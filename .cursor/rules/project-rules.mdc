@@ -1,0 +1,1253 @@
+# AI_CODING_RULES.md
+# Genel Yerel Hizmet ve Randevu Ekosistemi
+# Cursor ve Antigravity için kodlama kuralları
+
+---
+
+## 1. PROJE KİMLİĞİ
+
+Bu proje Türkiye odaklı, randevu tabanlı tüm yerel işletmeleri kapsayan bir hizmet keşif ve randevu platformudur.
+
+Hedef kategoriler:
+
+- Berber
+- Kuaför
+- Güzellik salonu
+- Tırnak stüdyosu
+- Dövme stüdyosu
+- Veteriner
+- Klinik
+- Diyetisyen
+- Psikolog
+- Spor merkezi
+- Halı saha
+- Danışmanlık
+
+İki ayrı uygulama vardır:
+
+- B2C: Kullanıcının işletme keşfettiği ve randevu aldığı uygulama
+- B2B: İşletme sahibinin randevu, hizmet ve müşteri yönettiği panel
+
+Geliştirici: Solo geliştirici. Java / Spring Boot biliyor, React / Next.js öğreniyor.
+
+---
+
+## 2. MİMARİ KARAR
+
+Mimari:
+
+```txt
+Modüler Monolith
+```
+
+Microservice yazma. Servis ayırma önerme.
+
+Paket yapısı domain bazlı olacak:
+
+```txt
+com.yourapp
+├── auth/
+├── user/
+├── business/
+├── service/
+├── staff/
+├── appointment/
+├── review/
+├── discovery/
+├── admin/
+├── notification/
+├── payment/
+├── storage/
+└── common/
+    ├── exception/
+    ├── response/
+    ├── config/
+    └── util/
+```
+
+Kurallar:
+
+- Her modül kendi Controller, Service, Repository, DTO, Mapper ve Entity sınıflarını içerebilir.
+- Modüller arası iletişim doğrudan servis injection ile yapılır.
+- Microservice, event-driven distributed architecture veya ayrı servis mimarisi önerilmez.
+- MVP sürecinde tek deploy edilebilir backend uygulaması korunur.
+
+---
+
+## 3. TEKNOLOJİ STACK
+
+### Backend
+
+- Java 21
+- Spring Boot 3.x
+- Spring Security + JWT
+- Spring Data JPA
+- PostgreSQL
+- Redis
+- Swagger / OpenAPI 3
+- Docker + Docker Compose
+- GitHub Actions CI
+- Flyway Migration
+
+### Storage
+
+- Cloudflare R2 veya AWS S3
+- S3 uyumlu API kullanılacak
+- Fotoğraflar database’de tutulmaz
+- Database’de sadece URL ve metadata tutulur
+
+### Frontend
+
+- İşletme/Admin Panel: React + Vite + Tailwind CSS
+- Kullanıcı Web/PWA: Next.js
+- Mobil: React Native, Expo bare workflow veya React Native CLI
+
+### Diğer
+
+- Push Notification: Firebase Cloud Messaging
+- SMS/OTP: Netgsm veya İleti Merkezi
+- Otomasyon: n8n
+- Ödeme: iyzico veya PayTR
+- AI: Spring AI
+
+---
+
+## 4. ENTITY İSİMLENDİRME KURALLARI
+
+### Kural
+
+Entity isimleri sektöre özel olmayacak.
+
+Yanlış:
+
+```java
+BarberService
+ClinicAppointment
+VeterinaryStaff
+HairdresserEmployee
+BeautyReview
+```
+
+Doğru:
+
+```java
+Service
+Appointment
+Staff
+Business
+Review
+WorkingHour
+```
+
+Ana entity listesi:
+
+```txt
+User
+RefreshToken
+City
+District
+Neighborhood
+Business
+BusinessCategory
+BusinessPhoto
+Service
+Staff
+WorkingHour
+Holiday
+Appointment
+Review
+DeviceToken
+Payment
+```
+
+---
+
+## 5. ENUM STANDARTLARI
+
+Enum değerleri Java tarafında enum olarak tutulur.
+
+Database tarafında `VARCHAR` olarak saklanır.
+
+Zorunlu kullanım:
+
+```java
+@Enumerated(EnumType.STRING)
+```
+
+Yasak kullanım:
+
+```java
+@Enumerated(EnumType.ORDINAL)
+```
+
+### UserRole
+
+```java
+USER,
+BUSINESS_OWNER,
+BUSINESS_EMPLOYEE,
+ADMIN
+```
+
+Not:
+
+Spring Security tarafında `hasRole('ADMIN')` kullanıldığında Spring bunu `ROLE_ADMIN` authority mantığıyla yorumlar.
+
+Bu yüzden enum değerlerinin başına `ROLE_` eklenmez.
+
+Yanlış enum:
+
+```java
+ROLE_USER,
+ROLE_ADMIN
+```
+
+Doğru enum:
+
+```java
+USER,
+ADMIN
+```
+
+### BusinessStatus
+
+```java
+PENDING,
+APPROVED,
+REJECTED,
+SUSPENDED,
+PASSIVE
+```
+
+### AppointmentStatus
+
+```java
+PENDING,
+CONFIRMED,
+CANCELLED_BY_USER,
+CANCELLED_BY_BUSINESS,
+COMPLETED,
+NO_SHOW,
+EXPIRED
+```
+
+### PaymentStatus
+
+```java
+INITIATED,
+PENDING,
+SUCCESS,
+FAILED,
+CANCELLED,
+REFUNDED,
+PARTIALLY_REFUNDED
+```
+
+Not:
+
+Ödeme status için `FAIL` değil, `FAILED` kullanılacaktır.
+
+### PaymentType
+
+```java
+DEPOSIT,
+FULL
+```
+
+### PaymentProvider
+
+```java
+IYZICO,
+PAYTR
+```
+
+### DevicePlatform
+
+```java
+ANDROID,
+IOS,
+WEB
+```
+
+---
+
+## 6. BASE ENTITY KURALI
+
+Tüm ana entityler ortak bir `BaseEntity` sınıfından türemelidir.
+
+```java
+@MappedSuperclass
+@Getter
+@Setter
+@NoArgsConstructor
+public abstract class BaseEntity {
+
+    @Id
+    @GeneratedValue
+    private UUID id;
+
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private OffsetDateTime createdAt;
+
+    @Column(name = "updated_at", nullable = false)
+    private OffsetDateTime updatedAt;
+
+    @PrePersist
+    protected void onCreate() {
+        OffsetDateTime now = OffsetDateTime.now();
+        this.createdAt = now;
+        this.updatedAt = now;
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = OffsetDateTime.now();
+    }
+}
+```
+
+Kurallar:
+
+- Tüm ID alanları UUID olacaktır.
+- Auto-increment integer kullanılmayacaktır.
+- `createdAt` ve `updatedAt` BaseEntity’den gelecektir.
+- Database karşılığı `TIMESTAMPTZ` olmalıdır.
+- Java tarafında tarih/saat için `OffsetDateTime` kullanılmalıdır.
+
+---
+
+## 7. TARİH VE SAAT KURALLARI
+
+Genel tarih/saat standardı:
+
+```java
+OffsetDateTime
+```
+
+Kullanım alanları:
+
+```java
+createdAt
+updatedAt
+startTime
+endTime
+expiresAt
+```
+
+Sadece tarih gereken alanlarda:
+
+```java
+LocalDate
+```
+
+Örnek:
+
+```java
+Holiday.date
+```
+
+Sadece saat gereken alanlarda:
+
+```java
+LocalTime
+```
+
+Örnek:
+
+```java
+WorkingHour.openTime
+WorkingHour.closeTime
+```
+
+Yanlış:
+
+```java
+private LocalDateTime startTime;
+private LocalDateTime endTime;
+```
+
+Doğru:
+
+```java
+private OffsetDateTime startTime;
+private OffsetDateTime endTime;
+```
+
+---
+
+## 8. RANDEVU MOTORU KURALLARI
+
+Appointment modeli şu kritik alanları içermelidir:
+
+```java
+public class Appointment extends BaseEntity {
+
+    private User user;
+
+    private Business business;
+
+    private Service service;
+
+    private Staff staff; // nullable
+
+    private OffsetDateTime startTime;
+
+    private OffsetDateTime endTime;
+
+    private AppointmentStatus status;
+
+    private BigDecimal priceSnapshot;
+
+    private String currency;
+
+    private String notes;
+
+    private String cancellationReason;
+}
+```
+
+Kritik kurallar:
+
+- `staff` nullable olmalıdır.
+- Bazı işletmelerde çalışan seçimi zorunlu değildir.
+- `priceSnapshot` zorunludur.
+- `priceSnapshot`, randevu oluşturulduğu anda service price değerinden kopyalanır.
+- Hizmet fiyatı sonradan değişse bile eski randevunun fiyatı değişmez.
+- Appointment fiziksel olarak silinmez.
+- İptal, tamamlama, no-show gibi işlemler status üzerinden yönetilir.
+
+### Çift rezervasyon önleme
+
+İki katmanlı koruma kullanılacaktır:
+
+1. Redis ile geçici slot lock
+2. PostgreSQL unique constraint ile kalıcı çakışma önleme
+
+Redis lock olmadan slot kaydetme.
+
+Örnek lock mantığı:
+
+```java
+String lockKey = "slot:" + businessId + ":" + date + ":" + time;
+
+Boolean locked = redisTemplate.opsForValue()
+        .setIfAbsent(lockKey, userId, 10, TimeUnit.SECONDS);
+
+if (Boolean.FALSE.equals(locked)) {
+    throw new SlotAlreadyTakenException();
+}
+```
+
+Not:
+
+Redis geçici koruma sağlar. Asıl veri güvenliği PostgreSQL constraint ile sağlanmalıdır.
+
+---
+
+## 9. ENTITY İLİŞKİ KURALLARI
+
+Tüm `@ManyToOne` ilişkilerde açıkça lazy kullanılmalıdır.
+
+Yanlış:
+
+```java
+@ManyToOne
+private Business business;
+```
+
+Doğru:
+
+```java
+@ManyToOne(fetch = FetchType.LAZY)
+@JoinColumn(name = "business_id", nullable = false)
+private Business business;
+```
+
+Genel kurallar:
+
+- Gereksiz `@OneToMany` listeleri ekleme.
+- Entityleri gereksiz çift yönlü yapma.
+- CascadeType.ALL kullanma.
+- Appointment, Payment, Review gibi kritik tablolarda cascade delete kullanma.
+- Entityleri doğrudan JSON response olarak dönme.
+- DTO kullan.
+
+---
+
+## 10. KATMAN KURALLARI
+
+### Controller
+
+- Sadece HTTP işlemleri
+- Request validation
+- Response dönme
+- İş mantığı yok
+
+### Service
+
+- Tüm iş mantığı burada
+- Transaction yönetimi burada
+- Diğer servisleri inject edebilir
+
+### Repository
+
+- Sadece veritabanı işlemleri
+- Custom query ve projection burada olabilir
+- İş mantığı yazılmaz
+
+Doğru örnek:
+
+```java
+@RestController
+@RequestMapping("/api/v1/appointments")
+@RequiredArgsConstructor
+public class AppointmentController {
+
+    private final AppointmentService appointmentService;
+
+    @PostMapping
+    public ResponseEntity<BaseResponse<AppointmentResponse>> create(
+            @Valid @RequestBody CreateAppointmentRequest request) {
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(appointmentService.create(request));
+    }
+}
+```
+
+Yanlış örnek:
+
+```java
+@PostMapping("/appointments")
+public ResponseEntity<?> create(@RequestBody CreateAppointmentRequest request) {
+    Appointment appointment = new Appointment();
+    appointment.setStatus(AppointmentStatus.PENDING);
+    appointmentRepository.save(appointment);
+    return ResponseEntity.ok().build();
+}
+```
+
+---
+
+## 11. DTO VE MAPPER KURALLARI
+
+Entityler doğrudan response olarak dönülmez.
+
+Her endpoint için request ve response DTO kullanılmalıdır.
+
+Yanlış:
+
+```java
+@GetMapping("/{id}")
+public Business getBusiness(@PathVariable UUID id) {
+    return businessService.getBusiness(id);
+}
+```
+
+Doğru:
+
+```java
+@GetMapping("/{id}")
+public BusinessResponse getBusiness(@PathVariable UUID id) {
+    return businessService.getBusiness(id);
+}
+```
+
+Kurallar:
+
+- Request DTO ayrı olmalıdır.
+- Response DTO ayrı olmalıdır.
+- Entity → DTO dönüşümü mapper ile yapılmalıdır.
+- MapStruct veya manuel mapper kullanılabilir.
+- Entity içinde API’ye özel alan bulunmamalıdır.
+
+---
+
+## 12. GÜVENLİK KURALLARI
+
+Public endpointler açıkça listelenmelidir.
+
+Geri kalan tüm endpointler authenticated olmalıdır.
+
+Password encoder:
+
+```txt
+BCrypt
+```
+
+JWT token içinde minimum bilgiler tutulmalıdır.
+
+Örnek JWT payload:
+
+```json
+{
+  "sub": "userId",
+  "role": "BUSINESS_OWNER",
+  "businessId": "businessId",
+  "iat": 1234567890,
+  "exp": 1234567890
+}
+```
+
+Endpoint koruma örnekleri:
+
+```java
+@PreAuthorize("hasRole('BUSINESS_OWNER')")
+@PostMapping("/businesses/{businessId}/services")
+public ResponseEntity<?> addService(...) { }
+```
+
+```java
+@PreAuthorize("hasRole('USER')")
+@GetMapping("/users/me/appointments")
+public ResponseEntity<?> getMyAppointments(...) { }
+```
+
+```java
+@PreAuthorize("hasRole('ADMIN')")
+@PutMapping("/admin/businesses/{id}/approve")
+public ResponseEntity<?> approveBusiness(...) { }
+```
+
+Kurallar:
+
+- Admin endpointleri ayrıca korunmalıdır.
+- Kullanıcı sadece kendi verisine erişmelidir.
+- İşletme sahibi sadece kendi işletmesini yönetmelidir.
+- Business employee sadece yetkili olduğu işletme verilerine erişmelidir.
+- CORS domainleri açıkça tanımlanmalıdır.
+- Wildcard `*` production ortamında kullanılmamalıdır.
+
+---
+
+## 13. REFRESH TOKEN KURALI
+
+Refresh token yönetimi database modeliyle uyumlu olmalıdır.
+
+Kurallar:
+
+- Refresh token düz metin olarak saklanmaz.
+- Refresh token hash değeri `refresh_tokens` tablosunda saklanır.
+- Token iptali için `revoked = true` kullanılır.
+- Redis, token blacklist ve geçici session yönetimi için kullanılabilir.
+- Refresh token’ın ana kalıcı kaydı database’de tutulur.
+
+Yanlış:
+
+```txt
+Refresh token sadece Redis'te saklanır.
+```
+
+Doğru:
+
+```txt
+Refresh token hash database'de saklanır.
+Redis blacklist ve geçici güvenlik kontrollerinde kullanılabilir.
+```
+
+---
+
+## 14. API STANDARTLARI
+
+Base URL:
+
+```txt
+/api/v1
+```
+
+Örnek endpoint yapısı:
+
+```txt
+GET    /api/v1/businesses
+GET    /api/v1/businesses/{id}
+POST   /api/v1/businesses
+PUT    /api/v1/businesses/{id}
+DELETE /api/v1/businesses/{id}
+
+GET    /api/v1/businesses/{id}/services
+POST   /api/v1/businesses/{id}/services
+
+GET    /api/v1/appointments
+POST   /api/v1/appointments
+PUT    /api/v1/appointments/{id}/cancel
+PUT    /api/v1/appointments/{id}/confirm
+PUT    /api/v1/appointments/{id}/complete
+```
+
+### BaseResponse
+
+Her response standart formatta dönmelidir.
+
+```java
+public class BaseResponse<T> {
+
+    private boolean success;
+
+    private String message;
+
+    private T data;
+
+    private OffsetDateTime timestamp;
+}
+```
+
+Başarılı response örneği:
+
+```json
+{
+  "success": true,
+  "message": "Randevu oluşturuldu",
+  "data": {},
+  "timestamp": "2026-05-25T10:30:00+03:00"
+}
+```
+
+Hata response örneği:
+
+```json
+{
+  "success": false,
+  "message": "Bu saat dolu",
+  "data": null,
+  "timestamp": "2026-05-25T10:30:00+03:00"
+}
+```
+
+### HTTP status kuralları
+
+```txt
+200 OK             → başarılı GET, PUT
+201 Created        → başarılı POST
+400 Bad Request    → validation hatası
+401 Unauthorized   → token yok veya geçersiz
+403 Forbidden      → yetki yok
+404 Not Found      → kayıt bulunamadı
+409 Conflict       → slot dolu, çakışma
+500 Internal Error → beklenmeyen hata
+```
+
+500 hataları client’a raw şekilde dönülmemelidir.
+
+---
+
+## 15. EXCEPTION HANDLING
+
+GlobalExceptionHandler kullanılmalıdır.
+
+Her yerde try-catch yazılmamalıdır.
+
+Örnek:
+
+```java
+@RestControllerAdvice
+@Slf4j
+public class GlobalExceptionHandler {
+
+    @ExceptionHandler(SlotAlreadyTakenException.class)
+    public ResponseEntity<BaseResponse<Void>> handleSlotTaken(
+            SlotAlreadyTakenException ex) {
+
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(BaseResponse.error(ex.getMessage()));
+    }
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<BaseResponse<Void>> handleNotFound(
+            EntityNotFoundException ex) {
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(BaseResponse.error(ex.getMessage()));
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<BaseResponse<Void>> handleGeneral(Exception ex) {
+        log.error("Unexpected error", ex);
+
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(BaseResponse.error("Beklenmeyen bir hata oluştu"));
+    }
+}
+```
+
+---
+
+## 16. VERİTABANI KURALLARI
+
+Tablo isimlendirme:
+
+- snake_case kullan
+- Çoğul isim kullan
+
+Örnek:
+
+```txt
+business_photos
+working_hours
+appointments
+```
+
+Entity alanları camelCase olmalıdır.
+
+Database kolonları snake_case olmalıdır.
+
+Örnek:
+
+```java
+private String fullName;
+```
+
+DB:
+
+```txt
+full_name
+```
+
+### Soft delete ve status yönetimi
+
+Her entity için tek tip `active` alanı zorunlu değildir.
+
+Soft delete veya pasifleştirme alanı tabloya göre değişir.
+
+Örnekler:
+
+```txt
+users              → is_active
+businesses         → is_active + status
+services           → is_active
+staff              → is_active
+business_photos    → fiziksel kayıt kalabilir, dosya yönetimi service katmanında yapılır
+appointments       → status
+reviews            → is_visible
+refresh_tokens     → revoked
+device_tokens      → is_active
+```
+
+Yanlış:
+
+```java
+private boolean active = true; // her entityye otomatik ekleme
+```
+
+Doğru:
+
+```txt
+DATABASE_MODEL.md dosyasındaki tablo alanlarına göre davran.
+```
+
+### Fotoğraf depolama
+
+Database’de sadece metadata tutulur.
+
+Örnek:
+
+```java
+public class BusinessPhoto extends BaseEntity {
+
+    private Business business;
+
+    private String url;
+
+    private String fileName;
+
+    private Integer fileSize;
+
+    private String mimeType;
+
+    private Boolean isCover;
+
+    private Integer sortOrder;
+}
+```
+
+Yanlış:
+
+```java
+private boolean primary;
+```
+
+Doğru:
+
+```java
+private Boolean isCover;
+```
+
+Asıl dosya S3/R2 üzerinde tutulur.
+
+Database’e binary/blob yazılmaz.
+
+### Konum alanları
+
+```java
+private Double latitude;
+private Double longitude;
+```
+
+Şimdilik Double yeterlidir.
+
+Mesafe hesabı Haversine ile yapılabilir.
+
+Tasarım Faz 17’de PostGIS’e geçmeye uygun kalmalıdır.
+
+### Index kuralları
+
+- Foreign key alanlarına index ekle.
+- Sık sorgulanan alanlara index ekle.
+- Status, slug, latitude/longitude gibi alanlar indexlenebilir.
+- Randevu sorgularında businessId + startTime önemlidir.
+- Staff bazlı slot kontrolünde staffId + startTime önemlidir.
+
+---
+
+## 17. STORAGE KURALLARI
+
+S3/R2 yükleme için tek bir StorageService kullanılmalıdır.
+
+```java
+@Service
+public class StorageService {
+
+    public String upload(MultipartFile file, String folder) {
+        // folder: business-photos, service-images, staff-photos
+        // return: public file URL
+    }
+
+    public void delete(String fileUrl) {
+        // delete from object storage
+    }
+}
+```
+
+Folder örnekleri:
+
+```txt
+business-photos
+service-images
+staff-photos
+```
+
+URL formatı örneği:
+
+```txt
+https://[bucket].r2.dev/business-photos/[uuid].[ext]
+https://[bucket].r2.dev/service-images/[uuid].[ext]
+https://[bucket].r2.dev/staff-photos/[uuid].[ext]
+```
+
+Kurallar:
+
+- Dosya tipi kontrol edilmelidir.
+- Dosya boyutu kontrol edilmelidir.
+- Dosya adı güvenli üretilmelidir.
+- Entity ile dosya ilişkisi service katmanında kurulmalıdır.
+
+---
+
+## 18. RATE LIMITING KURALLARI
+
+Spring Boot’ta bucket4j veya benzer güvenilir bir çözümle temel rate limiting uygulanabilir.
+
+Aşağıdaki endpoint grupları korunacaktır:
+
+```txt
+/api/v1/auth/login          → 5 istek / dakika / IP
+/api/v1/auth/register       → 3 istek / dakika / IP
+/api/v1/auth/otp            → 3 istek / dakika / IP
+/api/v1/appointments POST   → 10 istek / dakika / kullanıcı
+/api/v1/reviews POST        → 5 istek / dakika / kullanıcı
+/api/v1/businesses GET      → 60 istek / dakika / IP
+```
+
+Amaç:
+
+- Bot isteklerini azaltmak
+- Spam kayıtları engellemek
+- Brute-force login denemelerini azaltmak
+- Backend’i gereksiz yükten korumak
+
+---
+
+## 19. GELİŞTİRME ORTAMI KURALLARI
+
+Development ortamında işletmeler otomatik onaylanabilir.
+
+Production ortamında admin onayı zorunludur.
+
+Örnek config:
+
+```yaml
+# application-dev.yml
+business:
+  auto-approve: true
+```
+
+```yaml
+# application-prod.yml
+business:
+  auto-approve: false
+```
+
+Örnek service mantığı:
+
+```java
+if (businessProperties.isAutoApprove()) {
+    business.setStatus(BusinessStatus.APPROVED);
+} else {
+    business.setStatus(BusinessStatus.PENDING);
+}
+```
+
+Environment dosyaları:
+
+```txt
+application.yml
+application-dev.yml
+application-prod.yml
+application-test.yml
+```
+
+Kurallar:
+
+- Secrets asla kod içinde olmayacak.
+- Environment variable kullanılacak.
+- JWT secret, database password, R2 key, SMS key, payment key kod içine yazılmayacak.
+
+---
+
+## 20. KOD YAZIM KURALLARI
+
+### Genel
+
+- Kod İngilizce yazılır.
+- Yorum satırı İngilizce olur.
+- Log mesajları İngilizce olur.
+- API response mesajları Türkçe olabilir.
+
+### İsimlendirme
+
+```txt
+Class       → PascalCase       → AppointmentService
+Method      → camelCase        → createAppointment
+Variable    → camelCase        → businessId
+Constant    → UPPER_SNAKE_CASE → MAX_SLOT_DURATION
+DB table    → snake_case       → appointment_status
+```
+
+### Yasaklar
+
+- Magic number kullanma, sabit tanımla.
+- `System.out.println` kullanma, logger kullan.
+- Boş catch block bırakma.
+- TODO yorumu bırakıp geçme.
+- Entityleri controller response olarak dönme.
+- `@Data` kullanma.
+- `CascadeType.ALL` kullanma.
+- `EnumType.ORDINAL` kullanma.
+- Kategoriye özel entity yazma.
+
+### Lombok
+
+Entitylerde kullanılabilir:
+
+```java
+@Getter
+@Setter
+@NoArgsConstructor
+```
+
+Entitylerde kaçınılmalı:
+
+```java
+@Data
+@ToString
+@EqualsAndHashCode
+```
+
+Sebep:
+
+- Lazy ilişkiler tetiklenebilir.
+- Recursive toString oluşabilir.
+- JPA entity lifecycle sorunları yaşanabilir.
+
+---
+
+## 21. TRANSACTION KURALLARI
+
+Transaction yönetimi service katmanında yapılır.
+
+Kurallar:
+
+- Write işlemlerinde `@Transactional` kullan.
+- Read işlemlerinde `@Transactional(readOnly = true)` kullanılabilir.
+- Controller’da transaction açma.
+- Repository’yi controller’dan direkt çağırma.
+
+Örnek:
+
+```java
+@Transactional
+public AppointmentResponse createAppointment(CreateAppointmentRequest request) {
+    // validate user
+    // validate business
+    // validate service
+    // validate staff
+    // acquire Redis slot lock
+    // set price snapshot
+    // save appointment
+    // return response
+}
+```
+
+---
+
+## 22. n8n SINIRI — KRİTİK
+
+n8n şu işler için kullanılmaz:
+
+- Randevu oluşturma
+- Randevu güncelleme
+- Slot kilitleme
+- Ödeme kararı verme
+- Kullanıcı yetkilendirme
+- Kritik business logic
+
+n8n şu işler için kullanılır:
+
+- Onboarding e-postaları
+- Hatırlatma SMS/push akışları
+- Admin raporları
+- CRM entegrasyonları
+- Slack/Telegram admin bildirimleri
+- Şikayet/destek otomasyonları
+
+---
+
+## 23. FAZ FARKINDALIK KURALLARI
+
+Şu anki faz:
+
+```txt
+FAZ 0 — Mimari Hazırlık
+```
+
+Kod üretirken şu soru sorulmalıdır:
+
+```txt
+Bu kod şu anki fazın kapsamında mı?
+```
+
+Faz 0-6 Backend MVP kapsamı dışındaki şeyleri üretme:
+
+```txt
+Ödeme kodu                 → Faz 11
+AI/Spring AI kodu           → Faz 14
+React Native kodu           → Faz 12
+Premium abonelik kodu       → Faz 15
+Kategoriye özel modüller    → Faz 16
+```
+
+Faz değiştiğinde bu dosya güncellenebilir.
+
+---
+
+## 24. FLYWAY MIGRATION KURALLARI
+
+Tüm şema değişiklikleri Flyway ile yönetilir.
+
+Kurallar:
+
+- Elle SQL çalıştırılmaz.
+- Her değişiklik migration dosyasıyla yapılır.
+- Migration dosya formatı:
+
+```txt
+V{version}__{description}.sql
+```
+
+Örnek:
+
+```txt
+V1__create_users_table.sql
+V2__create_location_tables.sql
+V3__create_business_tables.sql
+```
+
+Kurallar:
+
+- Entity ile migration uyumlu olmalıdır.
+- Enum değerleri migration ve Java tarafında aynı olmalıdır.
+- Faz 17’de PostGIS geçişi ayrı migration setiyle yapılmalıdır.
+
+---
+
+## 25. CURSOR / ANTIGRAVITY İÇİN NET TALİMAT
+
+Kod üretirken aşağıdaki kurallara birebir uy:
+
+1. Modüler monolith dışına çıkma.
+2. Microservice önerme.
+3. Entityleri kategoriye özel isimlendirme.
+4. UUID kullan.
+5. BaseEntity kullan.
+6. `createdAt` ve `updatedAt` için `OffsetDateTime` kullan.
+7. `startTime` ve `endTime` için `OffsetDateTime` kullan.
+8. `LocalDateTime` kullanma.
+9. Fiyat alanlarında `BigDecimal` kullan.
+10. Enumlarda `EnumType.STRING` kullan.
+11. Enum değerlerinde `ROLE_` prefix kullanma.
+12. Spring Security tarafında role kontrolünü `hasRole('ADMIN')` şeklinde yap.
+13. ManyToOne ilişkilerde `FetchType.LAZY` kullan.
+14. Gereksiz OneToMany listeleri ekleme.
+15. `CascadeType.ALL` kullanma.
+16. Entityleri response olarak dönme.
+17. Request/Response DTO kullan.
+18. Mapper kullan.
+19. Entitylerde Lombok `@Data` kullanma.
+20. Appointment.staff nullable kalmalı.
+21. Appointment.priceSnapshot zorunlu olmalı.
+22. Refresh token hash database’de saklanmalı.
+23. Redis sadece blacklist/geçici güvenlik/session ve slot lock için kullanılmalı.
+24. Fotoğraflar DB’ye binary olarak yazılmamalı.
+25. BusinessPhoto alanı `isCover` olmalı, `primary` olmamalı.
+26. Her entityye otomatik `active` alanı ekleme; database modeline göre davran.
+27. Appointment fiziksel silinmemeli, status ile yönetilmeli.
+28. Review fiziksel silinmemeli, `isVisible` ile yönetilmeli.
+29. Service ve Staff fiziksel silinmemeli, `isActive` ile yönetilmeli.
+30. Flyway migration kullan.
+
+---
+
+## 26. DİĞER REFERANS DOKÜMANLAR
+
+Bu dosya tek başına yeterli değildir.
+
+Kod üretirken aşağıdaki dosyalarla birlikte kullanılmalıdır:
+
+```txt
+BACKEND_ARCHITECTURE.md
+DATABASE_MODEL.md
+ENTITY_ARCHITECTURE.md
+API_RULES.md
+PROJECT_OVERVIEW.md
+PHASE_PLAN.md
+```
+
+---
+
+## 27. DOSYA SONU NOTU
+
+Bu dosya projenin teknik hafızasıdır.
+
+Yeni bir sohbet başladığında veya başka bir AI aracına geçildiğinde bu dosya bağlam olarak verilmelidir.
+
+Bu dosyadaki kurallar proje sahibi onayı olmadan değiştirilmemelidir.
+
+Temel strateji:
+
+```txt
+Genel sistem olarak tasarla.
+Dar pilot kategoriyle doğrula.
+Backend’i sağlam kur.
+Önce web/PWA ile MVP çıkar.
+Mobil uygulamayı doğrulamadan sonra geliştir.
+Ödeme, AI ve premium özellikleri ana sistem oturduktan sonra ekle.
+```
