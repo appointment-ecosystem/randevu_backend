@@ -1,0 +1,59 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/postgre_db}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:postgres}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 5
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+
+# JWT yapilandirmasi
+app:
+  jwt:
+    secret: ${JWT_SECRET:dev-only-secret-key-min-256-bit-uzunlugunda-olmali-uretim-icin-degistirilmeli-12345}
+    access-token-expiration: ${JWT_ACCESS_EXPIRATION:900000}
+    refresh-token-expiration: ${JWT_REFRESH_EXPIRATION:604800000}
+
+  # Cloudflare R2 / S3 uyumlu storage yapilandirmasi
+  storage:
+    endpoint: ${STORAGE_ENDPOINT:https://your-account-id.r2.cloudflarestorage.com}
+    bucket-name: ${STORAGE_BUCKET:randevu-dev}
+    access-key: ${STORAGE_ACCESS_KEY:dev-access-key}
+    secret-key: ${STORAGE_SECRET_KEY:dev-secret-key}
+    public-url: ${STORAGE_PUBLIC_URL:https://cdn.example.com}
+
+  # Netgsm SMS yapilandirmasi
+  sms:
+    netgsm:
+      api-url: ${NETGSM_API_URL:https://api.netgsm.com.tr/sms/send/get}
+      username: ${NETGSM_USERNAME:demo}
+      password: ${NETGSM_PASSWORD:demo}
+      header: ${NETGSM_HEADER:RANDEVU}
+
+  # OTP yapilandirmasi
+  otp:
+    ttl-seconds: ${OTP_TTL:180}
+    max-attempts: ${OTP_MAX_ATTEMPTS:5}

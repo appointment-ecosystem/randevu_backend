@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: randevu
+  profiles:
+    active: dev

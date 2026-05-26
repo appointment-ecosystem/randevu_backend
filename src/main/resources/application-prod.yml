@@ -1,0 +1,53 @@
+server:
+  port: ${SERVER_PORT:8080}
+
+spring:
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: ${DB_POOL_MAX:20}
+      minimum-idle: ${DB_POOL_MIN:5}
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: false
+
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false
+
+app:
+  jwt:
+    secret: ${JWT_SECRET}
+    access-token-expiration: ${JWT_ACCESS_EXPIRATION:900000}
+    refresh-token-expiration: ${JWT_REFRESH_EXPIRATION:604800000}
+
+  storage:
+    endpoint: ${STORAGE_ENDPOINT}
+    bucket-name: ${STORAGE_BUCKET}
+    access-key: ${STORAGE_ACCESS_KEY}
+    secret-key: ${STORAGE_SECRET_KEY}
+    public-url: ${STORAGE_PUBLIC_URL}
+
+  sms:
+    netgsm:
+      api-url: ${NETGSM_API_URL}
+      username: ${NETGSM_USERNAME}
+      password: ${NETGSM_PASSWORD}
+      header: ${NETGSM_HEADER}
+
+  otp:
+    ttl-seconds: ${OTP_TTL:180}
+    max-attempts: ${OTP_MAX_ATTEMPTS:5}
