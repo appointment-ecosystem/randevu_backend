@@ -1,4 +1,4 @@
-package com.yunus.security.service;
+package com.yunus.security;
 
 import com.yunus.user.entity.User;
 import com.yunus.user.entity.UserRole;
@@ -14,11 +14,11 @@ import org.springframework.security.core.userdetails.UserDetails;
  * User entity'sini sarararak güvenlik bağlamında kullanılabilir hale getirir.
  * Authority üretiminde ROLE_ prefix otomatik eklenir.
  */
-public class CustomUserDetails implements UserDetails {
+public class UserPrincipal implements UserDetails {
 
     private final User user;
 
-    public CustomUserDetails(User user) {
+    public UserPrincipal(User user) {
         this.user = user;
     }
 
@@ -60,7 +60,7 @@ public class CustomUserDetails implements UserDetails {
         return user.getIsActive();
     }
 
-    // User entity'sine erişim — security context'ten kullanıcı bilgileri alınır
+    /** User entity'sine erişim — security context'ten kullanıcı bilgileri alınır */
     public User getUser() {
         return user;
     }

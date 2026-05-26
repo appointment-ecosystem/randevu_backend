@@ -1,20 +1,20 @@
-package com.yunus.security.service;
+package com.yunus.auth;
 
 import com.yunus.common.exception.UnauthorizedException;
 import com.yunus.security.jwt.JwtProperties;
 import com.yunus.user.entity.RefreshToken;
 import com.yunus.user.entity.User;
 import com.yunus.user.repository.RefreshTokenRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.OffsetDateTime;
 import java.util.Base64;
 import java.util.UUID;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Refresh token üretimi, doğrulanması, iptal edilmesi ve rotasyon işlemlerini yürüten servis.
@@ -28,7 +28,8 @@ public class RefreshTokenService {
     private final RefreshTokenRepository refreshTokenRepository;
     private final JwtProperties jwtProperties;
 
-    public RefreshTokenService(RefreshTokenRepository refreshTokenRepository, JwtProperties jwtProperties) {
+    public RefreshTokenService(RefreshTokenRepository refreshTokenRepository,
+                               JwtProperties jwtProperties) {
         this.refreshTokenRepository = refreshTokenRepository;
         this.jwtProperties = jwtProperties;
     }
@@ -92,11 +93,9 @@ public class RefreshTokenService {
      * Token rotasyonu gerçekleştirir: Eski token'ı iptal eder, yeni bir token üretip döner.
      */
     @Transactional
-    public String rotateRefreshToken(String oldRawToken) {
-        RefreshToken oldToken = validateRefreshToken(oldRawToken);
+    public String rotateRefreshToken(String oldRawToken, RefreshToken oldToken) {
         oldToken.setRevoked(true);
         refreshTokenRepository.save(oldToken);
-
         log.info("Old refresh token revoked, rotating token for user: {}", oldToken.getUser().getId());
         return createRefreshToken(oldToken.getUser());
     }

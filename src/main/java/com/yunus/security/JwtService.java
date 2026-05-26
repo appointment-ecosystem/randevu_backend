@@ -1,6 +1,6 @@
-package com.yunus.security.jwt;
+package com.yunus.security;
 
-import com.yunus.security.service.CustomUserDetails;
+import com.yunus.security.jwt.JwtProperties;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
@@ -26,40 +26,40 @@ public class JwtService {
         this.jwtProperties = jwtProperties;
     }
 
-    // Access token üretir — sub: phone, role claim eklenir
+    /** Access token üretir — sub: phone, role ve userId claim eklenir */
     public String generateAccessToken(UserDetails userDetails) {
         Map<String, Object> extraClaims = new HashMap<>();
-        // CustomUserDetails üzerinden role bilgisi alınır
-        if (userDetails instanceof CustomUserDetails customUser) {
-            extraClaims.put("role", customUser.getRole().name());
-            extraClaims.put("userId", customUser.getUserId().toString());
+        // UserPrincipal üzerinden role bilgisi alınır
+        if (userDetails instanceof UserPrincipal userPrincipal) {
+            extraClaims.put("role", userPrincipal.getRole().name());
+            extraClaims.put("userId", userPrincipal.getUserId().toString());
         }
         return buildToken(extraClaims, userDetails, jwtProperties.accessTokenExpiration());
     }
 
-    // Refresh token üretir — daha uzun ömürlü
+    /** Refresh token üretir — daha uzun ömürlü */
     public String generateRefreshToken(UserDetails userDetails) {
         return buildToken(new HashMap<>(), userDetails, jwtProperties.refreshTokenExpiration());
     }
 
-    // Token'dan kullanıcı adını (phone) çıkarır
+    /** Token'dan kullanıcı adını (phone) çıkarır */
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
-    // Token'dan belirli bir claim değeri çıkarır
+    /** Token'dan belirli bir claim değeri çıkarır */
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
     }
 
-    // Token geçerliliğini doğrular — kullanıcı adı eşleşmeli ve süre dolmamış olmalı
+    /** Token geçerliliğini doğrular — kullanıcı adı eşleşmeli ve süre dolmamış olmalı */
     public boolean isTokenValid(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
         return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
     }
 
-    // Token süresinin dolup dolmadığını kontrol eder
+    /** Token süresinin dolup dolmadığını kontrol eder */
     public boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
@@ -86,7 +86,7 @@ public class JwtService {
                 .compact();
     }
 
-    // Secret key'i decode edip HMAC-SHA anahtarı oluşturur
+    /** Secret key'i decode edip HMAC-SHA anahtarı oluşturur */
     private SecretKey getSigningKey() {
         byte[] keyBytes = Decoders.BASE64.decode(jwtProperties.secret());
         return Keys.hmacShaKeyFor(keyBytes);

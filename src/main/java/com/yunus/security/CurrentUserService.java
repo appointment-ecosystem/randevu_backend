@@ -1,34 +1,32 @@
-package com.yunus.security.util;
+package com.yunus.security;
 
 import com.yunus.common.exception.UnauthorizedException;
-import com.yunus.security.service.CustomUserDetails;
 import com.yunus.user.entity.User;
 import com.yunus.user.entity.UserRole;
+import java.util.UUID;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import java.util.UUID;
+import org.springframework.stereotype.Service;
 
 /**
- * Güvenlik bağlamından (SecurityContext) kullanıcı bilgilerini çekmek için yardımcı sınıf.
+ * Güvenlik bağlamından (SecurityContext) kullanıcı bilgilerini çekmek için servis.
+ * SecurityContext'e injection ile erişilir; static yardımcı metodların Spring bean karşılığı.
  */
-public final class SecurityUtils {
-
-    private SecurityUtils() {
-        // Yardımcı sınıf, instance oluşturulamaz
-    }
+@Service
+public class CurrentUserService {
 
     /**
-     * Mevcut oturum açmış kullanıcının CustomUserDetails nesnesini döner.
+     * Mevcut oturum açmış kullanıcının UserPrincipal nesnesini döner.
      */
-    public static CustomUserDetails getCurrentUserDetails() {
+    public UserPrincipal getCurrentUserPrincipal() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !authentication.isAuthenticated() ||
                 "anonymousUser".equals(authentication.getPrincipal())) {
             throw new UnauthorizedException("Bu işlem için giriş yapılması gerekmektedir");
         }
         Object principal = authentication.getPrincipal();
-        if (principal instanceof CustomUserDetails) {
-            return (CustomUserDetails) principal;
+        if (principal instanceof UserPrincipal userPrincipal) {
+            return userPrincipal;
         }
         throw new UnauthorizedException("Geçersiz kimlik bilgisi oturumu");
     }
@@ -36,21 +34,21 @@ public final class SecurityUtils {
     /**
      * Mevcut oturum açmış kullanıcının Entity nesnesini döner.
      */
-    public static User getCurrentUser() {
-        return getCurrentUserDetails().getUser();
+    public User getCurrentUser() {
+        return getCurrentUserPrincipal().getUser();
     }
 
     /**
      * Mevcut oturum açmış kullanıcının UUID'sini döner.
      */
-    public static UUID getCurrentUserId() {
-        return getCurrentUserDetails().getUserId();
+    public UUID getCurrentUserId() {
+        return getCurrentUserPrincipal().getUserId();
     }
 
     /**
      * Mevcut oturum açmış kullanıcının rolünü döner.
      */
-    public static UserRole getCurrentUserRole() {
-        return getCurrentUserDetails().getRole();
+    public UserRole getCurrentUserRole() {
+        return getCurrentUserPrincipal().getRole();
     }
 }

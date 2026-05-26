@@ -1,4 +1,4 @@
-package com.yunus.security.jwt;
+package com.yunus.security;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -22,9 +22,9 @@ import org.springframework.web.filter.OncePerRequestFilter;
  * Redis blacklist kontrolü yapılır; Redis erişilemezse güvenli şekilde devam eder.
  */
 @Component
-public class JwtAuthenticationFilter extends OncePerRequestFilter {
+public class JwtFilter extends OncePerRequestFilter {
 
-    private static final Logger log = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
+    private static final Logger log = LoggerFactory.getLogger(JwtFilter.class);
     private static final String BEARER_PREFIX = "Bearer ";
     private static final String BLACKLIST_PREFIX = "blacklist:";
 
@@ -32,9 +32,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final UserDetailsService userDetailsService;
     private final RedisTemplate<String, String> redisTemplate;
 
-    public JwtAuthenticationFilter(JwtService jwtService,
-                                   UserDetailsService userDetailsService,
-                                   RedisTemplate<String, String> redisTemplate) {
+    public JwtFilter(JwtService jwtService,
+                     UserDetailsService userDetailsService,
+                     RedisTemplate<String, String> redisTemplate) {
         this.jwtService = jwtService;
         this.userDetailsService = userDetailsService;
         this.redisTemplate = redisTemplate;

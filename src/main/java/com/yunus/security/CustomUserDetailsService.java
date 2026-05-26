@@ -1,4 +1,4 @@
-package com.yunus.security.service;
+package com.yunus.security;
 
 import com.yunus.user.entity.User;
 import com.yunus.user.repository.UserRepository;
@@ -34,6 +34,6 @@ public class CustomUserDetailsService implements UserDetailsService {
                 });
 
         // Pasif kullanıcılar için isEnabled() false dönecek, Spring Security login'i engelleyecek
-        return new CustomUserDetails(user);
+        return new UserPrincipal(user);
     }
 }

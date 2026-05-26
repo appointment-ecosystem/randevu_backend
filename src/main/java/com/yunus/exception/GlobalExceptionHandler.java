@@ -1,6 +1,11 @@
-package com.yunus.common.exception;
+package com.yunus.exception;
 
-import com.yunus.common.response.BaseResponse;
+import com.yunus.common.exception.BusinessException;
+import com.yunus.common.exception.ConflictException;
+import com.yunus.common.exception.ForbiddenException;
+import com.yunus.common.exception.ResourceNotFoundException;
+import com.yunus.common.exception.SlotAlreadyTakenException;
+import com.yunus.common.exception.UnauthorizedException;
 import jakarta.validation.ConstraintViolationException;
 import java.util.List;
 import org.slf4j.Logger;
@@ -15,7 +20,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 /**
  * Tüm uygulama genelinde fırlatılan exception'ları merkezi olarak yakalar.
- * Her exception tipine uygun HTTP status kodu ve BaseResponse formatında yanıt döner.
+ * Her exception tipine uygun HTTP status kodu ve ErrorResponse formatında yanıt döner.
  * 500 hatalarında stack trace sadece loglanır, client'a genel mesaj döner.
  */
 @RestControllerAdvice
@@ -25,97 +30,95 @@ public class GlobalExceptionHandler {
 
     // Bean Validation hataları — @Valid ile tetiklenir
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<BaseResponse<List<ValidationErrorResponse>>> handleValidation(
-            MethodArgumentNotValidException ex) {
-        List<ValidationErrorResponse> errors = ex.getBindingResult().getFieldErrors().stream()
-                .map(err -> new ValidationErrorResponse(err.getField(), err.getDefaultMessage()))
+    public ResponseEntity<ErrorResponse> handleValidation(MethodArgumentNotValidException ex) {
+        List<ErrorResponse.FieldError> errors = ex.getBindingResult().getFieldErrors().stream()
+                .map(err -> new ErrorResponse.FieldError(err.getField(), err.getDefaultMessage()))
                 .toList();
         log.warn("Validation failed: {}", errors);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(BaseResponse.error("Doğrulama hatası", errors));
+                .body(new ErrorResponse("Doğrulama hatası", ErrorType.VALIDATION_ERROR, errors));
     }
 
     // ConstraintViolation hataları — path variable ve request param validasyonları
     @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<BaseResponse<List<ValidationErrorResponse>>> handleConstraintViolation(
-            ConstraintViolationException ex) {
-        List<ValidationErrorResponse> errors = ex.getConstraintViolations().stream()
-                .map(v -> new ValidationErrorResponse(v.getPropertyPath().toString(), v.getMessage()))
+    public ResponseEntity<ErrorResponse> handleConstraintViolation(ConstraintViolationException ex) {
+        List<ErrorResponse.FieldError> errors = ex.getConstraintViolations().stream()
+                .map(v -> new ErrorResponse.FieldError(v.getPropertyPath().toString(), v.getMessage()))
                 .toList();
         log.warn("Constraint violation: {}", errors);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(BaseResponse.error("Doğrulama hatası", errors));
+                .body(new ErrorResponse("Doğrulama hatası", ErrorType.VALIDATION_ERROR, errors));
     }
 
     // İş kuralı ihlalleri
     @ExceptionHandler(BusinessException.class)
-    public ResponseEntity<BaseResponse<Void>> handleBusiness(BusinessException ex) {
+    public ResponseEntity<ErrorResponse> handleBusiness(BusinessException ex) {
         log.warn("Business exception: {}", ex.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(BaseResponse.error(ex.getMessage()));
+                .body(new ErrorResponse(ex.getMessage(), ErrorType.BUSINESS_ERROR));
     }
 
     // Kaynak bulunamadı
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<BaseResponse<Void>> handleNotFound(ResourceNotFoundException ex) {
+    public ResponseEntity<ErrorResponse> handleNotFound(ResourceNotFoundException ex) {
         log.warn("Resource not found: {}", ex.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(BaseResponse.error(ex.getMessage()));
+                .body(new ErrorResponse(ex.getMessage(), ErrorType.NOT_FOUND));
     }
 
     // Kimlik doğrulama hatası
     @ExceptionHandler(UnauthorizedException.class)
-    public ResponseEntity<BaseResponse<Void>> handleUnauthorized(UnauthorizedException ex) {
+    public ResponseEntity<ErrorResponse> handleUnauthorized(UnauthorizedException ex) {
         log.warn("Unauthorized: {}", ex.getMessage());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                .body(BaseResponse.error(ex.getMessage()));
+                .body(new ErrorResponse(ex.getMessage(), ErrorType.UNAUTHORIZED));
     }
 
     // Yetkilendirme hatası
     @ExceptionHandler(ForbiddenException.class)
-    public ResponseEntity<BaseResponse<Void>> handleForbidden(ForbiddenException ex) {
+    public ResponseEntity<ErrorResponse> handleForbidden(ForbiddenException ex) {
         log.warn("Forbidden: {}", ex.getMessage());
         return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                .body(BaseResponse.error(ex.getMessage()));
+                .body(new ErrorResponse(ex.getMessage(), ErrorType.FORBIDDEN));
     }
 
     // Kaynak çakışması
     @ExceptionHandler(ConflictException.class)
-    public ResponseEntity<BaseResponse<Void>> handleConflict(ConflictException ex) {
+    public ResponseEntity<ErrorResponse> handleConflict(ConflictException ex) {
         log.warn("Conflict: {}", ex.getMessage());
         return ResponseEntity.status(HttpStatus.CONFLICT)
-                .body(BaseResponse.error(ex.getMessage()));
+                .body(new ErrorResponse(ex.getMessage(), ErrorType.CONFLICT));
     }
 
     // Randevu slotu çakışması
     @ExceptionHandler(SlotAlreadyTakenException.class)
-    public ResponseEntity<BaseResponse<Void>> handleSlotTaken(SlotAlreadyTakenException ex) {
+    public ResponseEntity<ErrorResponse> handleSlotTaken(SlotAlreadyTakenException ex) {
         log.warn("Slot already taken: {}", ex.getMessage());
         return ResponseEntity.status(HttpStatus.CONFLICT)
-                .body(BaseResponse.error(ex.getMessage()));
+                .body(new ErrorResponse(ex.getMessage(), ErrorType.SLOT_ALREADY_TAKEN));
     }
 
     // Spring Security — erişim reddedildi
     @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<BaseResponse<Void>> handleAccessDenied(AccessDeniedException ex) {
+    public ResponseEntity<ErrorResponse> handleAccessDenied(AccessDeniedException ex) {
         log.warn("Access denied: {}", ex.getMessage());
         return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                .body(BaseResponse.error("Bu işlem için yetkiniz bulunmamaktadır"));
+                .body(new ErrorResponse("Bu işlem için yetkiniz bulunmamaktadır", ErrorType.FORBIDDEN));
     }
 
     // Spring Security — hatalı kimlik bilgileri
     @ExceptionHandler(BadCredentialsException.class)
-    public ResponseEntity<BaseResponse<Void>> handleBadCredentials(BadCredentialsException ex) {
+    public ResponseEntity<ErrorResponse> handleBadCredentials(BadCredentialsException ex) {
         log.warn("Bad credentials attempt");
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                .body(BaseResponse.error("Geçersiz telefon numarası veya şifre"));
+                .body(new ErrorResponse("Geçersiz telefon numarası veya şifre", ErrorType.UNAUTHORIZED));
     }
 
     // Beklenmeyen tüm hatalar — stack trace loglanır, client'a genel mesaj döner
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<BaseResponse<Void>> handleGeneral(Exception ex) {
+    public ResponseEntity<ErrorResponse> handleGeneral(Exception ex) {
         log.error("Unexpected error occurred", ex);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(BaseResponse.error("Beklenmeyen bir hata oluştu"));
+                .body(new ErrorResponse("Beklenmeyen bir hata oluştu", ErrorType.INTERNAL_SERVER_ERROR));
     }
 }
