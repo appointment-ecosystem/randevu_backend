@@ -26,7 +26,8 @@ public abstract class BaseEntity {
     private UUID id;
 
     // Kayıt ilk oluşturulduğunda set edilir; sonradan değiştirilmez
-    @Column(name = "created_at", nullable = false, updatable = false)
+    @Column(name = "created_at", nullable = false,
+            updatable = false)
     private OffsetDateTime createdAt;
 
     // Her güncellemede @PreUpdate ile yenilenir

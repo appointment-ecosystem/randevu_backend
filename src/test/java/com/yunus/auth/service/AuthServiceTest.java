@@ -1,5 +1,6 @@
 package com.yunus.auth.service;
 
+import com.yunus.auth.AuthService;
 import com.yunus.auth.dto.RegisterRequest;
 import com.yunus.common.exception.ConflictException;
 import com.yunus.user.entity.UserRole;
