@@ -1,6 +1,7 @@
 package com.yunus.common.exception;
 
 import com.yunus.common.response.BaseResponse;
+import com.yunus.exception.GlobalExceptionHandler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;

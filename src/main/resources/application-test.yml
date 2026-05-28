@@ -26,6 +26,13 @@ app:
     access-token-expiration: 900000
     refresh-token-expiration: 604800000
 
+  cors:
+    allowed-origins:
+      - http://localhost:3000
+
+  security:
+    fail-on-redis-blacklist-error: false
+
   storage:
     endpoint: https://test.r2.cloudflarestorage.com
     bucket-name: randevu-test

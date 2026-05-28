@@ -38,8 +38,20 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 /**
  * Spring Security temel yapılandırma sınıfı.
- * CSRF kapalı, session yönetimi stateless (JWT), yetkilendirme kuralları ve CORS ayarlanır.
- * Custom entry point ve access denied handler inline olarak tanımlanır.
+ * CSRF kapalı, session yönetimi stateless (JWT tabanlı).
+ * <p>
+ * Public endpoint'ler (authentication gerekmez):
+ *   POST /api/v1/auth/register
+ *   POST /api/v1/auth/login
+ *   POST /api/v1/auth/refresh
+ * <p>
+ * Authenticated endpoint'ler:
+ *   POST /api/v1/auth/logout
+ *   GET  /api/v1/auth/me
+ *   ... (diğer tüm endpoint'ler)
+ * <p>
+ * CORS: izin verilen origin'ler CorsProperties üzerinden application.yml'den okunur.
+ * Dev: localhost portları. Prod: gerçek frontend domain'leri.
  */
 @Configuration
 @EnableWebSecurity
@@ -50,10 +62,14 @@ public class SecurityConfig {
 
     private final JwtFilter jwtFilter;
     private final UserDetailsService userDetailsService;
+    private final CorsProperties corsProperties;
 
-    public SecurityConfig(JwtFilter jwtFilter, UserDetailsService userDetailsService) {
+    public SecurityConfig(JwtFilter jwtFilter,
+                          UserDetailsService userDetailsService,
+                          CorsProperties corsProperties) {
         this.jwtFilter = jwtFilter;
         this.userDetailsService = userDetailsService;
+        this.corsProperties = corsProperties;
     }
 
     @Bean
@@ -67,17 +83,21 @@ public class SecurityConfig {
                         .accessDeniedHandler(accessDeniedHandler())
                 )
                 .authorizeHttpRequests(auth -> auth
-                        // Public endpoints
-                        .requestMatchers("/api/v1/auth/**").permitAll()
+                        // Public auth endpoint'leri — sadece belirtilen 3 path
+                        .requestMatchers(HttpMethod.POST, "/api/v1/auth/register").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/auth/login").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/auth/refresh").permitAll()
+                        // Diğer GET public endpoint'ler
                         .requestMatchers(HttpMethod.GET, "/api/v1/businesses/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/locations/**").permitAll()
-                        // Swagger UI and OpenAPI public paths
+                        // Swagger / OpenAPI — prod'da SwaggerConfig @Profile("!prod") ile devre dışı
                         .requestMatchers(
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**",
                                 "/swagger-ui.html"
                         ).permitAll()
-                        // Rest of the requests must be authenticated
+                        // Diğer tüm endpoint'ler — authentication zorunlu
+                        // logout (/api/v1/auth/logout) ve me (/api/v1/auth/me) buraya dahil
                         .anyRequest().authenticated()
                 )
                 .authenticationProvider(authenticationProvider())
@@ -103,11 +123,21 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+    /**
+     * CORS yapılandırması.
+     * İzin verilen origin'ler CorsProperties üzerinden application.yml'den okunur.
+     * allowCredentials(true) ve wildcard origin birlikte kullanılmaz — tarayıcı engeller.
+     * Dev'de localhost portları yeterli; prod'da application-prod.yml üzerinden gerçek domain'ler verilir.
+     */
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        // Geliştirme aşaması için tüm origin'lere izin verilir, prod'da kısıtlanmalıdır.
-        configuration.setAllowedOriginPatterns(List.of("*"));
+        List<String> origins = corsProperties.allowedOrigins();
+        if (origins == null || origins.isEmpty()) {
+            log.warn("No CORS allowed origins configured under app.cors.allowed-origins — defaulting to localhost:3000");
+            origins = List.of("http://localhost:3000");
+        }
+        configuration.setAllowedOrigins(origins);
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
         configuration.setAllowedHeaders(List.of("Authorization", "Content-Type", "Accept", "X-Requested-With"));
         configuration.setExposedHeaders(List.of("Authorization"));
@@ -120,6 +150,7 @@ public class SecurityConfig {
 
     /**
      * Kimlik doğrulanmamış isteklerde JSON formatında 401 yanıtı döner.
+     * Filter chain'den dönen hata olduğu için GlobalExceptionHandler yerine burada yönetilir.
      */
     @Bean
     public AuthenticationEntryPoint authenticationEntryPoint() {
@@ -131,6 +162,7 @@ public class SecurityConfig {
 
     /**
      * Yetkilendirme başarısız olduğunda JSON formatında 403 yanıtı döner.
+     * Filter chain'den dönen hata olduğu için GlobalExceptionHandler yerine burada yönetilir.
      */
     @Bean
     public AccessDeniedHandler accessDeniedHandler() {

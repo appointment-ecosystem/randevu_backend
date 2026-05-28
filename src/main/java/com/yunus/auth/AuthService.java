@@ -9,6 +9,7 @@ import com.yunus.security.JwtService;
 import com.yunus.security.UserPrincipal;
 import com.yunus.user.entity.RefreshToken;
 import com.yunus.user.entity.User;
+import com.yunus.user.entity.UserRole;
 import com.yunus.user.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -69,7 +70,9 @@ public class AuthService {
         user.setPhone(request.getPhone());
         user.setEmail(request.getEmail());
         user.setPasswordHash(passwordEncoder.encode(request.getPassword()));
-        user.setRole(request.getRole());
+        // Güvenlik: public register endpoint'i üzerinden her zaman USER rolü verilir.
+        // BUSINESS_OWNER, BUSINESS_EMPLOYEE ve ADMIN rolleri ayrı admin flow'ları üzerinden atanır.
+        user.setRole(UserRole.USER);
         user.setPhoneVerified(false);
         user.setIsActive(true);
 

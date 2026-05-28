@@ -1,6 +1,7 @@
 package com.yunus.security.jwt;
 
-import com.yunus.security.service.CustomUserDetails;
+import com.yunus.security.JwtService;
+import com.yunus.security.UserPrincipal;
 import com.yunus.user.entity.User;
 import com.yunus.user.entity.UserRole;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,7 +33,7 @@ class JwtServiceTest {
         user.setRole(UserRole.USER);
         user.setIsActive(true);
 
-        CustomUserDetails userDetails = new CustomUserDetails(user);
+        UserPrincipal userDetails = new UserPrincipal(user);
 
         String token = jwtService.generateAccessToken(userDetails);
         assertNotNull(token);
@@ -52,7 +53,7 @@ class JwtServiceTest {
         user.setRole(UserRole.BUSINESS_OWNER);
         user.setIsActive(true);
 
-        CustomUserDetails userDetails = new CustomUserDetails(user);
+        UserPrincipal userDetails = new UserPrincipal(user);
 
         String refreshToken = jwtService.generateRefreshToken(userDetails);
         assertNotNull(refreshToken);

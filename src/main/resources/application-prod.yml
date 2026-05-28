@@ -34,6 +34,15 @@ app:
     access-token-expiration: ${JWT_ACCESS_EXPIRATION:900000}
     refresh-token-expiration: ${JWT_REFRESH_EXPIRATION:604800000}
 
+  # CORS: prod'da gercek frontend domain'leri env variable veya bu dosya uzerinden verilir
+  # allowCredentials=true ile wildcard (*) kullanilamaz
+  cors:
+    allowed-origins: ${CORS_ALLOWED_ORIGINS:https://randevu.example.com}
+
+  # Guvenlik: prod'da Redis erisilemezse token gecersiz say (daha guvenli)
+  security:
+    fail-on-redis-blacklist-error: ${FAIL_ON_REDIS_ERROR:true}
+
   storage:
     endpoint: ${STORAGE_ENDPOINT}
     bucket-name: ${STORAGE_BUCKET}

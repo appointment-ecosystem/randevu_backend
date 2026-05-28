@@ -1,5 +1,6 @@
 package com.yunus.security;
 
+import com.yunus.config.SecurityProperties;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -19,7 +20,12 @@ import org.springframework.web.filter.OncePerRequestFilter;
 /**
  * Her HTTP isteğinde Authorization header'daki Bearer token'ı doğrulayan filtre.
  * Token geçerliyse SecurityContext'e authentication bilgisi set eder.
- * Redis blacklist kontrolü yapılır; Redis erişilemezse güvenli şekilde devam eder.
+ * <p>
+ * Redis blacklist davranışı:
+ *   app.security.fail-on-redis-blacklist-error=false (dev, default):
+ *     Redis erişilemezse blacklist kontrolü atlanır — uygulama ayakta kalır (graceful degradation).
+ *   app.security.fail-on-redis-blacklist-error=true (prod):
+ *     Redis erişilemezse token geçersiz sayılır — daha güvenli, sistem daha kırılgan.
  */
 @Component
 public class JwtFilter extends OncePerRequestFilter {
@@ -31,13 +37,16 @@ public class JwtFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
     private final RedisTemplate<String, String> redisTemplate;
+    private final SecurityProperties securityProperties;
 
     public JwtFilter(JwtService jwtService,
                      UserDetailsService userDetailsService,
-                     RedisTemplate<String, String> redisTemplate) {
+                     RedisTemplate<String, String> redisTemplate,
+                     SecurityProperties securityProperties) {
         this.jwtService = jwtService;
         this.userDetailsService = userDetailsService;
         this.redisTemplate = redisTemplate;
+        this.securityProperties = securityProperties;
     }
 
     @Override
@@ -56,9 +65,9 @@ public class JwtFilter extends OncePerRequestFilter {
         final String jwt = authHeader.substring(BEARER_PREFIX.length());
 
         try {
-            // Redis blacklist kontrolü — Redis erişilemezse devam eder
+            // Redis blacklist kontrolü
             if (isTokenBlacklisted(jwt)) {
-                log.debug("Token is blacklisted");
+                log.debug("Token is blacklisted, rejecting request to: {}", request.getRequestURI());
                 filterChain.doFilter(request, response);
                 return;
             }
@@ -79,7 +88,7 @@ public class JwtFilter extends OncePerRequestFilter {
             }
         } catch (Exception ex) {
             // Token geçersizse veya herhangi bir hata olursa sessizce devam et
-            log.debug("JWT authentication failed: {}", ex.getMessage());
+            log.debug("JWT authentication failed for request to {}: {}", request.getRequestURI(), ex.getMessage());
         }
 
         filterChain.doFilter(request, response);
@@ -87,14 +96,21 @@ public class JwtFilter extends OncePerRequestFilter {
 
     /**
      * Token'ın Redis blacklist'te olup olmadığını kontrol eder.
-     * Redis bağlantı hatası olursa false döner (güvenli devam).
+     * <p>
+     * Redis bağlantı hatası durumunda davranış SecurityProperties ile yönetilir:
+     *   fail-on-redis-blacklist-error=false → false döner (token geçerli sayılır, sistem ayakta kalır)
+     *   fail-on-redis-blacklist-error=true  → true döner (token geçersiz sayılır, daha güvenli)
      */
     private boolean isTokenBlacklisted(String token) {
         try {
             return Boolean.TRUE.equals(redisTemplate.hasKey(BLACKLIST_PREFIX + token));
         } catch (Exception ex) {
-            log.warn("Redis blacklist check failed, proceeding without blacklist: {}", ex.getMessage());
-            return false;
+            if (securityProperties.failOnRedisBlacklistError()) {
+                log.error("Redis blacklist check failed and fail-on-error=true, rejecting token: {}", ex.getMessage());
+                return true; // Token geçersiz say — daha güvenli
+            }
+            log.warn("Redis blacklist check failed, proceeding without blacklist check (fail-on-error=false): {}", ex.getMessage());
+            return false; // Sistemi ayakta tut — graceful degradation
         }
     }
 }

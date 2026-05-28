@@ -3,7 +3,6 @@ package com.yunus.auth.service;
 import com.yunus.auth.AuthService;
 import com.yunus.auth.dto.RegisterRequest;
 import com.yunus.common.exception.ConflictException;
-import com.yunus.user.entity.UserRole;
 import com.yunus.user.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,7 +28,7 @@ class AuthServiceTest {
         request.setPhone("5554443322");
         request.setEmail("yunus@example.com");
         request.setPassword("password123");
-        request.setRole(UserRole.USER);
+        // role alanı kaldırıldı — public register her zaman USER rolüyle kayıt yapar
 
         // Given
         when(userRepository.existsByPhone(request.getPhone())).thenReturn(true);

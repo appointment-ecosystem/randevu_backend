@@ -1,9 +1,7 @@
 package com.yunus.auth.dto;
 
-import com.yunus.user.entity.UserRole;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -11,6 +9,8 @@ import lombok.Setter;
 
 /**
  * Kullanıcı kayıt isteği DTO sınıfı.
+ * Public register endpoint'i üzerinden kayıt olan kullanıcılar her zaman USER rolüyle oluşturulur.
+ * BUSINESS_OWNER ve ADMIN rolleri ayrı flow'lar üzerinden verilir.
  */
 @Getter
 @Setter
@@ -31,7 +31,4 @@ public class RegisterRequest {
     @NotBlank(message = "Şifre boş bırakılamaz")
     @Size(min = 6, max = 32, message = "Şifre en az 6, en fazla 32 karakter olmalıdır")
     private String password;
-
-    @NotNull(message = "Rol belirtilmelidir")
-    private UserRole role;
 }
