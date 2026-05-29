@@ -1,5 +1,7 @@
 package com.yunus.config;
 
+import com.yunus.config.seeder.BusinessCategorySeeder;
+import com.yunus.config.seeder.LocationSeeder;
 import com.yunus.user.entity.User;
 import com.yunus.user.entity.UserRole;
 import com.yunus.user.repository.UserRepository;
@@ -26,14 +28,23 @@ public class DataInitializer implements ApplicationRunner {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final LocationSeeder locationSeeder;
+    private final BusinessCategorySeeder businessCategorySeeder;
 
-    public DataInitializer(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public DataInitializer(UserRepository userRepository,
+                           PasswordEncoder passwordEncoder,
+                           LocationSeeder locationSeeder,
+                           BusinessCategorySeeder businessCategorySeeder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.locationSeeder = locationSeeder;
+        this.businessCategorySeeder = businessCategorySeeder;
     }
 
     @Override
     public void run(ApplicationArguments args) {
+        locationSeeder.seed();
+        businessCategorySeeder.seed();
         seedAdminUser();
     }
 
