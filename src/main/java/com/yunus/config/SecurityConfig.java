@@ -90,6 +90,9 @@ public class SecurityConfig {
                         // Diğer GET public endpoint'ler
                         .requestMatchers(HttpMethod.GET, "/api/v1/businesses/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/locations/**").permitAll()
+                        // Kullanıcı profil endpoint'leri — USER, BUSINESS_OWNER, ADMIN
+                        .requestMatchers("/api/v1/users/me", "/api/v1/users/me/**")
+                        .hasAnyRole("USER", "BUSINESS_OWNER", "ADMIN")
                         // Swagger / OpenAPI — prod'da SwaggerConfig @Profile("!prod") ile devre dışı
                         .requestMatchers(
                                 "/v3/api-docs/**",

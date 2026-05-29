@@ -27,4 +27,11 @@ public interface OtpService {
      * @param phone Telefon numarası
      */
     void invalidateOtp(String phone);
+
+    /**
+     * Telefon için Redis'te geçerli (süresi dolmamış) bir OTP kaydı olup olmadığını kontrol eder.
+     *
+     * @param phone Telefon numarası
+     */
+    boolean hasActiveOtp(String phone);
 }

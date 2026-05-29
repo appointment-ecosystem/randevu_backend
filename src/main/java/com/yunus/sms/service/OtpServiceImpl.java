@@ -4,8 +4,10 @@ import com.yunus.common.exception.BusinessException;
 import com.yunus.sms.config.OtpProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.env.Environment;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import java.util.Arrays;
 import java.security.SecureRandom;
 import java.util.concurrent.TimeUnit;
 
@@ -24,14 +26,17 @@ public class OtpServiceImpl implements OtpService {
     private final RedisTemplate<String, String> redisTemplate;
     private final SmsService smsService;
     private final OtpProperties otpProperties;
+    private final Environment environment;
     private final SecureRandom secureRandom;
 
     public OtpServiceImpl(RedisTemplate<String, String> redisTemplate,
                           SmsService smsService,
-                          OtpProperties otpProperties) {
+                          OtpProperties otpProperties,
+                          Environment environment) {
         this.redisTemplate = redisTemplate;
         this.smsService = smsService;
         this.otpProperties = otpProperties;
+        this.environment = environment;
         this.secureRandom = new SecureRandom();
     }
 
@@ -54,6 +59,9 @@ public class OtpServiceImpl implements OtpService {
 
             smsService.sendSms(phone, message);
             log.info("OTP sent successfully to: {}", phone);
+            if (Arrays.asList(environment.getActiveProfiles()).contains("dev")) {
+                log.info("DEV ONLY — OTP for {}: {}", phone, code);
+            }
         } catch (Exception ex) {
             log.error("Redis connection failed during OTP store for: {}", phone, ex);
             // Redis çökerse veya erişilemezse güvenli modda loga bas ve devam et (ya da istersen hata fırlat,
@@ -101,6 +109,16 @@ public class OtpServiceImpl implements OtpService {
             throw ex;
         } catch (Exception ex) {
             log.error("Redis error during OTP verification for phone: {}", phone, ex);
+            throw new BusinessException("Doğrulama işlemi sırasında sistemsel bir hata oluştu.");
+        }
+    }
+
+    @Override
+    public boolean hasActiveOtp(String phone) {
+        try {
+            return Boolean.TRUE.equals(redisTemplate.hasKey(OTP_CODE_PREFIX + phone));
+        } catch (Exception ex) {
+            log.error("Redis error while checking OTP presence for phone: {}", phone, ex);
             throw new BusinessException("Doğrulama işlemi sırasında sistemsel bir hata oluştu.");
         }
     }
