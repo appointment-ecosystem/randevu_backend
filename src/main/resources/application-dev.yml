@@ -71,3 +71,7 @@ app:
   otp:
     ttl-seconds: ${OTP_TTL:180}
     max-attempts: ${OTP_MAX_ATTEMPTS:5}
+
+  # Isletme olusturma davranisi
+  business:
+    auto-approve: true
