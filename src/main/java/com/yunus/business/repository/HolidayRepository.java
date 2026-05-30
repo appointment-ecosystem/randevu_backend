@@ -27,4 +27,10 @@ public interface HolidayRepository extends JpaRepository<Holiday, UUID> {
 
     // Tatil çakışma kontrolü — addHoliday'de aynı gün aynı kapsam tekrarını önler
     boolean existsByBusinessAndStaffAndDate(Business business, Staff staff, LocalDate date);
+
+    // Slot hesaplamasında tek gün tatil kontrolü — işletme geneli (staff = null)
+    java.util.Optional<Holiday> findByBusinessIdAndStaffIsNullAndDate(UUID businessId, LocalDate date);
+
+    // Slot hesaplamasında tek gün tatil kontrolü — personel bazlı
+    java.util.Optional<Holiday> findByBusinessIdAndStaffIdAndDate(UUID businessId, UUID staffId, LocalDate date);
 }
