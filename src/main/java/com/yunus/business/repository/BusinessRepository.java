@@ -18,4 +18,7 @@ public interface BusinessRepository extends JpaRepository<Business, UUID> {
 
     List<Business> findByStatus(BusinessStatus status);
 
+    // Randevu ve yetki kontrollerinde sahip doğrulaması
+    Optional<Business> findByIdAndOwnerId(UUID id, UUID ownerId);
+
 }
