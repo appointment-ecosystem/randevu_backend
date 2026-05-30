@@ -8,7 +8,9 @@ package com.yunus.business.controller;
 
 import com.yunus.business.dto.BusinessDiscoveryDetailResponse;
 import com.yunus.business.dto.BusinessDiscoveryResponse;
+import com.yunus.business.dto.OpenStatusResponse;
 import com.yunus.business.service.BusinessDiscoveryService;
+import com.yunus.business.service.OpenStatusService;
 import com.yunus.common.response.BaseResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -37,6 +39,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class DiscoverController {
 
     private final BusinessDiscoveryService businessDiscoveryService;
+    private final OpenStatusService openStatusService;
 
     // ─────────────────────────────────────────────────────────────────────────
     // GET /api/v1/discover/businesses
@@ -123,6 +126,26 @@ public class DiscoverController {
             @PathVariable UUID id) {
 
         BusinessDiscoveryDetailResponse result = businessDiscoveryService.getBusinessDetail(id);
+        return ResponseEntity.ok(BaseResponse.success(result));
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // GET /api/v1/discover/businesses/{id}/open-status
+    // İşletmenin anlık açık/kapalı durumunu döner.
+    // ─────────────────────────────────────────────────────────────────────────
+
+    /**
+     * Belirtilen işletmenin anlık açık/kapalı durumunu döner.
+     *
+     * <p>GET /api/v1/discover/businesses/{id}/open-status
+     */
+    @GetMapping("/businesses/{id}/open-status")
+    @Operation(
+            summary = "İşletme açık/kapalı durumu",
+            description = "Onaylanmış işletmenin o an açık veya kapalı olma durumunu detaylarıyla döner."
+    )
+    public ResponseEntity<BaseResponse<OpenStatusResponse>> getOpenStatus(@PathVariable UUID id) {
+        OpenStatusResponse result = openStatusService.getOpenStatus(id);
         return ResponseEntity.ok(BaseResponse.success(result));
     }
 }

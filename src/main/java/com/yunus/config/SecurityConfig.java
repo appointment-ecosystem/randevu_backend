@@ -1,5 +1,51 @@
 package com.yunus.config;
 
+/**
+ * Spring Security temel yapılandırma sınıfı.
+ * CSRF kapalı, session yönetimi stateless (JWT tabanlı).
+ *
+ * ─── Public Endpoint'ler (authentication gerekmez) ───────────────────────────
+ *
+ * Auth:
+ *   POST /api/v1/auth/register
+ *   POST /api/v1/auth/login
+ *   POST /api/v1/auth/refresh
+ *
+ * Konum (location):
+ *   GET  /api/v1/locations/**
+ *
+ * İşletme (legacy businesses):
+ *   GET  /api/v1/businesses/**
+ *
+ * Keşfet (discover) — Faz 5:
+ *   GET  /api/v1/discover/businesses
+ *   GET  /api/v1/discover/businesses/{id}
+ *   GET  /api/v1/discover/businesses/search
+ *   GET  /api/v1/discover/businesses/{id}/open-status
+ *
+ * Değerlendirme (review) — Faz 5:
+ *   GET  /api/v1/reviews/business/{businessId}
+ *
+ * Swagger / OpenAPI:
+ *   /v3/api-docs/**, /swagger-ui/**, /swagger-ui.html
+ *
+ * ─── Kimlik Doğrulama Gerektiren Endpoint'ler ────────────────────────────────
+ *
+ * Kullanıcı profili:
+ *   ANY  /api/v1/users/me, /api/v1/users/me/**  → USER, BUSINESS_OWNER, ADMIN
+ *
+ * Değerlendirme (review) — Faz 5:
+ *   POST   /api/v1/reviews
+ *   GET    /api/v1/reviews/my
+ *   DELETE /api/v1/reviews/{reviewId}
+ *
+ * Diğer tüm endpoint'ler: authenticated()
+ *
+ * ─── CORS ────────────────────────────────────────────────────────────────────
+ *   İzin verilen origin'ler CorsProperties üzerinden application.yml'den okunur.
+ *   Dev: localhost portları. Prod: gerçek frontend domain'leri.
+ */
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.yunus.common.response.BaseResponse;
@@ -36,23 +82,6 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-/**
- * Spring Security temel yapılandırma sınıfı.
- * CSRF kapalı, session yönetimi stateless (JWT tabanlı).
- * <p>
- * Public endpoint'ler (authentication gerekmez):
- *   POST /api/v1/auth/register
- *   POST /api/v1/auth/login
- *   POST /api/v1/auth/refresh
- * <p>
- * Authenticated endpoint'ler:
- *   POST /api/v1/auth/logout
- *   GET  /api/v1/auth/me
- *   ... (diğer tüm endpoint'ler)
- * <p>
- * CORS: izin verilen origin'ler CorsProperties üzerinden application.yml'den okunur.
- * Dev: localhost portları. Prod: gerçek frontend domain'leri.
- */
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
@@ -83,24 +112,44 @@ public class SecurityConfig {
                         .accessDeniedHandler(accessDeniedHandler())
                 )
                 .authorizeHttpRequests(auth -> auth
-                        // Public auth endpoint'leri — sadece belirtilen 3 path
+
+                        // ── Auth (public) ────────────────────────────────────────────
                         .requestMatchers(HttpMethod.POST, "/api/v1/auth/register").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/v1/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/v1/auth/refresh").permitAll()
-                        // Diğer GET public endpoint'ler
-                        .requestMatchers(HttpMethod.GET, "/api/v1/businesses/**").permitAll()
+
+                        // ── Konum (public) ───────────────────────────────────────────
                         .requestMatchers(HttpMethod.GET, "/api/v1/locations/**").permitAll()
-                        // Kullanıcı profil endpoint'leri — USER, BUSINESS_OWNER, ADMIN
-                        .requestMatchers("/api/v1/users/me", "/api/v1/users/me/**")
-                        .hasAnyRole("USER", "BUSINESS_OWNER", "ADMIN")
-                        // Swagger / OpenAPI — prod'da SwaggerConfig @Profile("!prod") ile devre dışı
+
+                        // ── İşletme — legacy (public) ────────────────────────────────
+                        .requestMatchers(HttpMethod.GET, "/api/v1/businesses/**").permitAll()
+
+                        // ── Keşfet / Discover (public) — Faz 5 ──────────────────────
+                        .requestMatchers(HttpMethod.GET, "/api/v1/discover/businesses").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/discover/businesses/search").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/discover/businesses/{id}").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/discover/businesses/{id}/open-status").permitAll()
+
+                        // ── Değerlendirme (public) — Faz 5 ──────────────────────────
+                        .requestMatchers(HttpMethod.GET, "/api/v1/reviews/business/{businessId}").permitAll()
+
+                        // ── Swagger / OpenAPI (public) ───────────────────────────────
                         .requestMatchers(
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**",
                                 "/swagger-ui.html"
                         ).permitAll()
-                        // Diğer tüm endpoint'ler — authentication zorunlu
-                        // logout (/api/v1/auth/logout) ve me (/api/v1/auth/me) buraya dahil
+
+                        // ── Kullanıcı profili (rol bazlı) ────────────────────────────
+                        .requestMatchers("/api/v1/users/me", "/api/v1/users/me/**")
+                        .hasAnyRole("USER", "BUSINESS_OWNER", "ADMIN")
+
+                        // ── Değerlendirme (kimlik doğrulama gerekli) — Faz 5 ─────────
+                        .requestMatchers(HttpMethod.POST,   "/api/v1/reviews").authenticated()
+                        .requestMatchers(HttpMethod.GET,    "/api/v1/reviews/my").authenticated()
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/reviews/{reviewId}").authenticated()
+
+                        // ── Diğer tüm endpoint'ler — kimlik doğrulama zorunlu ────────
                         .anyRequest().authenticated()
                 )
                 .authenticationProvider(authenticationProvider())
@@ -175,6 +224,7 @@ public class SecurityConfig {
         };
     }
 
+    // JSON formatında HTTP yanıtı yazan yardımcı metot
     private void writeJsonResponse(HttpServletResponse response, HttpStatus status, String message) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
