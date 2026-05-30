@@ -391,7 +391,7 @@ public class AppointmentServiceImpl implements AppointmentService {
      */
     private void requireBusinessOwnership(UUID businessId) {
         UUID currentUserId = currentUserService.getCurrentUserId();
-        businessRepository.findByIdAndOwnerId(businessId, currentUserId)
+        businessRepository.findByIdAndOwnerIdAndIsActiveTrue(businessId, currentUserId)
                 .orElseThrow(() -> new ForbiddenException(
                         "Bu işletmenin randevularını görüntüleme yetkiniz yok."));
     }

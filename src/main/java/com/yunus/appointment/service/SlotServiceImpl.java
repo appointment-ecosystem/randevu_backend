@@ -23,7 +23,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -43,7 +42,8 @@ import org.springframework.transaction.annotation.Transactional;
  * ({@code Europe/Istanbul}) yapılır. Bu sınıftaki tüm dönüşümler
  * {@link #ISTANBUL} sabiti üzerinden geçer.
  */
-@Service
+
+@org.springframework.stereotype.Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class SlotServiceImpl implements SlotService {
