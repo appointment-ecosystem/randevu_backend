@@ -56,4 +56,47 @@ public interface ReviewRepository extends JpaRepository<Review, UUID> {
      * @return Eşleşen değerlendirme (opsiyonel)
      */
     Optional<Review> findByIdAndUserId(UUID reviewId, UUID userId);
+
+    // ── Admin yorum yönetimi sorguları ─────────────────────────────────────────
+
+    /**
+     * Tüm yorumları oluşturulma tarihine göre azalan sırada sayfalı döner.
+     * Admin panelinde filtre uygulanmadan tüm yorumları listelemek için kullanılır.
+     *
+     * @param pageable Sayfalama ve sıralama bilgisi
+     * @return Tüm yorumların sayfalı listesi, {@code createdAt DESC} sıralı
+     */
+    Page<Review> findAllByOrderByCreatedAtDesc(Pageable pageable);
+
+    /**
+     * Belirtilen işletmeye ait tüm yorumları (görünür/gizli ayrımı yapmadan)
+     * oluşturulma tarihine göre azalan sırada sayfalı döner.
+     *
+     * @param businessId Filtrelenecek işletmenin UUID'si
+     * @param pageable   Sayfalama ve sıralama bilgisi
+     * @return İşletmeye ait yorumların sayfalı listesi, {@code createdAt DESC} sıralı
+     */
+    Page<Review> findByBusinessIdOrderByCreatedAtDesc(UUID businessId, Pageable pageable);
+
+    /**
+     * Görünürlük durumuna göre filtreli yorumları oluşturulma tarihine göre
+     * azalan sırada sayfalı döner.
+     *
+     * @param isVisible Görünürlük filtresi (true = görünür, false = gizli)
+     * @param pageable  Sayfalama ve sıralama bilgisi
+     * @return Filtrelenmiş yorumların sayfalı listesi, {@code createdAt DESC} sıralı
+     */
+    Page<Review> findByIsVisibleOrderByCreatedAtDesc(Boolean isVisible, Pageable pageable);
+
+    /**
+     * Hem işletme hem görünürlük durumuna göre filtrelenmiş yorumları
+     * oluşturulma tarihine göre azalan sırada sayfalı döner.
+     *
+     * @param businessId Filtrelenecek işletmenin UUID'si
+     * @param isVisible  Görünürlük filtresi (true = görünür, false = gizli)
+     * @param pageable   Sayfalama ve sıralama bilgisi
+     * @return İkili filtreye uyan yorumların sayfalı listesi, {@code createdAt DESC} sıralı
+     */
+    Page<Review> findByBusinessIdAndIsVisibleOrderByCreatedAtDesc(UUID businessId, Boolean isVisible, Pageable pageable);
 }
+

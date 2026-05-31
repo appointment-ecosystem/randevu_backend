@@ -17,6 +17,8 @@ import com.yunus.appointment.repository.AppointmentRepository;
 import com.yunus.common.exception.BusinessException;
 import com.yunus.common.exception.ForbiddenException;
 import com.yunus.common.exception.ResourceNotFoundException;
+import com.yunus.exception.ErrorType;
+import com.yunus.review.dto.AdminReviewResponse;
 import com.yunus.review.dto.CreateReviewRequest;
 import com.yunus.review.dto.ReviewResponse;
 import com.yunus.review.entity.Review;
@@ -24,6 +26,8 @@ import com.yunus.review.repository.ReviewRepository;
 import com.yunus.security.CurrentUserService;
 import com.yunus.user.entity.User;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -34,6 +38,8 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class ReviewServiceImpl implements ReviewService {
+
+    private static final Logger log = LoggerFactory.getLogger(ReviewServiceImpl.class);
 
     // Bağımlılıklar: repository ve yardımcı servisler
     private final ReviewRepository reviewRepository;
@@ -131,5 +137,113 @@ public class ReviewServiceImpl implements ReviewService {
         // Soft delete: fiziksel silme yerine gizle
         review.setIsVisible(false);
         reviewRepository.save(review);
+    }
+
+    // ── Admin yorum yönetimi metodları ──────────────────────────────────────────
+
+    /**
+     * Admin paneli için tüm yorumları opsiyonel businessId ve isVisible filtrelerine göre
+     * sayfalı döner. Dört farklı kombinasyona göre doğru repository metodunu çağırır.
+     *
+     * @param businessId Filtrelenecek işletme UUID'si (null ise tüm işletmeler)
+     * @param isVisible  Görünürlük filtresi (null ise her iki durum dahil edilir)
+     * @param pageable   Sayfalama ve sıralama bilgisi
+     * @return Filtrelenmiş yorumların AdminReviewResponse olarak sayfalı listesi
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public Page<AdminReviewResponse> getAllReviews(UUID businessId, Boolean isVisible, Pageable pageable) {
+        log.info("Admin yorum listeleme isteği — businessId: {}, isVisible: {}", businessId, isVisible);
+
+        // 4 kombinasyon: businessId ve isVisible null/değer durumlarına göre doğru sorgu seç
+        if (businessId != null && isVisible != null) {
+            // Her iki filtre de var
+            return reviewRepository
+                    .findByBusinessIdAndIsVisibleOrderByCreatedAtDesc(businessId, isVisible, pageable)
+                    .map(this::toAdminResponse);
+        } else if (businessId != null) {
+            // Yalnızca işletme filtresi
+            return reviewRepository
+                    .findByBusinessIdOrderByCreatedAtDesc(businessId, pageable)
+                    .map(this::toAdminResponse);
+        } else if (isVisible != null) {
+            // Yalnızca görünürlük filtresi
+            return reviewRepository
+                    .findByIsVisibleOrderByCreatedAtDesc(isVisible, pageable)
+                    .map(this::toAdminResponse);
+        } else {
+            // Filtre yok — tüm yorumlar
+            return reviewRepository
+                    .findAllByOrderByCreatedAtDesc(pageable)
+                    .map(this::toAdminResponse);
+        }
+    }
+
+    /**
+     * Belirtilen yorumu admin tarafından gizler (isVisible = false).
+     * Yorum bulunamazsa ResourceNotFoundException (HTTP 404) fırlatır.
+     *
+     * @param reviewId Gizlenecek yorumun UUID'si
+     */
+    @Override
+    @Transactional
+    public void hideReview(UUID reviewId) {
+        log.info("Admin yorum gizleme isteği — reviewId: {}", reviewId);
+        Review review = findReviewById(reviewId);
+        review.setIsVisible(false);
+        reviewRepository.save(review);
+        log.info("Yorum gizlendi — reviewId: {}", reviewId);
+    }
+
+    /**
+     * Gizlenmiş bir yorumu admin tarafından tekrar görünür yapar (isVisible = true).
+     * Yorum bulunamazsa ResourceNotFoundException (HTTP 404) fırlatır.
+     *
+     * @param reviewId Görünür yapılacak yorumun UUID'si
+     */
+    @Override
+    @Transactional
+    public void showReview(UUID reviewId) {
+        log.info("Admin yorum gösterme isteği — reviewId: {}", reviewId);
+        Review review = findReviewById(reviewId);
+        review.setIsVisible(true);
+        reviewRepository.save(review);
+        log.info("Yorum görünür yapıldı — reviewId: {}", reviewId);
+    }
+
+    // ── Yardımcı metodlar ────────────────────────────────────────────────────
+
+    /**
+     * Kimliğe göre yorumu veri tabanından sorgular.
+     * Bulunamazsa ResourceNotFoundException (HTTP 404) fırlatır.
+     *
+     * @param reviewId Sorgulanacak yorumun UUID'si
+     * @return Bulunan Review entity nesnesi
+     */
+    private Review findReviewById(UUID reviewId) {
+        return reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        ErrorType.REVIEW_NOT_FOUND, "Yorum bulunamadı: " + reviewId));
+    }
+
+    /**
+     * Review entity nesnesini AdminReviewResponse DTO'suna dönüştürür.
+     * İşletme adı ve kullanıcı adı LAZY ilişkilerden @Transactional scope içinde okunur.
+     *
+     * @param review Dönüştürülecek Review entity nesnesi
+     * @return Admin yorum yanıt DTO'su
+     */
+    private AdminReviewResponse toAdminResponse(Review review) {
+        return new AdminReviewResponse(
+                review.getId(),
+                review.getBusiness().getId(),
+                review.getBusiness().getName(),
+                review.getUser().getId(),
+                review.getUser().getFullName(),
+                review.getRating(),
+                review.getComment(),
+                review.getIsVisible(),
+                review.getCreatedAt()
+        );
     }
 }

@@ -39,6 +39,18 @@ package com.yunus.config;
  *   GET    /api/v1/reviews/my
  *   DELETE /api/v1/reviews/{reviewId}
  *
+ * Admin işletme yönetimi:
+ *   ANY  /api/v1/admin/businesses/**  → ADMIN
+ *
+ * Admin kategori yönetimi — P3:
+ *   ANY  /api/v1/admin/categories/**  → ADMIN
+ *
+ * Admin kullanıcı yönetimi — P4:
+ *   ANY  /api/v1/admin/users/**  → ADMIN
+ *
+ * Admin yorum yönetimi — P5:
+ *   ANY  /api/v1/admin/reviews/**  → ADMIN
+ *
  * Diğer tüm endpoint'ler: authenticated()
  *
  * ─── CORS ────────────────────────────────────────────────────────────────────
@@ -139,6 +151,22 @@ public class SecurityConfig {
                                 "/swagger-ui/**",
                                 "/swagger-ui.html"
                         ).permitAll()
+
+                        // ── Admin İşletme Yönetimi (rol bazlı) ─────────────────────────
+                        .requestMatchers("/api/v1/admin/businesses", "/api/v1/admin/businesses/**")
+                        .hasRole("ADMIN")
+
+                        // ── Admin Kategori Yönetimi (rol bazlı) — P3 ────────────────────
+                        .requestMatchers("/api/v1/admin/categories", "/api/v1/admin/categories/**")
+                        .hasRole("ADMIN")
+
+                        // ── Admin Kullanıcı Yönetimi (rol bazlı) — P4 ───────────────────
+                        .requestMatchers("/api/v1/admin/users", "/api/v1/admin/users/**")
+                        .hasRole("ADMIN")
+
+                        // ── Admin Yorum Yönetimi (rol bazlı) — P5 ───────────────────────
+                        .requestMatchers("/api/v1/admin/reviews", "/api/v1/admin/reviews/**")
+                        .hasRole("ADMIN")
 
                         // ── Kullanıcı profili (rol bazlı) ────────────────────────────
                         .requestMatchers("/api/v1/users/me", "/api/v1/users/me/**")

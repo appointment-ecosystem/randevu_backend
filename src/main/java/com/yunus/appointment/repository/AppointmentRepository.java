@@ -6,6 +6,8 @@ import java.time.OffsetDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -269,4 +271,22 @@ public interface AppointmentRepository extends JpaRepository<Appointment, UUID> 
             @Param("rangeStart") OffsetDateTime rangeStart,
             @Param("rangeEnd") OffsetDateTime rangeEnd
     );
+
+    // -------------------------------------------------------------------------
+    // 9. Admin — kullanıcı randevuları (sayfalanmış)
+    // -------------------------------------------------------------------------
+
+    /**
+     * Belirli bir kullanıcıya ait tüm randevuları başlangıç zamanına göre
+     * azalan sırada sayfalanmış olarak döner.
+     *
+     * <p>Kullanım: Admin panelinde {@code GET /api/v1/admin/users/{id}/appointments}
+     * endpoint'inde kullanıcının randevu geçmişini görüntülemek için çağrılır.
+     *
+     * @param userId   randevuları getirilecek kullanıcının UUID'si
+     * @param pageable sayfalama ve sıralama parametreleri
+     * @return sayfalanmış randevu listesi, {@code startTime DESC} sıralı
+     */
+    Page<Appointment> findByUserIdOrderByStartTimeDesc(UUID userId, Pageable pageable);
 }
+

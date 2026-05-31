@@ -15,6 +15,8 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import com.yunus.business.dto.AdminBusinessDetailResponse;
+import com.yunus.business.dto.AdminBusinessListResponse;
 import java.util.HashSet;
 import java.util.Set;
 import lombok.Getter;
@@ -96,5 +98,86 @@ public class Business extends BaseEntity {
             inverseJoinColumns = @JoinColumn(name = "category_id")
     )
     private Set<BusinessCategory> categories = new HashSet<>();
+
+    /**
+     * İşletmeyi admin paneli listeleme yanıt DTO'suna (AdminBusinessListResponse) dönüştürür.
+     * Bu bir static factory metodudur.
+     *
+     * @param business Dönüştürülecek işletme nesnesi
+     * @return Dönüştürülmüş liste yanıtı DTO'su
+     */
+    public static AdminBusinessListResponse toAdminListResponse(Business business) {
+        if (business == null) {
+            return null;
+        }
+        return new AdminBusinessListResponse(
+                business.getId(),
+                business.getName(),
+                business.getSlug(),
+                business.getStatus(),
+                business.getIsActive(),
+                business.getOwner() != null ? business.getOwner().getFullName() : null,
+                business.getOwner() != null ? business.getOwner().getPhone() : null,
+                business.getCity() != null ? business.getCity().getName() : null,
+                business.getDistrict() != null ? business.getDistrict().getName() : null,
+                business.getCreatedAt()
+        );
+    }
+
+    /**
+     * İşletmeyi admin paneli listeleme yanıt DTO'suna (AdminBusinessListResponse) dönüştürür.
+     *
+     * @return Dönüştürülmüş liste yanıtı DTO'su
+     */
+    public AdminBusinessListResponse toAdminListResponse() {
+        return toAdminListResponse(this);
+    }
+
+    /**
+     * İşletmeyi admin paneli detay yanıt DTO'suna (AdminBusinessDetailResponse) dönüştürür.
+     * Bu bir static factory metodudur.
+     *
+     * @param business Dönüştürülecek işletme nesnesi
+     * @return Dönüştürülmüş detay yanıtı DTO'su
+     */
+    public static AdminBusinessDetailResponse toAdminDetailResponse(Business business) {
+        if (business == null) {
+            return null;
+        }
+        return new AdminBusinessDetailResponse(
+                business.getId(),
+                business.getName(),
+                business.getSlug(),
+                business.getStatus(),
+                business.getIsActive(),
+                business.getOwner() != null ? business.getOwner().getFullName() : null,
+                business.getOwner() != null ? business.getOwner().getPhone() : null,
+                business.getCity() != null ? business.getCity().getName() : null,
+                business.getDistrict() != null ? business.getDistrict().getName() : null,
+                business.getCreatedAt(),
+                business.getRejectionReason(),
+                business.getDescription(),
+                business.getPhone(),
+                business.getEmail(),
+                business.getWebsite(),
+                business.getNeighborhood() != null ? business.getNeighborhood().getName() : null,
+                business.getAddressLine(),
+                business.getLatitude(),
+                business.getLongitude(),
+                business.getCategories() != null 
+                        ? business.getCategories().stream().map(BusinessCategory::getName).toList() 
+                        : java.util.Collections.emptyList(),
+                business.getUpdatedAt()
+        );
+    }
+
+    /**
+     * İşletmeyi admin paneli detay yanıt DTO'suna (AdminBusinessDetailResponse) dönüştürür.
+     *
+     * @return Dönüştürülmüş detay yanıtı DTO'su
+     */
+    public AdminBusinessDetailResponse toAdminDetailResponse() {
+        return toAdminDetailResponse(this);
+    }
 
 }
