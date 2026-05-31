@@ -49,6 +49,9 @@ public enum ErrorType {
     SLOT_ALREADY_TAKEN(HttpStatus.CONFLICT),
     HOLIDAY_ALREADY_EXISTS(HttpStatus.CONFLICT),
 
+    // İstek limiti aşıldı (429)
+    RATE_LIMIT_EXCEEDED(HttpStatus.TOO_MANY_REQUESTS),
+
     // Sunucu hatası (500)
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR);
 

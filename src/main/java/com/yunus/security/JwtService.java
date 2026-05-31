@@ -86,6 +86,26 @@ public class JwtService {
                 .compact();
     }
 
+    /**
+     * Token'dan userId claim değerini güvenli biçimde çeker.
+     * Token geçersiz, süresi dolmuş veya userId claim'i yoksa null döner.
+     * Rate limiter gibi kritik olmayan bileşenler tarafından kullanılır;
+     * exception fırlatmak yerine null ile IP'ye düşülür.
+     *
+     * @param token Ham JWT string (Bearer prefix olmadan)
+     * @return userId string değeri; herhangi bir hata durumunda null
+     */
+    public String extractUserIdSafe(String token) {
+        try {
+            Claims claims = extractAllClaims(token);
+            Object userId = claims.get("userId");
+            return userId != null ? userId.toString() : null;
+        } catch (Exception e) {
+            // Geçersiz token, süresi dolmuş token veya parse hatası — null dön
+            return null;
+        }
+    }
+
     /** Secret key'i decode edip HMAC-SHA anahtarı oluşturur */
     private SecretKey getSigningKey() {
         byte[] keyBytes = Decoders.BASE64.decode(jwtProperties.secret());

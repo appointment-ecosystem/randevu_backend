@@ -12,6 +12,8 @@ import jakarta.validation.Valid;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
+import com.yunus.ratelimit.annotation.KeyType;
+import com.yunus.ratelimit.annotation.RateLimit;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -68,6 +70,8 @@ public class AppointmentController {
      * @param request işletme, hizmet, personel (opsiyonel), başlangıç zamanı ve not
      * @return oluşturulan randevunun detayı
      */
+    // 1 saatlik pencerede aynı kullanıcıdan en fazla 20 randevu oluşturma isteği
+    @RateLimit(limit = 20, windowSeconds = 3600, key = "appointment:create", keyType = KeyType.USER)
     @PostMapping
     @Operation(summary = "Randevu oluştur",
                description = "Slot lock ve DB çakışma kontrolü yapılarak PENDING statüsünde " +

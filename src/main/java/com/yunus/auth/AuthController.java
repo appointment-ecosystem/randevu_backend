@@ -8,6 +8,8 @@ import com.yunus.auth.dto.UserInfoResponse;
 import com.yunus.common.response.BaseResponse;
 import com.yunus.security.CurrentUserService;
 import com.yunus.user.entity.User;
+import com.yunus.ratelimit.annotation.KeyType;
+import com.yunus.ratelimit.annotation.RateLimit;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,6 +38,8 @@ public class AuthController {
      * Yeni bir kullanıcı kaydeder.
      * POST /api/v1/auth/register
      */
+    // 1 saat penceresi içinde aynı IP'den en fazla 5 kayıt isteği
+    @RateLimit(limit = 5, windowSeconds = 3600, key = "auth:register", keyType = KeyType.IP)
     @PostMapping("/register")
     public ResponseEntity<BaseResponse<AuthResponse>> register(@Valid @RequestBody RegisterRequest request) {
         AuthResponse response = authService.register(request);
@@ -46,6 +50,8 @@ public class AuthController {
      * Kullanıcı girişi sağlar.
      * POST /api/v1/auth/login
      */
+    // 15 dakika penceresi içinde aynı IP'den en fazla 10 giriş denemesi
+    @RateLimit(limit = 10, windowSeconds = 900, key = "auth:login", keyType = KeyType.IP)
     @PostMapping("/login")
     public ResponseEntity<BaseResponse<AuthResponse>> login(@Valid @RequestBody LoginRequest request) {
         AuthResponse response = authService.login(request);

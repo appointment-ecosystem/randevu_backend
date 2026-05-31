@@ -12,6 +12,8 @@ import com.yunus.business.dto.OpenStatusResponse;
 import com.yunus.business.service.BusinessDiscoveryService;
 import com.yunus.business.service.OpenStatusService;
 import com.yunus.common.response.BaseResponse;
+import com.yunus.ratelimit.annotation.KeyType;
+import com.yunus.ratelimit.annotation.RateLimit;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.UUID;
@@ -54,6 +56,8 @@ public class DiscoverController {
      *
      * <p>GET /api/v1/discover/businesses
      */
+    // Keşif listesi için 1 dakikada IP başına en fazla 100 istek
+    @RateLimit(limit = 100, windowSeconds = 60, key = "discover", keyType = KeyType.IP)
     @GetMapping("/businesses")
     @Operation(
             summary = "İşletme listesi",
@@ -87,6 +91,8 @@ public class DiscoverController {
      *
      * <p>GET /api/v1/discover/businesses/search
      */
+    // Arama endpoint'i için 1 dakikada IP başına en fazla 100 istek
+    @RateLimit(limit = 100, windowSeconds = 60, key = "discover", keyType = KeyType.IP)
     @GetMapping("/businesses/search")
     @Operation(
             summary = "İşletme arama",
@@ -117,6 +123,8 @@ public class DiscoverController {
      *
      * <p>GET /api/v1/discover/businesses/{id}
      */
+    // İşletme detayı için 1 dakikada IP başına en fazla 100 istek
+    @RateLimit(limit = 100, windowSeconds = 60, key = "discover", keyType = KeyType.IP)
     @GetMapping("/businesses/{id}")
     @Operation(
             summary = "İşletme detayı",
@@ -139,6 +147,8 @@ public class DiscoverController {
      *
      * <p>GET /api/v1/discover/businesses/{id}/open-status
      */
+    // İşletme çalışma durumu için 1 dakikada IP başına en fazla 100 istek
+    @RateLimit(limit = 100, windowSeconds = 60, key = "discover", keyType = KeyType.IP)
     @GetMapping("/businesses/{id}/open-status")
     @Operation(
             summary = "İşletme açık/kapalı durumu",

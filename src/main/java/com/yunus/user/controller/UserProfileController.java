@@ -8,6 +8,8 @@ import com.yunus.user.dto.PhoneVerifyRequest;
 import com.yunus.user.dto.UpdateProfileRequest;
 import com.yunus.user.dto.UserProfileResponse;
 import com.yunus.user.service.UserProfileService;
+import com.yunus.ratelimit.annotation.KeyType;
+import com.yunus.ratelimit.annotation.RateLimit;
 import jakarta.validation.Valid;
 import java.util.UUID;
 import org.springframework.http.ResponseEntity;
@@ -57,6 +59,8 @@ public class UserProfileController {
         return ResponseEntity.ok(BaseResponse.success("Şifre başarıyla güncellendi"));
     }
 
+    // 10 dakika penceresi içinde aynı IP'den en fazla 3 OTP isteği
+    @RateLimit(limit = 3, windowSeconds = 600, key = "user:otp", keyType = KeyType.IP)
     @PostMapping("/phone/otp")
     public ResponseEntity<BaseResponse<Void>> requestPhoneOtp(@RequestBody(required = false) PhoneOtpRequest request) {
         UUID userId = currentUserService.getCurrentUserId();

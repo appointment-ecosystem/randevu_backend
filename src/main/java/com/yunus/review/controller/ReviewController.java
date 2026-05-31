@@ -12,6 +12,8 @@ package com.yunus.review.controller;
  */
 
 import com.yunus.common.response.BaseResponse;
+import com.yunus.ratelimit.annotation.KeyType;
+import com.yunus.ratelimit.annotation.RateLimit;
 import com.yunus.review.dto.CreateReviewRequest;
 import com.yunus.review.dto.ReviewResponse;
 import com.yunus.review.service.ReviewService;
@@ -53,6 +55,8 @@ public class ReviewController {
      * @param request Değerlendirme bilgilerini taşıyan istek gövdesi
      * @return Oluşturulan değerlendirme bilgisi, HTTP 201 Created
      */
+    // 1 saatlik pencerede aynı kullanıcıdan en fazla 10 değlendirme oluşturma isteği
+    @RateLimit(limit = 10, windowSeconds = 3600, key = "review:create", keyType = KeyType.USER)
     @Operation(summary = "Değerlendirme oluştur", description = "Tamamlanmış randevuya yorum ve puan ekler")
     @PostMapping
     @PreAuthorize("isAuthenticated()")
