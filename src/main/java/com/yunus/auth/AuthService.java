@@ -11,8 +11,10 @@ import com.yunus.user.entity.RefreshToken;
 import com.yunus.user.entity.User;
 import com.yunus.user.entity.UserRole;
 import com.yunus.user.repository.UserRepository;
+import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -30,22 +32,27 @@ public class AuthService {
 
     private static final Logger log = LoggerFactory.getLogger(AuthService.class);
 
+    private static final String BLACKLIST_PREFIX = "blacklist:";
+
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final RefreshTokenService refreshTokenService;
     private final AuthenticationManager authenticationManager;
+    private final RedisTemplate<String, String> redisTemplate;
 
     public AuthService(UserRepository userRepository,
                        PasswordEncoder passwordEncoder,
                        JwtService jwtService,
                        RefreshTokenService refreshTokenService,
-                       AuthenticationManager authenticationManager) {
+                       AuthenticationManager authenticationManager,
+                       RedisTemplate<String, String> redisTemplate) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
         this.refreshTokenService = refreshTokenService;
         this.authenticationManager = authenticationManager;
+        this.redisTemplate = redisTemplate;
     }
 
     // ─── Auth Operations ──────────────────────────────────────────────────────
@@ -147,11 +154,34 @@ public class AuthService {
     }
 
     /**
-     * Oturumu kapatır ve refresh token'ı iptal eder.
+     * Oturumu kapatır: refresh token DB'de revoke edilir, access token Redis blacklist'e eklenir.
+     *
+     * @param rawRefreshToken İptal edilecek ham refresh token
+     * @param accessToken     Blacklist'e eklenecek access token; null ise bu adım atlanır
      */
     @Transactional
-    public void logout(String rawRefreshToken) {
+    public void logout(String rawRefreshToken, String accessToken) {
         refreshTokenService.revokeRefreshToken(rawRefreshToken);
+
+        if (accessToken != null) {
+            try {
+                long remainingMs = jwtService.getRemainingExpiration(accessToken);
+                if (remainingMs > 0) {
+                    redisTemplate.opsForValue().set(
+                            BLACKLIST_PREFIX + accessToken,
+                            "true",
+                            remainingMs,
+                            TimeUnit.MILLISECONDS
+                    );
+                    log.info("Access token blacklisted in Redis, TTL: {} ms", remainingMs);
+                } else {
+                    log.debug("Access token already expired, skipping blacklist.");
+                }
+            } catch (Exception ex) {
+                // Token parse hatası veya Redis erişim hatası — logout akışını durdurma
+                log.warn("Access token could not be blacklisted during logout: {}", ex.getMessage());
+            }
+        }
     }
 
     /**

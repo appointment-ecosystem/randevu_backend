@@ -10,6 +10,7 @@ import com.yunus.security.CurrentUserService;
 import com.yunus.user.entity.User;
 import com.yunus.ratelimit.annotation.KeyType;
 import com.yunus.ratelimit.annotation.RateLimit;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -69,12 +70,19 @@ public class AuthController {
     }
 
     /**
-     * Kullanıcı oturumunu kapatır, refresh token'ı iptal eder.
+     * Kullanıcı oturumunu kapatır.
+     * Refresh token DB'de revoke edilir; Authorization header'dan gelen access token Redis blacklist'e eklenir.
      * POST /api/v1/auth/logout
      */
     @PostMapping("/logout")
-    public ResponseEntity<BaseResponse<Void>> logout(@Valid @RequestBody com.yunus.auth.dto.LogoutRequest request) {
-        authService.logout(request.getRefreshToken());
+    public ResponseEntity<BaseResponse<Void>> logout(@Valid @RequestBody com.yunus.auth.dto.LogoutRequest request,
+                                                     HttpServletRequest httpRequest) {
+        String authHeader = httpRequest.getHeader("Authorization");
+        String accessToken = (authHeader != null && authHeader.startsWith("Bearer "))
+                ? authHeader.substring(7)
+                : null;
+
+        authService.logout(request.getRefreshToken(), accessToken);
         return ResponseEntity.ok(BaseResponse.success("Oturum kapatıldı"));
     }
 

@@ -68,6 +68,19 @@ public class JwtService {
         return extractClaim(token, Claims::getExpiration);
     }
 
+    /**
+     * Token'ın şu andan itibaren kalan geçerlilik süresini milisaniye cinsinden döner.
+     * Token süresi dolmuşsa veya expiration geçmişte kalmışsa 0 döner.
+     *
+     * @param token Ham JWT string (Bearer prefix olmadan)
+     * @return Kalan süre (ms); token süresi dolmuşsa 0
+     */
+    public long getRemainingExpiration(String token) {
+        Date expiration = extractExpiration(token);
+        long remaining = expiration.getTime() - System.currentTimeMillis();
+        return Math.max(remaining, 0L);
+    }
+
     private Claims extractAllClaims(String token) {
         return Jwts.parser()
                 .verifyWith(getSigningKey())
