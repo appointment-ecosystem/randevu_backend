@@ -37,7 +37,6 @@ public class WorkingHourController {
      * GET /api/v1/businesses/{businessId}/working-hours
      */
     @GetMapping
-    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<BaseResponse<List<WorkingHourResponse>>> getBusinessHours(
             @PathVariable UUID businessId) {
         List<WorkingHourResponse> hours = workingHourService.getBusinessHours(businessId);
@@ -49,7 +48,6 @@ public class WorkingHourController {
      * GET /api/v1/businesses/{businessId}/working-hours/staff/{staffId}
      */
     @GetMapping("/staff/{staffId}")
-    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<BaseResponse<List<WorkingHourResponse>>> getStaffHours(
             @PathVariable UUID businessId,
             @PathVariable UUID staffId) {

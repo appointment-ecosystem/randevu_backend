@@ -74,7 +74,11 @@ public class DiscoverController {
 
         Pageable pageable = PageRequest.of(page, size);
         Page<BusinessDiscoveryResponse> result = businessDiscoveryService
-                .getBusinesses(categoryId, cityId, districtId, lat, lng, pageable);
+                .getBusinesses(categoryId, cityId, districtId, lat, lng,
+                        lat != null && lng != null,   // sortByNearest: koordinat varsa mesafeye göre sırala
+                        null,                          // maxDistanceKm: discover endpoint'te filtre yok
+                        null,                          // onlyOpen: discover endpoint'te filtre yok
+                        pageable);
 
         return ResponseEntity.ok(BaseResponse.success(result));
     }

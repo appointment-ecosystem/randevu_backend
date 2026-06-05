@@ -32,5 +32,8 @@ public interface BusinessCategoryRepository extends JpaRepository<BusinessCatego
     /** Tüm kategorileri sıralama değerine (sortOrder) göre artan sırada getirir. */
     List<BusinessCategory> findAllByOrderBySortOrderAsc();
 
+    /** Yalnızca aktif (isActive = true) kategorileri sortOrder'a göre artan sırada getirir. */
+    List<BusinessCategory> findAllByIsActiveTrueOrderBySortOrderAsc();
+
 }
 

@@ -27,12 +27,18 @@ public interface BusinessDiscoveryService {
      * alanı Haversine formülüyle hesaplanır ve sonuçlar mesafeye göre sıralanır.
      * Koordinat verilmemişse {@code distanceKm} {@code null} olarak döner.
      *
-     * @param categoryId  opsiyonel kategori filtresi; null ise uygulanmaz
-     * @param cityId      opsiyonel şehir filtresi; null ise uygulanmaz
-     * @param districtId  opsiyonel ilçe filtresi; null ise uygulanmaz
-     * @param lat         kullanıcının enlemi (mesafe sıralaması için); null olabilir
-     * @param lng         kullanıcının boylamı (mesafe sıralaması için); null olabilir
-     * @param pageable    sayfalama ve sıralama
+     * <p>{@code sortBy="nearest"} isteğinde {@code lat}/{@code lng} eksikse mesafe
+     * sıralaması atlanır; varsayılan sıralama (id asc) uygulanır — NPE olmaz.
+     *
+     * @param categoryId    opsiyonel kategori filtresi; null ise uygulanmaz
+     * @param cityId        opsiyonel şehir filtresi; null ise uygulanmaz
+     * @param districtId    opsiyonel ilçe filtresi; null ise uygulanmaz
+     * @param lat           kullanıcının enlemi (mesafe sıralaması için); null olabilir
+     * @param lng           kullanıcının boylamı (mesafe sıralaması için); null olabilir
+     * @param sortByNearest true ise mesafeye göre artan sıralama; lat/lng yoksa yoksayılır
+     * @param maxDistanceKm maksimum mesafe filtresi (km); null ise uygulanmaz
+     * @param onlyOpen      true ise yalnızca şu an açık işletmeleri döner; null/false ise filtre yok
+     * @param pageable      sayfalama ve sıralama
      * @return filtrelenmiş işletme özet sayfası
      */
     Page<BusinessDiscoveryResponse> getBusinesses(
@@ -41,6 +47,9 @@ public interface BusinessDiscoveryService {
             UUID districtId,
             Double lat,
             Double lng,
+            boolean sortByNearest,
+            Double maxDistanceKm,
+            Boolean onlyOpen,
             Pageable pageable
     );
 

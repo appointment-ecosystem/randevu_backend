@@ -5,8 +5,9 @@ package com.yunus.business.service;
 // Ne yapıyor: Onaylanmış işletmeleri veritabanından çeker, kapak fotoğrafı/
 //             ortalama puan/yorum sayısı/kategori gibi ek bilgileri zenginleştirir.
 //             lat/lng verilmişse HaversineUtil ile mesafe hesaplar ve sonuçları
-//             mesafeye göre artan sırayla döner. Arama ve detay endpoint'lerini
-//             de yönetir.
+//             mesafeye göre artan sırayla döner. sortByNearest=true ama lat/lng
+//             eksikse NPE yerine varsayılan sıralama uygulanır. onlyOpen ve
+//             maxDistanceKm filtreleri de desteklenir.
 
 import com.yunus.business.dto.BusinessDiscoveryDetailResponse;
 import com.yunus.business.dto.BusinessDiscoveryDetailResponse.ServiceSummary;
@@ -26,6 +27,8 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -43,10 +46,13 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class BusinessDiscoveryServiceImpl implements BusinessDiscoveryService {
 
+    private static final Logger log = LoggerFactory.getLogger(BusinessDiscoveryServiceImpl.class);
+
     private final BusinessDiscoveryRepository discoveryRepository;
     private final BusinessPhotoRepository     photoRepository;
     private final ServiceRepository           serviceRepository;
     private final StaffRepository             staffRepository;
+    private final OpenStatusService           openStatusService;
 
     // ─────────────────────────────────────────────────────────────────────────
     // getBusinesses
@@ -59,7 +65,18 @@ public class BusinessDiscoveryServiceImpl implements BusinessDiscoveryService {
             UUID districtId,
             Double lat,
             Double lng,
+            boolean sortByNearest,
+            Double maxDistanceKm,
+            Boolean onlyOpen,
             Pageable pageable) {
+
+        // sortByNearest=true ama koordinat verilmemişse güvenli fallback
+        // — NPE yerine loglayarak varsayılan sıralamaya geç
+        final boolean canSortByDistance = sortByNearest && lat != null && lng != null;
+        if (sortByNearest && (lat == null || lng == null)) {
+            log.warn("sortBy=nearest istendi fakat lat/lng parametresi eksik; "
+                    + "varsayılan sıralama uygulanıyor");
+        }
 
         Page<Business> page = discoveryRepository.findApprovedBusinesses(
                 categoryId, cityId, districtId, pageable);
@@ -67,11 +84,26 @@ public class BusinessDiscoveryServiceImpl implements BusinessDiscoveryService {
         // Her Business'ı yanıt nesnesine dönüştür; koordinat varsa mesafeyi hesapla
         List<BusinessDiscoveryResponse> mapped = page.getContent().stream()
                 .map(b -> toDiscoveryResponse(b, lat, lng))
+                // maxDistanceKm filtresi: koordinat ve eşik varsa uygula
+                .filter(r -> {
+                    if (maxDistanceKm == null || lat == null || lng == null) return true;
+                    return r.distanceKm() != null && r.distanceKm() <= maxDistanceKm;
+                })
+                // onlyOpen filtresi: true ise şu an kapalı işletmeleri ele
+                .filter(r -> {
+                    if (!Boolean.TRUE.equals(onlyOpen)) return true;
+                    try {
+                        return openStatusService.getOpenStatus(r.id()).open();
+                    } catch (Exception e) {
+                        // işletme bulunamazsa veya durum hesaplanamazsa dahil et
+                        log.debug("Open-status kontrolü başarısız, işletme dahil ediliyor: {}", r.id());
+                        return true;
+                    }
+                })
                 .collect(Collectors.toList());
 
-        // lat/lng verilmişse distanceKm'e göre artan sıralama uygula
-        // (Page'in toplam eleman sayısı ve sayfalama bilgisi korunur)
-        if (lat != null && lng != null) {
+        // Mesafeye göre artan sıralama — yalnızca koordinat tamam olduğunda
+        if (canSortByDistance) {
             mapped.sort(Comparator.comparingDouble(r ->
                     r.distanceKm() != null ? r.distanceKm() : Double.MAX_VALUE));
         }

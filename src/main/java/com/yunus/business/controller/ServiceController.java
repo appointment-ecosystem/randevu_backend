@@ -42,7 +42,6 @@ public class ServiceController {
      * GET /api/v1/businesses/{businessId}/services
      */
     @GetMapping
-    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<BaseResponse<List<ServiceResponse>>> getServices(
             @PathVariable UUID businessId) {
         List<ServiceResponse> services = serviceManagementService.getServices(businessId);
@@ -54,7 +53,6 @@ public class ServiceController {
      * GET /api/v1/businesses/{businessId}/services/{serviceId}
      */
     @GetMapping("/{serviceId}")
-    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<BaseResponse<ServiceResponse>> getService(
             @PathVariable UUID businessId,
             @PathVariable UUID serviceId) {

@@ -14,8 +14,19 @@ package com.yunus.config;
  * Konum (location):
  *   GET  /api/v1/locations/**
  *
- * İşletme (legacy businesses):
- *   GET  /api/v1/businesses/**
+ * Kategoriler (categories):
+ *   GET  /api/v1/categories
+ *
+ * İşletme (businesses) — GET public:
+ *   GET  /api/v1/businesses
+ *   GET  /api/v1/businesses/{id}
+ *   GET  /api/v1/businesses/{id}/services
+ *   GET  /api/v1/businesses/{id}/services/{serviceId}
+ *   GET  /api/v1/businesses/{id}/staff
+ *   GET  /api/v1/businesses/{id}/staff/{staffId}
+ *   GET  /api/v1/businesses/{id}/photos
+ *   GET  /api/v1/businesses/{id}/working-hours
+ *   GET  /api/v1/businesses/{id}/working-hours/staff/{staffId}
  *
  * Keşfet (discover) — Faz 5:
  *   GET  /api/v1/discover/businesses
@@ -132,6 +143,9 @@ public class SecurityConfig {
 
                         // ── Konum (public) ───────────────────────────────────────────
                         .requestMatchers(HttpMethod.GET, "/api/v1/locations/**").permitAll()
+
+                        // ── Kategoriler (public) ─────────────────────────────────────
+                        .requestMatchers(HttpMethod.GET, "/api/v1/categories").permitAll()
 
                         // ── İşletme — legacy (public) ────────────────────────────────
                         .requestMatchers(HttpMethod.GET, "/api/v1/businesses/**").permitAll()

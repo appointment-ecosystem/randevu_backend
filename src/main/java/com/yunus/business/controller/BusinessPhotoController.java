@@ -39,7 +39,6 @@ public class BusinessPhotoController {
      * GET /api/v1/businesses/{businessId}/photos
      */
     @GetMapping
-    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<BaseResponse<List<BusinessPhotoResponse>>> getPhotos(
             @PathVariable UUID businessId) {
         List<BusinessPhotoResponse> photos = businessPhotoService.getPhotos(businessId);

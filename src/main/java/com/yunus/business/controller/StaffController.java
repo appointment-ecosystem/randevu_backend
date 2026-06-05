@@ -42,7 +42,6 @@ public class StaffController {
      * GET /api/v1/businesses/{businessId}/staff
      */
     @GetMapping
-    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<BaseResponse<List<StaffResponse>>> getStaffList(
             @PathVariable UUID businessId) {
         List<StaffResponse> staffList = staffService.getStaffList(businessId);
@@ -54,7 +53,6 @@ public class StaffController {
      * GET /api/v1/businesses/{businessId}/staff/{staffId}
      */
     @GetMapping("/{staffId}")
-    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<BaseResponse<StaffResponse>> getStaff(
             @PathVariable UUID businessId,
             @PathVariable UUID staffId) {

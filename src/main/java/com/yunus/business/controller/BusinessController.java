@@ -1,15 +1,20 @@
 package com.yunus.business.controller;
 
+import com.yunus.business.dto.BusinessDiscoveryResponse;
 import com.yunus.business.dto.BusinessResponse;
 import com.yunus.business.dto.BusinessStatusResponse;
 import com.yunus.business.dto.CreateBusinessRequest;
 import com.yunus.business.dto.UpdateBusinessRequest;
+import com.yunus.business.service.BusinessDiscoveryService;
 import com.yunus.business.service.BusinessService;
 import com.yunus.common.response.BaseResponse;
 import com.yunus.security.CurrentUserService;
 import jakarta.validation.Valid;
 import java.util.List;
 import java.util.UUID;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +23,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -28,17 +34,59 @@ import org.springframework.web.bind.annotation.RestController;
 public class BusinessController {
 
     private final BusinessService businessService;
+    private final BusinessDiscoveryService businessDiscoveryService;
     private final CurrentUserService currentUserService;
 
-    public BusinessController(BusinessService businessService, CurrentUserService currentUserService) {
+    public BusinessController(BusinessService businessService,
+                              BusinessDiscoveryService businessDiscoveryService,
+                              CurrentUserService currentUserService) {
         this.businessService = businessService;
+        this.businessDiscoveryService = businessDiscoveryService;
         this.currentUserService = currentUserService;
     }
 
     /**
-     * İşletme oluşturur (sadece BUSINESS_OWNER).
-     * POST /api/v1/businesses
+     * Onaylanmış işletmeleri listeler (public).
+     * GET /api/v1/businesses
+     *
+     * <p>Desteklenen query parametreleri:
+     * <ul>
+     *   <li>{@code sortBy} — "nearest" verilirse konuma göre sırala;
+     *       lat/lng eksikse NPE yerine varsayılan sıralama uygulanır.</li>
+     *   <li>{@code lat}, {@code lng} — kullanıcı koordinatları (mesafe hesabı için).</li>
+     *   <li>{@code maxDistance} — km cinsinden maksimum mesafe filtresi.</li>
+     *   <li>{@code onlyOpen} — true ise yalnızca şu an açık işletmeler.</li>
+     *   <li>{@code categoryId}, {@code cityId}, {@code districtId} — opsiyonel filtreler.</li>
+     *   <li>{@code page} (0-indexed), {@code size} — sayfalama.</li>
+     * </ul>
      */
+    @GetMapping
+    public ResponseEntity<BaseResponse<Page<BusinessDiscoveryResponse>>> getBusinesses(
+            @RequestParam(required = false) String sortBy,
+            @RequestParam(required = false) Double lat,
+            @RequestParam(required = false) Double lng,
+            @RequestParam(required = false) Double maxDistance,
+            @RequestParam(required = false) Boolean onlyOpen,
+            @RequestParam(required = false) UUID categoryId,
+            @RequestParam(required = false) UUID cityId,
+            @RequestParam(required = false) UUID districtId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size) {
+
+        boolean sortByNearest = "nearest".equalsIgnoreCase(sortBy);
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<BusinessDiscoveryResponse> result = businessDiscoveryService.getBusinesses(
+                categoryId, cityId, districtId,
+                lat, lng,
+                sortByNearest,
+                maxDistance,
+                onlyOpen,
+                pageable);
+
+        return ResponseEntity.ok(BaseResponse.success(result));
+    }
+
     @PostMapping
     @PreAuthorize("hasRole('BUSINESS_OWNER')")
     public ResponseEntity<BaseResponse<BusinessResponse>> createBusiness(
