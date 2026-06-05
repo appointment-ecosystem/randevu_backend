@@ -1,0 +1,1838 @@
+{
+  "info": {
+    "_postman_id": "randevu-api-collection-v1",
+    "name": "Randevu API - Faz 1-6",
+    "description": "Tüm Faz 1-6 endpoint'lerini kapsayan Postman Collection. Ortam değişkeni olarak 'Randevu Env' kullanılmalıdır.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080/api/v1",
+      "type": "string"
+    },
+    {
+      "key": "accessToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "refreshToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "businessId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "userId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "appointmentId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "reviewId",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "description": "Kimlik doğrulama, kayıt, giriş, çıkış ve oturum yenileme endpoint'leri.",
+      "item": [
+        {
+          "name": "Kayıt Ol (Register)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fullName\": \"Ahmet Yılmaz\",\n  \"phone\": \"05321234567\",\n  \"password\": \"Test1234!\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "register"]
+            },
+            "description": "Yeni kullanıcı kaydı oluşturur. Rate limit: IP başına 1 saatte 5 istek."
+          }
+        },
+        {
+          "name": "Giriş Yap (Login)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var data = pm.response.json();",
+                  "pm.environment.set(\"accessToken\", data.data.accessToken);",
+                  "pm.environment.set(\"refreshToken\", data.data.refreshToken);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phone\": \"05321234567\",\n  \"password\": \"Test1234!\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "login"]
+            },
+            "description": "Kullanıcı girişi. Başarılı girişte accessToken ve refreshToken otomatik olarak environment'a set edilir. Rate limit: IP başına 15 dakikada 10 istek."
+          }
+        },
+        {
+          "name": "Token Yenile (Refresh)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var data = pm.response.json();",
+                  "pm.environment.set(\"accessToken\", data.data.accessToken);",
+                  "pm.environment.set(\"refreshToken\", data.data.refreshToken);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/refresh",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "refresh"]
+            },
+            "description": "Rotasyonlu token yenileme. Yeni accessToken ve refreshToken döner."
+          }
+        },
+        {
+          "name": "Çıkış Yap (Logout)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/logout",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "logout"]
+            },
+            "description": "Oturumu kapatır. Refresh token DB'de revoke edilir, access token Redis blacklist'e eklenir."
+          }
+        },
+        {
+          "name": "Benim Bilgilerim (Me)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/me",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "me"]
+            },
+            "description": "Giriş yapmış kullanıcının profil detaylarını döner."
+          }
+        }
+      ]
+    },
+    {
+      "name": "User",
+      "description": "Giriş yapmış kullanıcının profil yönetimi endpoint'leri. Tüm istekler Authorization header gerektirir.",
+      "item": [
+        {
+          "name": "Profilimi Getir",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/users/me",
+              "host": ["{{baseUrl}}"],
+              "path": ["users", "me"]
+            },
+            "description": "Giriş yapan kullanıcının kendi profil bilgilerini döner."
+          }
+        },
+        {
+          "name": "Profili Güncelle",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fullName\": \"Ahmet Kaya Yılmaz\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/users/me",
+              "host": ["{{baseUrl}}"],
+              "path": ["users", "me"]
+            },
+            "description": "Kullanıcı profil bilgilerini günceller."
+          }
+        },
+        {
+          "name": "Şifre Değiştir",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"currentPassword\": \"Test1234!\",\n  \"newPassword\": \"YeniSifre2024!\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/users/me/change-password",
+              "host": ["{{baseUrl}}"],
+              "path": ["users", "me", "change-password"]
+            },
+            "description": "Mevcut şifreyi doğrulayarak yeni şifre belirler."
+          }
+        },
+        {
+          "name": "Telefon OTP Gönder",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/users/me/phone/otp",
+              "host": ["{{baseUrl}}"],
+              "path": ["users", "me", "phone", "otp"]
+            },
+            "description": "Telefon doğrulaması için OTP kodu gönderir. Rate limit: IP başına 10 dakikada 3 istek."
+          }
+        },
+        {
+          "name": "Telefon Doğrula",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"otp\": \"123456\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/users/me/phone/verify",
+              "host": ["{{baseUrl}}"],
+              "path": ["users", "me", "phone", "verify"]
+            },
+            "description": "OTP kodu ile telefon numarasını doğrular."
+          }
+        },
+        {
+          "name": "Hesabı Devre Dışı Bırak",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/users/me",
+              "host": ["{{baseUrl}}"],
+              "path": ["users", "me"]
+            },
+            "description": "Kendi hesabını pasifleştirir (soft delete)."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Business",
+      "description": "İşletme oluşturma ve yönetim endpoint'leri.",
+      "item": [
+        {
+          "name": "İşletme Oluştur",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var data = pm.response.json();",
+                  "if (data.data && data.data.id) {",
+                  "  pm.environment.set(\"businessId\", data.data.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Ahmet Berber\",\n  \"description\": \"Profesyonel erkek kuaförü ve berber hizmeti\",\n  \"phone\": \"02121234567\",\n  \"email\": \"ahmetberber@example.com\",\n  \"address\": \"Bağcılar Mahallesi, Atatürk Caddesi No:15\",\n  \"categoryId\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"cityId\": \"3fa85f64-5717-4562-b3fc-2c963f66afa7\",\n  \"districtId\": \"3fa85f64-5717-4562-b3fc-2c963f66afa8\",\n  \"neighborhoodId\": \"3fa85f64-5717-4562-b3fc-2c963f66afa9\",\n  \"latitude\": 41.0082,\n  \"longitude\": 28.9784\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/businesses",
+              "host": ["{{baseUrl}}"],
+              "path": ["businesses"]
+            },
+            "description": "Yeni işletme oluşturur. Yalnızca BUSINESS_OWNER rolü yapabilir. Oluşturulan işletmenin ID'si otomatik olarak businessId değişkenine set edilir."
+          }
+        },
+        {
+          "name": "Kendi İşletmelerimi Listele",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/businesses/mine",
+              "host": ["{{baseUrl}}"],
+              "path": ["businesses", "mine"]
+            },
+            "description": "Giriş yapan kullanıcının sahip olduğu işletmeleri listeler."
+          }
+        },
+        {
+          "name": "İşletme Detayı (Public)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/businesses/{{businessId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["businesses", "{{businessId}}"]
+            },
+            "description": "Belirtilen işletmenin detay bilgisini döner. Kimlik doğrulama gerekmez."
+          }
+        },
+        {
+          "name": "İşletme Güncelle",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Ahmet Berber & Kuaför\",\n  \"description\": \"Profesyonel erkek kuaförü, berber ve saç bakım hizmetleri\",\n  \"phone\": \"02121234568\",\n  \"email\": \"ahmetberber@example.com\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/businesses/{{businessId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["businesses", "{{businessId}}"]
+            },
+            "description": "İşletme bilgilerini günceller. Yalnızca BUSINESS_OWNER rolü yapabilir."
+          }
+        },
+        {
+          "name": "İşletme Durumunu Getir",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/businesses/{{businessId}}/status",
+              "host": ["{{baseUrl}}"],
+              "path": ["businesses", "{{businessId}}", "status"]
+            },
+            "description": "İşletmenin onay durumunu ve aktiflik bilgisini döner."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Business / Photos",
+      "description": "İşletme fotoğraf yönetimi endpoint'leri (multipart/form-data).",
+      "item": [
+        {
+          "name": "Fotoğrafları Listele",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/businesses/{{businessId}}/photos",
+              "host": ["{{baseUrl}}"],
+              "path": ["businesses", "{{businessId}}", "photos"]
+            },
+            "description": "İşletmenin fotoğraflarını sortOrder'a göre sıralı döner."
+          }
+        },
+        {
+          "name": "Fotoğraf Yükle",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "type": "file",
+                  "src": "",
+                  "description": "Yüklenecek fotoğraf dosyası (JPG, PNG)"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/businesses/{{businessId}}/photos",
+              "host": ["{{baseUrl}}"],
+              "path": ["businesses", "{{businessId}}", "photos"]
+            },
+            "description": "İşletmeye yeni fotoğraf yükler. multipart/form-data ile 'file' alanı gönderilmelidir."
+          }
+        },
+        {
+          "name": "Kapak Fotoğrafı Ayarla",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/businesses/{{businessId}}/photos/PHOTO_ID/cover",
+              "host": ["{{baseUrl}}"],
+              "path": ["businesses", "{{businessId}}", "photos", "PHOTO_ID", "cover"]
+            },
+            "description": "Belirtilen fotoğrafı kapak görseli yapar. PHOTO_ID yerine gerçek UUID yazın."
+          }
+        },
+        {
+          "name": "Fotoğraf Sil",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/businesses/{{businessId}}/photos/PHOTO_ID",
+              "host": ["{{baseUrl}}"],
+              "path": ["businesses", "{{businessId}}", "photos", "PHOTO_ID"]
+            },
+            "description": "Fotoğrafı R2'den ve DB'den kalıcı olarak siler. PHOTO_ID yerine gerçek UUID yazın."
+          }
+        },
+        {
+          "name": "Fotoğraf Sıralamasını Güncelle",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  { \"photoId\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\", \"sortOrder\": 1 },\n  { \"photoId\": \"3fa85f64-5717-4562-b3fc-2c963f66afa7\", \"sortOrder\": 2 },\n  { \"photoId\": \"3fa85f64-5717-4562-b3fc-2c963f66afa8\", \"sortOrder\": 3 }\n]",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/businesses/{{businessId}}/photos/sort",
+              "host": ["{{baseUrl}}"],
+              "path": ["businesses", "{{businessId}}", "photos", "sort"]
+            },
+            "description": "Birden fazla fotoğrafın sıralama değerini toplu günceller."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Business / Services",
+      "description": "İşletme hizmetleri CRUD ve görsel yönetimi endpoint'leri.",
+      "item": [
+        {
+          "name": "Hizmetleri Listele",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/businesses/{{businessId}}/services",
+              "host": ["{{baseUrl}}"],
+              "path": ["businesses", "{{businessId}}", "services"]
+            },
+            "description": "İşletmenin aktif hizmet listesini döner."
+          }
+        },
+        {
+          "name": "Hizmet Detayı",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/businesses/{{businessId}}/services/SERVICE_ID",
+              "host": ["{{baseUrl}}"],
+              "path": ["businesses", "{{businessId}}", "services", "SERVICE_ID"]
+            },
+            "description": "Tek bir hizmetin detayını döner. SERVICE_ID yerine gerçek UUID yazın."
+          }
+        },
+        {
+          "name": "Hizmet Oluştur",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Saç Kesimi\",\n  \"description\": \"Klasik ve modern saç kesimi hizmeti\",\n  \"durationMinutes\": 30,\n  \"price\": 150.00\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/businesses/{{businessId}}/services",
+              "host": ["{{baseUrl}}"],
+              "path": ["businesses", "{{businessId}}", "services"]
+            },
+            "description": "Yeni hizmet oluşturur. Yalnızca işletme sahibi yapabilir."
+          }
+        },
+        {
+          "name": "Hizmet Güncelle",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Saç Kesimi & Yıkama\",\n  \"description\": \"Saç yıkama dahil profesyonel kesim\",\n  \"durationMinutes\": 45,\n  \"price\": 200.00\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/businesses/{{businessId}}/services/SERVICE_ID",
+              "host": ["{{baseUrl}}"],
+              "path": ["businesses", "{{businessId}}", "services", "SERVICE_ID"]
+            },
+            "description": "Mevcut hizmeti günceller. SERVICE_ID yerine gerçek UUID yazın."
+          }
+        },
+        {
+          "name": "Hizmet Görseli Yükle",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "type": "file",
+                  "src": "",
+                  "description": "Hizmet görseli (JPG, PNG)"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/businesses/{{businessId}}/services/SERVICE_ID/image",
+              "host": ["{{baseUrl}}"],
+              "path": ["businesses", "{{businessId}}", "services", "SERVICE_ID", "image"]
+            },
+            "description": "Hizmet görseli yükler. Varsa eski görsel R2'den silinir. SERVICE_ID yerine gerçek UUID yazın."
+          }
+        },
+        {
+          "name": "Hizmet Görselini Sil",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/businesses/{{businessId}}/services/SERVICE_ID/image",
+              "host": ["{{baseUrl}}"],
+              "path": ["businesses", "{{businessId}}", "services", "SERVICE_ID", "image"]
+            },
+            "description": "Hizmet görselini R2'den ve DB'den siler."
+          }
+        },
+        {
+          "name": "Hizmeti Pasife Al",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/businesses/{{businessId}}/services/SERVICE_ID/deactivate",
+              "host": ["{{baseUrl}}"],
+              "path": ["businesses", "{{businessId}}", "services", "SERVICE_ID", "deactivate"]
+            },
+            "description": "Hizmeti pasife alır (soft delete)."
+          }
+        },
+        {
+          "name": "Hizmeti Aktive Et",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/businesses/{{businessId}}/services/SERVICE_ID/activate",
+              "host": ["{{baseUrl}}"],
+              "path": ["businesses", "{{businessId}}", "services", "SERVICE_ID", "activate"]
+            },
+            "description": "Pasif hizmeti tekrar aktive eder."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Business / Staff",
+      "description": "İşletme personeli yönetimi endpoint'leri.",
+      "item": [
+        {
+          "name": "Personelleri Listele",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/businesses/{{businessId}}/staff",
+              "host": ["{{baseUrl}}"],
+              "path": ["businesses", "{{businessId}}", "staff"]
+            },
+            "description": "İşletmenin aktif personel listesini döner."
+          }
+        },
+        {
+          "name": "Personel Detayı",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/businesses/{{businessId}}/staff/STAFF_ID",
+              "host": ["{{baseUrl}}"],
+              "path": ["businesses", "{{businessId}}", "staff", "STAFF_ID"]
+            },
+            "description": "Tek bir personelin detayını döner. STAFF_ID yerine gerçek UUID yazın."
+          }
+        },
+        {
+          "name": "Personel Oluştur",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fullName\": \"Mehmet Demir\",\n  \"title\": \"Kıdemli Berber\",\n  \"phone\": \"05331234567\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/businesses/{{businessId}}/staff",
+              "host": ["{{baseUrl}}"],
+              "path": ["businesses", "{{businessId}}", "staff"]
+            },
+            "description": "Yeni personel oluşturur. Yalnızca işletme sahibi yapabilir."
+          }
+        },
+        {
+          "name": "Personel Güncelle",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fullName\": \"Mehmet Ali Demir\",\n  \"title\": \"Baş Berber\",\n  \"phone\": \"05331234568\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/businesses/{{businessId}}/staff/STAFF_ID",
+              "host": ["{{baseUrl}}"],
+              "path": ["businesses", "{{businessId}}", "staff", "STAFF_ID"]
+            },
+            "description": "Personel bilgisini günceller. STAFF_ID yerine gerçek UUID yazın."
+          }
+        },
+        {
+          "name": "Personel Profil Fotoğrafı Yükle",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "type": "file",
+                  "src": "",
+                  "description": "Personel profil fotoğrafı (JPG, PNG)"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/businesses/{{businessId}}/staff/STAFF_ID/photo",
+              "host": ["{{baseUrl}}"],
+              "path": ["businesses", "{{businessId}}", "staff", "STAFF_ID", "photo"]
+            },
+            "description": "Profil fotoğrafı yükler. Varsa eski fotoğraf R2'den silinir."
+          }
+        },
+        {
+          "name": "Personel Profil Fotoğrafını Sil",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/businesses/{{businessId}}/staff/STAFF_ID/photo",
+              "host": ["{{baseUrl}}"],
+              "path": ["businesses", "{{businessId}}", "staff", "STAFF_ID", "photo"]
+            },
+            "description": "Profil fotoğrafını R2'den ve DB'den siler."
+          }
+        },
+        {
+          "name": "Personeli Pasife Al",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/businesses/{{businessId}}/staff/STAFF_ID/deactivate",
+              "host": ["{{baseUrl}}"],
+              "path": ["businesses", "{{businessId}}", "staff", "STAFF_ID", "deactivate"]
+            },
+            "description": "Personeli pasife alır (soft delete)."
+          }
+        },
+        {
+          "name": "Personeli Aktive Et",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/businesses/{{businessId}}/staff/STAFF_ID/activate",
+              "host": ["{{baseUrl}}"],
+              "path": ["businesses", "{{businessId}}", "staff", "STAFF_ID", "activate"]
+            },
+            "description": "Pasif personeli tekrar aktive eder."
+          }
+        },
+        {
+          "name": "Personele Hizmet Ata",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"3fa85f64-5717-4562-b3fc-2c963f66afa7\"\n]",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/businesses/{{businessId}}/staff/STAFF_ID/services",
+              "host": ["{{baseUrl}}"],
+              "path": ["businesses", "{{businessId}}", "staff", "STAFF_ID", "services"]
+            },
+            "description": "Personele hizmet atar. UUID listesi body olarak gönderilir."
+          }
+        },
+        {
+          "name": "Personelden Hizmet Kaldır",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  \"3fa85f64-5717-4562-b3fc-2c963f66afa6\"\n]",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/businesses/{{businessId}}/staff/STAFF_ID/services",
+              "host": ["{{baseUrl}}"],
+              "path": ["businesses", "{{businessId}}", "staff", "STAFF_ID", "services"]
+            },
+            "description": "Personelden belirtilen hizmetleri kaldırır. UUID listesi body olarak gönderilir."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Business / Working Hours & Holidays",
+      "description": "İşletme ve personel çalışma saati ile tatil/kapalı gün yönetimi.",
+      "item": [
+        {
+          "name": "İşletme Çalışma Saatlerini Getir",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/businesses/{{businessId}}/working-hours",
+              "host": ["{{baseUrl}}"],
+              "path": ["businesses", "{{businessId}}", "working-hours"]
+            },
+            "description": "İşletmenin genel çalışma saatlerini listeler."
+          }
+        },
+        {
+          "name": "Personel Çalışma Saatlerini Getir",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/businesses/{{businessId}}/working-hours/staff/STAFF_ID",
+              "host": ["{{baseUrl}}"],
+              "path": ["businesses", "{{businessId}}", "working-hours", "staff", "STAFF_ID"]
+            },
+            "description": "Belirtilen personelin çalışma saatlerini listeler."
+          }
+        },
+        {
+          "name": "İşletme Çalışma Saatlerini Set Et (Bulk)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"hours\": [\n    { \"dayOfWeek\": \"MONDAY\",    \"isOpen\": true,  \"openTime\": \"09:00\", \"closeTime\": \"18:00\" },\n    { \"dayOfWeek\": \"TUESDAY\",   \"isOpen\": true,  \"openTime\": \"09:00\", \"closeTime\": \"18:00\" },\n    { \"dayOfWeek\": \"WEDNESDAY\", \"isOpen\": true,  \"openTime\": \"09:00\", \"closeTime\": \"18:00\" },\n    { \"dayOfWeek\": \"THURSDAY\",  \"isOpen\": true,  \"openTime\": \"09:00\", \"closeTime\": \"18:00\" },\n    { \"dayOfWeek\": \"FRIDAY\",    \"isOpen\": true,  \"openTime\": \"09:00\", \"closeTime\": \"18:00\" },\n    { \"dayOfWeek\": \"SATURDAY\",  \"isOpen\": true,  \"openTime\": \"10:00\", \"closeTime\": \"16:00\" },\n    { \"dayOfWeek\": \"SUNDAY\",    \"isOpen\": false, \"openTime\": null,    \"closeTime\": null    }\n  ]\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/businesses/{{businessId}}/working-hours",
+              "host": ["{{baseUrl}}"],
+              "path": ["businesses", "{{businessId}}", "working-hours"]
+            },
+            "description": "İşletme geneli çalışma saatlerini tamamen yeniden set eder. Mevcut saatler silinir."
+          }
+        },
+        {
+          "name": "Personel Çalışma Saatlerini Set Et (Bulk)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"hours\": [\n    { \"dayOfWeek\": \"MONDAY\",    \"isOpen\": true,  \"openTime\": \"09:00\", \"closeTime\": \"17:00\" },\n    { \"dayOfWeek\": \"TUESDAY\",   \"isOpen\": true,  \"openTime\": \"09:00\", \"closeTime\": \"17:00\" },\n    { \"dayOfWeek\": \"WEDNESDAY\", \"isOpen\": false, \"openTime\": null,    \"closeTime\": null    },\n    { \"dayOfWeek\": \"THURSDAY\",  \"isOpen\": true,  \"openTime\": \"09:00\", \"closeTime\": \"17:00\" },\n    { \"dayOfWeek\": \"FRIDAY\",    \"isOpen\": true,  \"openTime\": \"09:00\", \"closeTime\": \"17:00\" },\n    { \"dayOfWeek\": \"SATURDAY\",  \"isOpen\": true,  \"openTime\": \"10:00\", \"closeTime\": \"15:00\" },\n    { \"dayOfWeek\": \"SUNDAY\",    \"isOpen\": false, \"openTime\": null,    \"closeTime\": null    }\n  ]\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/businesses/{{businessId}}/working-hours/staff/STAFF_ID",
+              "host": ["{{baseUrl}}"],
+              "path": ["businesses", "{{businessId}}", "working-hours", "staff", "STAFF_ID"]
+            },
+            "description": "Personelin çalışma saatlerini tamamen yeniden set eder."
+          }
+        },
+        {
+          "name": "Tek Günün Çalışma Saatini Güncelle",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"dayOfWeek\": \"MONDAY\",\n  \"isOpen\": true,\n  \"openTime\": \"08:00\",\n  \"closeTime\": \"19:00\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/businesses/{{businessId}}/working-hours/WORKING_HOUR_ID",
+              "host": ["{{baseUrl}}"],
+              "path": ["businesses", "{{businessId}}", "working-hours", "WORKING_HOUR_ID"]
+            },
+            "description": "Tek bir günün çalışma saatini günceller. WORKING_HOUR_ID yerine gerçek UUID yazın."
+          }
+        },
+        {
+          "name": "Tatilleri Listele",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/businesses/{{businessId}}/holidays",
+              "host": ["{{baseUrl}}"],
+              "path": ["businesses", "{{businessId}}", "holidays"],
+              "query": [
+                {
+                  "key": "staffId",
+                  "value": "",
+                  "description": "Opsiyonel. Dolu bırakılırsa işletme geneli tatiller döner.",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "staffId verilmezse işletme geneli tatiller; verilirse personele özel tatiller döner."
+          }
+        },
+        {
+          "name": "Tatil Ekle",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"date\": \"2025-01-01\",\n  \"description\": \"Yılbaşı Tatili\",\n  \"staffId\": null\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/businesses/{{businessId}}/holidays",
+              "host": ["{{baseUrl}}"],
+              "path": ["businesses", "{{businessId}}", "holidays"]
+            },
+            "description": "Yeni tatil ekler. staffId null ise işletme geneli tatil; UUID ise personele özel."
+          }
+        },
+        {
+          "name": "Tatil Sil",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/businesses/{{businessId}}/holidays/HOLIDAY_ID",
+              "host": ["{{baseUrl}}"],
+              "path": ["businesses", "{{businessId}}", "holidays", "HOLIDAY_ID"]
+            },
+            "description": "Tatil kaydını siler. HOLIDAY_ID yerine gerçek UUID yazın."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Slots",
+      "description": "Randevu için müsait zaman dilimi (slot) sorgulama endpoint'leri.",
+      "item": [
+        {
+          "name": "Müsait Slotları Getir",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"businessId\": \"{{businessId}}\",\n  \"serviceId\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"staffId\": null,\n  \"date\": \"2025-03-15\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/slots/available",
+              "host": ["{{baseUrl}}"],
+              "path": ["slots", "available"]
+            },
+            "description": "Seçili işletme, hizmet ve tarihe göre müsait randevu slotlarını döner. staffId opsiyoneldir."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Appointments",
+      "description": "Randevu yaşam döngüsü endpoint'leri (oluşturma, sorgulama, durum geçişleri).",
+      "item": [
+        {
+          "name": "Randevu Oluştur",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var data = pm.response.json();",
+                  "if (data.data && data.data.id) {",
+                  "  pm.environment.set(\"appointmentId\", data.data.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"businessId\": \"{{businessId}}\",\n  \"serviceId\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"staffId\": null,\n  \"startTime\": \"2025-03-15T10:00:00+03:00\",\n  \"note\": \"Lütfen saçı çok kısa kesmeyin.\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/appointments",
+              "host": ["{{baseUrl}}"],
+              "path": ["appointments"]
+            },
+            "description": "Yeni randevu oluşturur. PENDING statüsünde oluşur. Rate limit: kullanıcı başına 1 saatte 20 istek."
+          }
+        },
+        {
+          "name": "Kendi Randevularım",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/appointments/my",
+              "host": ["{{baseUrl}}"],
+              "path": ["appointments", "my"],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "PENDING",
+                  "description": "Opsiyonel filtre: PENDING, CONFIRMED, CANCELLED_BY_USER, CANCELLED_BY_BUSINESS, COMPLETED, NO_SHOW",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Giriş yapan kullanıcının randevularını listeler. status ile filtrelenebilir."
+          }
+        },
+        {
+          "name": "Randevu Detayı",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/appointments/{{appointmentId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["appointments", "{{appointmentId}}"]
+            },
+            "description": "Belirtilen randevunun detayını getirir."
+          }
+        },
+        {
+          "name": "İşletme Randevuları (Tarih Aralığı)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/appointments/business/{{businessId}}?rangeStart=2025-03-01T00:00:00+03:00&rangeEnd=2025-03-31T23:59:59+03:00",
+              "host": ["{{baseUrl}}"],
+              "path": ["appointments", "business", "{{businessId}}"],
+              "query": [
+                { "key": "rangeStart", "value": "2025-03-01T00:00:00+03:00" },
+                { "key": "rangeEnd",   "value": "2025-03-31T23:59:59+03:00" },
+                {
+                  "key": "status",
+                  "value": "CONFIRMED",
+                  "description": "Opsiyonel durum filtresi",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "İşletmenin belirtilen tarih aralığındaki randevularını listeler."
+          }
+        },
+        {
+          "name": "Randevuyu Onayla (İşletme)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/appointments/{{appointmentId}}/confirm",
+              "host": ["{{baseUrl}}"],
+              "path": ["appointments", "{{appointmentId}}", "confirm"]
+            },
+            "description": "PENDING → CONFIRMED. Yalnızca işletme sahibi yapabilir."
+          }
+        },
+        {
+          "name": "Randevuyu İptal Et (Kullanıcı)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reason\": \"Başka bir işim çıktı.\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/appointments/{{appointmentId}}/cancel",
+              "host": ["{{baseUrl}}"],
+              "path": ["appointments", "{{appointmentId}}", "cancel"]
+            },
+            "description": "Kullanıcı kendi randevusunu CANCELLED_BY_USER statüsüne geçirir. reason opsiyoneldir."
+          }
+        },
+        {
+          "name": "Randevuyu İptal Et (İşletme)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reason\": \"Personel hastalık izni nedeniyle uygun değil.\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/appointments/{{appointmentId}}/cancel-by-business",
+              "host": ["{{baseUrl}}"],
+              "path": ["appointments", "{{appointmentId}}", "cancel-by-business"]
+            },
+            "description": "İşletme sahibi randevuyu CANCELLED_BY_BUSINESS statüsüne geçirir. reason opsiyoneldir."
+          }
+        },
+        {
+          "name": "Randevuyu Tamamla",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/appointments/{{appointmentId}}/complete",
+              "host": ["{{baseUrl}}"],
+              "path": ["appointments", "{{appointmentId}}", "complete"]
+            },
+            "description": "CONFIRMED → COMPLETED. Yalnızca işletme sahibi yapabilir."
+          }
+        },
+        {
+          "name": "No-Show İşaretle",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/appointments/{{appointmentId}}/no-show",
+              "host": ["{{baseUrl}}"],
+              "path": ["appointments", "{{appointmentId}}", "no-show"]
+            },
+            "description": "CONFIRMED → NO_SHOW. Kullanıcı gelmediğinde işletme tarafından işaretlenir."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Discovery",
+      "description": "Onaylanmış işletmeleri keşfetme, arama ve detay görüntüleme endpoint'leri. Kimlik doğrulama gerekmez.",
+      "item": [
+        {
+          "name": "İşletmeleri Keşfet (Filtreli)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/discover/businesses?page=0&size=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["discover", "businesses"],
+              "query": [
+                { "key": "page", "value": "0" },
+                { "key": "size", "value": "20" },
+                {
+                  "key": "categoryId",
+                  "value": "",
+                  "description": "Opsiyonel kategori filtresi (UUID)",
+                  "disabled": true
+                },
+                {
+                  "key": "cityId",
+                  "value": "",
+                  "description": "Opsiyonel il filtresi (UUID)",
+                  "disabled": true
+                },
+                {
+                  "key": "districtId",
+                  "value": "",
+                  "description": "Opsiyonel ilçe filtresi (UUID)",
+                  "disabled": true
+                },
+                {
+                  "key": "lat",
+                  "value": "41.0082",
+                  "description": "Opsiyonel kullanıcı enlem (yakına göre sıralar)",
+                  "disabled": true
+                },
+                {
+                  "key": "lng",
+                  "value": "28.9784",
+                  "description": "Opsiyonel kullanıcı boylam (yakına göre sıralar)",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Onaylanmış ve aktif işletmeleri listeler. Koordinat verilirse yakına göre sıralar. Rate limit: IP başına dakikada 100 istek."
+          }
+        },
+        {
+          "name": "İşletme Ara (Keyword)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/discover/businesses/search?q=berber&page=0&size=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["discover", "businesses", "search"],
+              "query": [
+                { "key": "q",    "value": "berber", "description": "Arama anahtar kelimesi" },
+                { "key": "page", "value": "0" },
+                { "key": "size", "value": "20" },
+                {
+                  "key": "cityId",
+                  "value": "",
+                  "description": "Opsiyonel il filtresi (UUID)",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "İşletme adı veya açıklamasında anahtar kelime araması yapar."
+          }
+        },
+        {
+          "name": "İşletme Detayı (Keşif)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/discover/businesses/{{businessId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["discover", "businesses", "{{businessId}}"]
+            },
+            "description": "Onaylanmış işletmenin hizmet, personel ve iletişim bilgilerini döner."
+          }
+        },
+        {
+          "name": "İşletme Açık/Kapalı Durumu",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/discover/businesses/{{businessId}}/open-status",
+              "host": ["{{baseUrl}}"],
+              "path": ["discover", "businesses", "{{businessId}}", "open-status"]
+            },
+            "description": "İşletmenin anlık açık veya kapalı olma durumunu döner."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Reviews",
+      "description": "Kullanıcı değerlendirme (yorum ve puan) endpoint'leri.",
+      "item": [
+        {
+          "name": "Değerlendirme Oluştur",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var data = pm.response.json();",
+                  "if (data.data && data.data.id) {",
+                  "  pm.environment.set(\"reviewId\", data.data.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"appointmentId\": \"{{appointmentId}}\",\n  \"rating\": 5,\n  \"comment\": \"Hizmet kalitesi mükemmeldi, personel çok ilgiliydi. Kesinlikle tavsiye ederim.\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/reviews",
+              "host": ["{{baseUrl}}"],
+              "path": ["reviews"]
+            },
+            "description": "Tamamlanmış randevuya yorum ve puan ekler. Rate limit: kullanıcı başına 1 saatte 10 istek."
+          }
+        },
+        {
+          "name": "İşletme Değerlendirmelerini Listele",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/reviews/business/{{businessId}}?page=0&size=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["reviews", "business", "{{businessId}}"],
+              "query": [
+                { "key": "page", "value": "0" },
+                { "key": "size", "value": "20" }
+              ]
+            },
+            "description": "İşletmeye ait görünür yorumları sayfalı döner. Kimlik doğrulama gerekmez."
+          }
+        },
+        {
+          "name": "Kendi Değerlendirmelerim",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/reviews/my?page=0&size=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["reviews", "my"],
+              "query": [
+                { "key": "page", "value": "0" },
+                { "key": "size", "value": "20" }
+              ]
+            },
+            "description": "Giriş yapan kullanıcının tüm değerlendirmelerini sayfalı döner."
+          }
+        },
+        {
+          "name": "Değerlendirme Sil",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/reviews/{{reviewId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["reviews", "{{reviewId}}"]
+            },
+            "description": "Kendi yorumunu soft-delete ile gizler (isVisible=false)."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Location",
+      "description": "İl, ilçe ve mahalle listeleme endpoint'leri. Kimlik doğrulama gerekmez.",
+      "item": [
+        {
+          "name": "İlleri Listele",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/locations/cities",
+              "host": ["{{baseUrl}}"],
+              "path": ["locations", "cities"]
+            },
+            "description": "Aktif illeri listeler."
+          }
+        },
+        {
+          "name": "İle Ait İlçeleri Listele",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/locations/cities/CITY_ID/districts",
+              "host": ["{{baseUrl}}"],
+              "path": ["locations", "cities", "CITY_ID", "districts"]
+            },
+            "description": "Seçilen ile ait aktif ilçeleri listeler. CITY_ID yerine gerçek UUID yazın."
+          }
+        },
+        {
+          "name": "İlçeye Ait Mahalleleri Listele",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/locations/districts/DISTRICT_ID/neighborhoods",
+              "host": ["{{baseUrl}}"],
+              "path": ["locations", "districts", "DISTRICT_ID", "neighborhoods"]
+            },
+            "description": "Seçilen ilçeye ait aktif mahalleleri listeler. DISTRICT_ID yerine gerçek UUID yazın."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Admin / Businesses",
+      "description": "Admin işletme yönetimi endpoint'leri. ROLE_ADMIN yetkisi gerektirir.",
+      "item": [
+        {
+          "name": "Tüm İşletmeleri Listele",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/businesses?page=0&size=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "businesses"],
+              "query": [
+                { "key": "page", "value": "0" },
+                { "key": "size", "value": "20" },
+                {
+                  "key": "status",
+                  "value": "PENDING",
+                  "description": "Opsiyonel: PENDING, APPROVED, REJECTED, SUSPENDED",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Tüm işletmeleri opsiyonel durum filtresiyle sayfalı listeler."
+          }
+        },
+        {
+          "name": "İşletme Detayı (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/businesses/{{businessId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "businesses", "{{businessId}}"]
+            },
+            "description": "Admin paneline özel tüm işletme detay bilgilerini getirir."
+          }
+        },
+        {
+          "name": "İşletme Onayla",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/businesses/{{businessId}}/approve",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "businesses", "{{businessId}}", "approve"]
+            },
+            "description": "Bekleyen işletmeyi onaylar."
+          }
+        },
+        {
+          "name": "İşletme Reddet",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reason\": \"Sağlanan belgeler eksik veya geçersizdir.\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/admin/businesses/{{businessId}}/reject",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "businesses", "{{businessId}}", "reject"]
+            },
+            "description": "İşletmeyi red gerekçesiyle reddeder."
+          }
+        },
+        {
+          "name": "İşletme Askıya Al",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reason\": \"Kullanıcı şikayetleri nedeniyle inceleme sürecinde askıya alındı.\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/admin/businesses/{{businessId}}/suspend",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "businesses", "{{businessId}}", "suspend"]
+            },
+            "description": "İşletmeyi gerekçe ile askıya alır."
+          }
+        },
+        {
+          "name": "İşletme Aktif Et",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/businesses/{{businessId}}/activate",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "businesses", "{{businessId}}", "activate"]
+            },
+            "description": "Pasif veya askıdaki işletmeyi yeniden aktif hale getirir."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Admin / Users",
+      "description": "Admin kullanıcı yönetimi endpoint'leri. ROLE_ADMIN yetkisi gerektirir.",
+      "item": [
+        {
+          "name": "Tüm Kullanıcıları Listele",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/users",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "users"]
+            },
+            "description": "Sistemdeki tüm kullanıcıları listeler."
+          }
+        },
+        {
+          "name": "Kullanıcı Detayı",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/users/{{userId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "users", "{{userId}}"]
+            },
+            "description": "Belirtilen kullanıcının detay bilgilerini getirir."
+          }
+        },
+        {
+          "name": "Kullanıcı Randevuları (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/users/{{userId}}/appointments?page=0&size=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "users", "{{userId}}", "appointments"],
+              "query": [
+                { "key": "page", "value": "0" },
+                { "key": "size", "value": "20" }
+              ]
+            },
+            "description": "Belirtilen kullanıcıya ait randevuları sayfalanmış listeler."
+          }
+        },
+        {
+          "name": "Kullanıcı Rolü Güncelle",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"role\": \"BUSINESS_OWNER\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/admin/users/{{userId}}/role",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "users", "{{userId}}", "role"]
+            },
+            "description": "Kullanıcı rolünü değiştirir. Geçerli değerler: USER, BUSINESS_OWNER, ADMIN."
+          }
+        },
+        {
+          "name": "Kullanıcı Devre Dışı Bırak",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/users/{{userId}}/deactivate",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "users", "{{userId}}", "deactivate"]
+            },
+            "description": "Belirtilen kullanıcıyı devre dışı bırakır (soft delete)."
+          }
+        },
+        {
+          "name": "Kullanıcı Aktif Et",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/users/{{userId}}/activate",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "users", "{{userId}}", "activate"]
+            },
+            "description": "Pasif kullanıcıyı yeniden aktif eder."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Admin / Reviews",
+      "description": "Admin yorum moderasyonu endpoint'leri. ROLE_ADMIN yetkisi gerektirir.",
+      "item": [
+        {
+          "name": "Tüm Yorumları Listele (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/reviews?page=0&size=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "reviews"],
+              "query": [
+                { "key": "page", "value": "0" },
+                { "key": "size", "value": "20" },
+                {
+                  "key": "businessId",
+                  "value": "",
+                  "description": "Opsiyonel işletme filtresi (UUID)",
+                  "disabled": true
+                },
+                {
+                  "key": "isVisible",
+                  "value": "true",
+                  "description": "Opsiyonel görünürlük filtresi (true/false)",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Tüm yorumları opsiyonel filtrelerle sayfalanmış listeler."
+          }
+        },
+        {
+          "name": "Yorumu Gizle",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/reviews/{{reviewId}}/hide",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "reviews", "{{reviewId}}", "hide"]
+            },
+            "description": "Belirtilen yorumu gizler (isVisible=false)."
+          }
+        },
+        {
+          "name": "Yorumu Görünür Yap",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/reviews/{{reviewId}}/show",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "reviews", "{{reviewId}}", "show"]
+            },
+            "description": "Gizlenmiş yorumu tekrar görünür yapar (isVisible=true)."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Admin / Categories",
+      "description": "Admin kategori yönetimi endpoint'leri. ROLE_ADMIN yetkisi gerektirir.",
+      "item": [
+        {
+          "name": "Tüm Kategorileri Listele",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/categories",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "categories"]
+            },
+            "description": "Sistemdeki tüm kategorileri sortOrder'a göre artan sırada listeler."
+          }
+        },
+        {
+          "name": "Kategori Oluştur",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Kuaför & Berber\",\n  \"description\": \"Saç kesimi, sakal tıraşı ve saç bakım hizmetleri\",\n  \"iconUrl\": \"https://cdn.example.com/icons/barber.svg\",\n  \"sortOrder\": 1\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/admin/categories",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "categories"]
+            },
+            "description": "Yeni işletme kategorisi oluşturur. HTTP 201 döner."
+          }
+        },
+        {
+          "name": "Kategori Güncelle",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Kuaför, Berber & Güzellik\",\n  \"description\": \"Saç kesimi, sakal tıraşı, cilt bakımı ve güzellik hizmetleri\",\n  \"iconUrl\": \"https://cdn.example.com/icons/beauty.svg\",\n  \"sortOrder\": 1\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/admin/categories/CATEGORY_ID",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "categories", "CATEGORY_ID"]
+            },
+            "description": "Mevcut bir kategoriyi günceller. CATEGORY_ID yerine gerçek UUID yazın."
+          }
+        },
+        {
+          "name": "Kategori Pasife Al",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/categories/CATEGORY_ID/deactivate",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "categories", "CATEGORY_ID", "deactivate"]
+            },
+            "description": "Belirtilen kategoriyi pasife alır (isActive=false)."
+          }
+        },
+        {
+          "name": "Kategori Aktive Et",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/categories/CATEGORY_ID/activate",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "categories", "CATEGORY_ID", "activate"]
+            },
+            "description": "Pasif kategoriyi tekrar aktif hale getirir (isActive=true)."
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -11,7 +11,6 @@ import lombok.Setter;
 @Setter
 public class LoginRequest {
 
-    @NotBlank(message = "Telefon numarası boş bırakılamaz")
     private String phone;
 
     @NotBlank(message = "Şifre boş bırakılamaz")
