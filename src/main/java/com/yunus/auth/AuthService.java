@@ -101,12 +101,22 @@ public class AuthService {
 
     /**
      * Kullanıcı girişi gerçekleştirir ve token çiftini döner.
+     * Telefon numarası veya e-posta ile giriş yapılabilir.
      */
     @Transactional
     public AuthResponse login(LoginRequest request) {
+        // Phone veya email'den hangisi doluysa onu identifier olarak kullan
+        String identifier = (request.getPhone() != null && !request.getPhone().isBlank())
+                ? request.getPhone()
+                : request.getEmail();
+
+        if (identifier == null || identifier.isBlank()) {
+            throw new BadCredentialsException("Telefon numarası veya e-posta girilmesi zorunludur");
+        }
+
         try {
             Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(request.getPhone(), request.getPassword())
+                    new UsernamePasswordAuthenticationToken(identifier, request.getPassword())
             );
 
             UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
@@ -125,7 +135,7 @@ public class AuthService {
                     .tokenType("Bearer")
                     .build();
         } catch (BadCredentialsException ex) {
-            log.warn("Login failed: invalid credentials for phone: {}", request.getPhone());
+            log.warn("Login failed: invalid credentials for identifier: {}", identifier);
             throw ex; // GlobalExceptionHandler yakalar ve Türkçe mesaj döner
         }
     }

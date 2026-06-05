@@ -10,7 +10,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 /**
- * Telefon numarası ile kullanıcı yükleme işlemini gerçekleştiren servis.
+ * Telefon numarası veya e-posta ile kullanıcı yükleme işlemini gerçekleştiren servis.
  * Spring Security'nin kimlik doğrulama mekanizmasında kullanılır.
  * Pasif kullanıcılar için giriş engellenir.
  */
@@ -25,13 +25,25 @@ public class CustomUserDetailsService implements UserDetailsService {
         this.userRepository = userRepository;
     }
 
+    /**
+     * Gelen değer "@" içeriyorsa e-posta, içermiyorsa telefon numarası olarak kabul edilir.
+     */
     @Override
-    public UserDetails loadUserByUsername(String phone) throws UsernameNotFoundException {
-        User user = userRepository.findByPhone(phone)
-                .orElseThrow(() -> {
-                    log.warn("User not found with phone: {}", phone);
-                    return new UsernameNotFoundException("Kullanıcı bulunamadı: " + phone);
-                });
+    public UserDetails loadUserByUsername(String identifier) throws UsernameNotFoundException {
+        User user;
+        if (identifier != null && identifier.contains("@")) {
+            user = userRepository.findByEmail(identifier)
+                    .orElseThrow(() -> {
+                        log.warn("User not found with email: {}", identifier);
+                        return new UsernameNotFoundException("Kullanıcı bulunamadı: " + identifier);
+                    });
+        } else {
+            user = userRepository.findByPhone(identifier)
+                    .orElseThrow(() -> {
+                        log.warn("User not found with phone: {}", identifier);
+                        return new UsernameNotFoundException("Kullanıcı bulunamadı: " + identifier);
+                    });
+        }
 
         // Pasif kullanıcılar için isEnabled() false dönecek, Spring Security login'i engelleyecek
         return new UserPrincipal(user);
