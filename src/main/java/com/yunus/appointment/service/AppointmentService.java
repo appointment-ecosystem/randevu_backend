@@ -57,6 +57,14 @@ public interface AppointmentService {
     List<AppointmentResponse> getMyAppointments(AppointmentStatus status);
 
     /**
+     * Belirli bir kullanıcının tüm randevularını döner (en yeni → en eski).
+     *
+     * @param userId randevuları getirilecek kullanıcının UUID'si
+     * @return kullanıcının randevu listesi
+     */
+    List<AppointmentResponse> getUserAppointments(UUID userId);
+
+    /**
      * İşletmenin verilen tarih aralığındaki tüm randevularını döner.
      *
      * <p>Yetki: yalnızca işletme sahibi erişebilir.

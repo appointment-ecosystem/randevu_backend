@@ -23,6 +23,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -47,6 +49,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class SlotServiceImpl implements SlotService {
+
+    private static final Logger log = LoggerFactory.getLogger(SlotServiceImpl.class);
 
     /** Tüm timezone dönüşümlerinde kullanılan İstanbul zaman dilimi. */
     private static final ZoneId ISTANBUL = ZoneId.of("Europe/Istanbul");
@@ -86,12 +90,17 @@ public class SlotServiceImpl implements SlotService {
                 .findByIdAndBusinessIdAndIsActiveTrue(serviceId, businessId)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Hizmet bulunamadı veya bu işletmeye ait değil: " + serviceId));
-        int durationMin = service.getDurationMin();
+        Integer durationMin = service.getDurationMin();
+        if (durationMin == null || durationMin <= 0) {
+            throw new BusinessException("Hizmet süresi geçersiz veya tanımlanmamış.");
+        }
 
         // ------------------------------------------------------------------
         // Adım 2 — Haftanın günü (1=Pazartesi, 7=Pazar)
         // ------------------------------------------------------------------
         int dayOfWeek = date.getDayOfWeek().getValue();
+        log.debug("[SlotService] date={} dayOfWeek={} ({}), businessId={}, serviceId={}, staffId={}, durationMin={}",
+                date, dayOfWeek, date.getDayOfWeek(), businessId, serviceId, staffId, durationMin);
 
         // ------------------------------------------------------------------
         // Adım 3 — staffId durumuna göre akış ayrılır
@@ -124,24 +133,41 @@ public class SlotServiceImpl implements SlotService {
                 .findByBusinessIdAndStaffIsNullAndDate(businessId, date)
                 .isPresent();
         if (isHoliday) {
+            log.warn("[SlotService] businessId={} date={} -> TAT\u0130L günü, boş liste döndü.", businessId, date);
             return Collections.emptyList();
         }
 
         // 3b — İşletme geneli çalışma saati
-        WorkingHour wh = workingHourRepository
-                .findByBusinessIdAndStaffIsNull(businessId)
-                .stream()
+        List<WorkingHour> allWh = workingHourRepository.findByBusinessIdAndStaffIsNull(businessId);
+        log.debug("[SlotService] businessId={} için {} adet working_hours kaydı bulundu. Aranan dayOfWeek={}.",
+                businessId, allWh.size(), dayOfWeek);
+        allWh.forEach(w -> log.debug("  -> wh: dayOfWeek={}, isClosed={}, open={}, close={}",
+                w.getDayOfWeek(), w.getIsClosed(), w.getOpenTime(), w.getCloseTime()));
+
+        WorkingHour wh = allWh.stream()
                 .filter(w -> w.getDayOfWeek().equals(dayOfWeek))
                 .findFirst()
                 .orElse(null);
 
-        if (wh == null || Boolean.TRUE.equals(wh.getIsClosed())) {
-            // O gün için kayıt yok ya da kapalı
+        if (wh == null) {
+            log.warn("[SlotService] businessId={} date={} dayOfWeek={} -> Eşleşen working_hours kaydı YOK, boş liste döndü.",
+                    businessId, date, dayOfWeek);
+            return Collections.emptyList();
+        }
+        if (Boolean.TRUE.equals(wh.getIsClosed())) {
+            log.warn("[SlotService] businessId={} date={} dayOfWeek={} -> is_closed=true, boş liste döndü.",
+                    businessId, date, dayOfWeek);
             return Collections.emptyList();
         }
 
         LocalTime openTime  = wh.getOpenTime();
         LocalTime closeTime = wh.getCloseTime();
+        log.debug("[SlotService] openTime={}, closeTime={}, durationMin={}", openTime, closeTime, durationMin);
+
+        if (openTime == null || closeTime == null) {
+            log.warn("[SlotService] openTime veya closeTime null -> boş liste döndü.");
+            return Collections.emptyList();
+        }
 
         // 3c — Gün içindeki meşgul randevuları al (İstanbul timezone'a çevirerek)
         OffsetDateTime rangeStart = date.atTime(openTime).atZone(ISTANBUL).toOffsetDateTime();
@@ -150,6 +176,7 @@ public class SlotServiceImpl implements SlotService {
         List<Appointment> busyAppointments = appointmentRepository
                 .findActiveByBusinessWithoutStaffAndTimeRange(
                         businessId, ACTIVE_STATUSES, rangeStart, rangeEnd);
+        log.debug("[SlotService] Meşgul randevu sayısı: {}", busyAppointments.size());
 
         // 3d — Slotları hesapla (staffId = null, staffName = null)
         return calculateSlots(openTime, closeTime, date, durationMin, busyAppointments, null, null);
@@ -238,6 +265,10 @@ public class SlotServiceImpl implements SlotService {
             closeTime = businessWh.getCloseTime();
         }
 
+        if (openTime == null || closeTime == null) {
+            return Collections.emptyList();
+        }
+
         // 3d — Gün içindeki meşgul randevuları al
         OffsetDateTime rangeStart = date.atTime(openTime).atZone(ISTANBUL).toOffsetDateTime();
         OffsetDateTime rangeEnd   = date.atTime(closeTime).atZone(ISTANBUL).toOffsetDateTime();
@@ -286,6 +317,15 @@ public class SlotServiceImpl implements SlotService {
         OffsetDateTime slotStart = date.atTime(openTime).atZone(ISTANBUL).toOffsetDateTime();
         OffsetDateTime slotEnd   = slotStart.plusMinutes(durationMin);
 
+        log.debug("[SlotService] calculateSlots: workEnd={}, ilk slotStart={}, ilk slotEnd={}",
+                workEnd, slotStart, slotEnd);
+
+        if (slotEnd.isAfter(workEnd)) {
+            log.warn("[SlotService] calculateSlots: İlk slotEnd ({}) zaten workEnd ({}) sonrasında — döngüye girilmiyor! "
+                    + "durationMin={} büyük ihtimalle closeTime-openTime'dan daha uzun.",
+                    slotEnd, workEnd, durationMin);
+        }
+
         List<SlotResponse> result = new ArrayList<>();
 
         // slotEnd kapanış saatini geçmediği sürece üret
@@ -299,6 +339,8 @@ public class SlotServiceImpl implements SlotService {
                     busy.getStartTime().isBefore(currentSlotEnd)
                     && busy.getEndTime().isAfter(currentSlotStart));
 
+            log.debug("[SlotService] slot [{} - {}] isBusy={}", currentSlotStart, currentSlotEnd, isBusy);
+
             // Müsait slotları listeye ekle; meşgul slotlar dahil edilmiyor
             // (sadece müsait slotları dön — available = true garantili)
             if (!isBusy) {
@@ -310,6 +352,7 @@ public class SlotServiceImpl implements SlotService {
             slotEnd   = slotEnd.plusMinutes(durationMin);
         }
 
+        log.debug("[SlotService] Toplam üretilen slot sayısı: {}", result.size());
         return result;
     }
 }

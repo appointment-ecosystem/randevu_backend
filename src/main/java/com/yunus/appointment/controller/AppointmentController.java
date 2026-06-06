@@ -26,6 +26,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import java.time.LocalDate;
+import com.yunus.appointment.dto.AvailableSlotsRequest;
+import com.yunus.appointment.dto.SlotResponse;
+import com.yunus.appointment.service.SlotService;
 
 /**
  * Randevu yaşam döngüsü endpoint'leri.
@@ -54,6 +58,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AppointmentController {
 
     private final AppointmentService appointmentService;
+    private final SlotService slotService;
 
     // =========================================================================
     // Oluşturma
@@ -112,6 +117,24 @@ public class AppointmentController {
     }
 
     /**
+     * Belirtilen kullanıcının randevularını listeler.
+     *
+     * <p>{@code GET /api/v1/appointments/user/{userId}} → HTTP 200
+     *
+     * @param userId randevuları listelenecek kullanıcının UUID'si
+     * @return kullanıcının randevu listesi, startTime DESC sıralı
+     */
+    @GetMapping("/user/{userId}")
+    @Operation(summary = "Kullanıcı randevuları",
+               description = "Belirtilen kullanıcının randevularını döner.")
+    public ResponseEntity<BaseResponse<List<AppointmentResponse>>> getUserAppointments(
+            @PathVariable UUID userId) {
+        
+        List<AppointmentResponse> appointments = appointmentService.getUserAppointments(userId);
+        return ResponseEntity.ok(BaseResponse.success(appointments));
+    }
+
+    /**
      * Belirtilen randevunun detayını getirir.
      *
      * <p>Yetki: randevunun sahibi veya ilgili işletmenin sahibi görüntüleyebilir.
@@ -163,6 +186,32 @@ public class AppointmentController {
         return ResponseEntity.ok(BaseResponse.success(appointments));
     }
 
+    /**
+     * İstemcinin GET isteği ile müsait slotları sorgulamasını sağlar.
+     *
+     * <p>{@code GET /api/v1/appointments/available-slots}
+     *
+     * @param businessId işletmenin UUID'si
+     * @param serviceId  hizmetin UUID'si
+     * @param staffId    personelin UUID'si (opsiyonel)
+     * @param date       sorgulanacak tarih (YYYY-MM-DD)
+     * @return müsait ve dolu slot listesi
+     */
+    @GetMapping("/available-slots")
+    @Operation(summary = "Müsait slotları listele",
+               description = "Seçili işletme, hizmet ve tarihe göre randevu alınabilecek " +
+                             "zaman dilimlerini döner. staffId opsiyoneldir.")
+    public ResponseEntity<BaseResponse<List<SlotResponse>>> getAvailableSlots(
+            @RequestParam UUID businessId,
+            @RequestParam UUID serviceId,
+            @RequestParam(required = false) UUID staffId,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+
+        AvailableSlotsRequest request = new AvailableSlotsRequest(businessId, serviceId, staffId, date);
+        List<SlotResponse> slots = slotService.getAvailableSlots(request);
+        return ResponseEntity.ok(BaseResponse.success(slots));
+    }
+
     // =========================================================================
     // Durum geçişleri
     // =========================================================================
@@ -199,7 +248,7 @@ public class AppointmentController {
      * @param request iptal gerekçesini içeren body (reason opsiyonel)
      * @return güncellenmiş randevu yanıtı
      */
-    @PatchMapping("/{id}/cancel")
+    @PatchMapping({"/{id}/cancel", "/{id}/cancel-by-user"})
     @Operation(summary = "Randevuyu iptal et (kullanıcı)",
                description = "Kullanıcı kendi randevusunu CANCELLED_BY_USER statüsüne geçirir. " +
                              "reason opsiyoneldir.")

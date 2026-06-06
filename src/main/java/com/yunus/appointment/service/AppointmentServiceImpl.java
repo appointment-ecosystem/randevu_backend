@@ -203,6 +203,19 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     /**
      * {@inheritDoc}
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public List<AppointmentResponse> getUserAppointments(UUID userId) {
+        // İlgili kullanıcının randevularını getir
+        return appointmentRepository.findByUserIdOrderByStartTimeDesc(userId)
+                .stream()
+                .map(this::toResponse)
+                .toList();
+    }
+
+    /**
+     * {@inheritDoc}
      *
      * <p>Yetki: yalnızca işletme sahibi erişebilir.
      */

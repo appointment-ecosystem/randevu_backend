@@ -147,6 +147,9 @@ public class SecurityConfig {
                         // ── Kategoriler (public) ─────────────────────────────────────
                         .requestMatchers(HttpMethod.GET, "/api/v1/categories").permitAll()
 
+                        // ── Randevular (public) ──────────────────────────────────────
+                        .requestMatchers(HttpMethod.GET, "/api/v1/appointments/available-slots").permitAll()
+
                         // ── İşletme — legacy (public) ────────────────────────────────
                         .requestMatchers(HttpMethod.GET, "/api/v1/businesses/**").permitAll()
 
@@ -185,6 +188,10 @@ public class SecurityConfig {
                         // ── Kullanıcı profili (rol bazlı) ────────────────────────────
                         .requestMatchers("/api/v1/users/me", "/api/v1/users/me/**")
                         .hasAnyRole("USER", "BUSINESS_OWNER", "ADMIN")
+
+                        // ── Randevu işlemleri (açıkça authenticated) ─────────────────
+                        .requestMatchers(HttpMethod.GET, "/api/v1/appointments/user/{userId}").authenticated()
+                        .requestMatchers(HttpMethod.PATCH, "/api/v1/appointments/{id}/cancel-by-user").authenticated()
 
                         // ── Değerlendirme (kimlik doğrulama gerekli) — Faz 5 ─────────
                         .requestMatchers(HttpMethod.POST,   "/api/v1/reviews").authenticated()
