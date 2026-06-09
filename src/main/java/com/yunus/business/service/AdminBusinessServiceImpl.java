@@ -8,6 +8,10 @@ import com.yunus.business.repository.BusinessRepository;
 import com.yunus.common.exception.BusinessException;
 import com.yunus.common.exception.ResourceNotFoundException;
 import com.yunus.exception.ErrorType;
+import com.yunus.webhook.WebhookEvent;
+import com.yunus.webhook.WebhookService;
+import java.time.OffsetDateTime;
+import java.util.Map;
 import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,14 +31,18 @@ public class AdminBusinessServiceImpl implements AdminBusinessService {
     private static final Logger log = LoggerFactory.getLogger(AdminBusinessServiceImpl.class);
 
     private final BusinessRepository businessRepository;
+    private final WebhookService webhookService;
 
     /**
      * İş mantığı sınıfı için bağımlılık enjeksiyonu yapıcı metodu.
      *
      * @param businessRepository İşletme veri erişim repository nesnesi
+     * @param webhookService     n8n webhook servisi
      */
-    public AdminBusinessServiceImpl(BusinessRepository businessRepository) {
+    public AdminBusinessServiceImpl(BusinessRepository businessRepository,
+                                    WebhookService webhookService) {
         this.businessRepository = businessRepository;
+        this.webhookService = webhookService;
     }
 
     @Override
@@ -61,10 +69,16 @@ public class AdminBusinessServiceImpl implements AdminBusinessService {
     public void approveBusiness(UUID id) {
         log.info("Admin approved business for id: {}", id);
         Business business = findBusinessById(id);
-        
+
         business.setStatus(BusinessStatus.APPROVED);
         business.setRejectionReason(null);
         businessRepository.save(business);
+
+        webhookService.sendWebhook(WebhookEvent.BUSINESS_APPROVED, Map.of(
+                "businessId", business.getId().toString(),
+                "businessName", business.getName(),
+                "approvedAt", OffsetDateTime.now().toString()
+        ));
     }
 
     @Override

@@ -22,9 +22,12 @@ import com.yunus.location.repository.NeighborhoodRepository;
 import com.yunus.user.entity.User;
 import com.yunus.user.entity.UserRole;
 import com.yunus.user.repository.UserRepository;
+import com.yunus.webhook.WebhookEvent;
+import com.yunus.webhook.WebhookService;
 import java.text.Normalizer;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -49,6 +52,7 @@ public class BusinessServiceImpl implements BusinessService {
     private final NeighborhoodRepository neighborhoodRepository;
     private final UserRepository userRepository;
     private final BusinessProperties businessProperties;
+    private final WebhookService webhookService;
 
     public BusinessServiceImpl(BusinessRepository businessRepository,
                                BusinessCategoryRepository businessCategoryRepository,
@@ -56,7 +60,8 @@ public class BusinessServiceImpl implements BusinessService {
                                DistrictRepository districtRepository,
                                NeighborhoodRepository neighborhoodRepository,
                                UserRepository userRepository,
-                               BusinessProperties businessProperties) {
+                               BusinessProperties businessProperties,
+                               WebhookService webhookService) {
         this.businessRepository = businessRepository;
         this.businessCategoryRepository = businessCategoryRepository;
         this.cityRepository = cityRepository;
@@ -64,6 +69,7 @@ public class BusinessServiceImpl implements BusinessService {
         this.neighborhoodRepository = neighborhoodRepository;
         this.userRepository = userRepository;
         this.businessProperties = businessProperties;
+        this.webhookService = webhookService;
     }
 
     @Override
@@ -105,6 +111,14 @@ public class BusinessServiceImpl implements BusinessService {
 
         Business saved = businessRepository.save(business);
         log.info("Business created with id {} and slug {} by owner {}", saved.getId(), saved.getSlug(), ownerId);
+
+        webhookService.sendWebhook(WebhookEvent.BUSINESS_REGISTERED, Map.of(
+                "businessId", saved.getId().toString(),
+                "businessName", saved.getName(),
+                "ownerEmail", owner.getEmail() != null ? owner.getEmail() : "",
+                "createdAt", saved.getCreatedAt().toString()
+        ));
+
         return toBusinessResponse(saved);
     }
 
