@@ -288,5 +288,55 @@ public interface AppointmentRepository extends JpaRepository<Appointment, UUID> 
      * @return sayfalanmış randevu listesi, {@code startTime DESC} sıralı
      */
     Page<Appointment> findByUserIdOrderByStartTimeDesc(UUID userId, Pageable pageable);
+
+    // -------------------------------------------------------------------------
+    // 10. Zamanlı bildirim sorguları — scheduler için
+    // -------------------------------------------------------------------------
+
+    /**
+     * Verilen zaman penceresi içinde başlayacak, PENDING veya CONFIRMED durumundaki
+     * randevuları döner. Hatırlatma bildirimi göndermek için kullanılır.
+     *
+     * <p>Kullanım: {@code NotificationScheduler.sendAppointmentReminders()} —
+     * yaklaşık 24 saat sonraki randevular için hatırlatma bildirimi tetikler.
+     *
+     * @param windowStart pencere başlangıcı (dahil)
+     * @param windowEnd   pencere sonu (hariç)
+     * @return hatırlatma yapılacak randevular
+     */
+    @Query("""
+            SELECT a
+            FROM Appointment a
+            WHERE a.status IN ('PENDING', 'CONFIRMED')
+              AND a.startTime >= :windowStart
+              AND a.startTime < :windowEnd
+            """)
+    List<Appointment> findAppointmentsForReminder(
+            @Param("windowStart") OffsetDateTime windowStart,
+            @Param("windowEnd") OffsetDateTime windowEnd
+    );
+
+    /**
+     * Verilen zaman penceresi içinde tamamlanmış (endTime bu aralıkta olan),
+     * COMPLETED durumundaki randevuları döner. Yorum isteme bildirimi için kullanılır.
+     *
+     * <p>Kullanım: {@code NotificationScheduler.sendReviewRequests()} —
+     * yaklaşık 1 saat önce tamamlanan randevular için yorum isteme bildirimi tetikler.
+     *
+     * @param windowStart pencere başlangıcı (dahil)
+     * @param windowEnd   pencere sonu (hariç)
+     * @return yorum isteme bildirimi yapılacak randevular
+     */
+    @Query("""
+            SELECT a
+            FROM Appointment a
+            WHERE a.status = 'COMPLETED'
+              AND a.endTime >= :windowStart
+              AND a.endTime < :windowEnd
+            """)
+    List<Appointment> findCompletedAppointmentsForReview(
+            @Param("windowStart") OffsetDateTime windowStart,
+            @Param("windowEnd") OffsetDateTime windowEnd
+    );
 }
 
