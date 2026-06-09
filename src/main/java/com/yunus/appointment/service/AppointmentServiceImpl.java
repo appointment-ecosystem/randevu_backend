@@ -18,7 +18,14 @@ import com.yunus.user.entity.User;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
+import com.yunus.notification.dto.PushNotificationPayload;
+import com.yunus.notification.entity.NotificationType;
+import com.yunus.notification.service.NotificationService;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,6 +52,7 @@ import org.springframework.transaction.annotation.Transactional;
  *   CONFIRMED → NO_SHOW            (markNoShow)
  * </pre>
  */
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AppointmentServiceImpl implements AppointmentService {
@@ -59,6 +67,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     private final StaffRepository       staffRepository;
     private final SlotLockService       slotLockService;
     private final CurrentUserService    currentUserService;
+    private final NotificationService   notificationService;
 
     // =========================================================================
     // Randevu oluşturma
@@ -146,6 +155,28 @@ public class AppointmentServiceImpl implements AppointmentService {
         // Adım 9 — Lock KASITLI OLARAK BIRAKILMIYOR
         // Randevu PENDING'de; lock 5 dk TTL ile expire olur.
         // Bu süre içinde başka kimse aynı slotu alamaz — ödeme/onay akışı tamamlanmalı.
+
+        try {
+            notificationService.sendToUser(saved.getUser().getId(), PushNotificationPayload.builder()
+                    .title("Randevunuz Oluşturuldu ✓")
+                    .body(saved.getBusiness().getName() + " · " + saved.getService().getName() + " | " + formatDateTime(saved.getStartTime()))
+                    .type(NotificationType.APPOINTMENT_CREATED)
+                    .data(Map.of("appointmentId", saved.getId().toString(), "screen", "appointment_detail"))
+                    .build());
+        } catch (Exception e) {
+            log.warn("Kullanıcıya randevu oluşturma bildirimi gönderilemedi: {}", e.getMessage());
+        }
+
+        try {
+            notificationService.sendToUser(saved.getBusiness().getOwner().getId(), PushNotificationPayload.builder()
+                    .title("Yeni Randevu \uD83D\uDCC5")
+                    .body(saved.getUser().getFullName() + " · " + saved.getService().getName() + " için randevu oluşturdu | " + formatDateTime(saved.getStartTime()))
+                    .type(NotificationType.APPOINTMENT_CREATED)
+                    .data(Map.of("appointmentId", saved.getId().toString(), "screen", "business_appointment_detail"))
+                    .build());
+        } catch (Exception e) {
+            log.warn("İşletme sahibine yeni randevu bildirimi gönderilemedi: {}", e.getMessage());
+        }
 
         return toResponse(saved);
     }
@@ -272,7 +303,20 @@ public class AppointmentServiceImpl implements AppointmentService {
         }
 
         appointment.setStatus(AppointmentStatus.CONFIRMED);
-        return toResponse(appointmentRepository.save(appointment));
+        Appointment saved = appointmentRepository.save(appointment);
+
+        try {
+            notificationService.sendToUser(saved.getUser().getId(), PushNotificationPayload.builder()
+                    .title("Randevunuz Onaylandı ✓")
+                    .body(saved.getBusiness().getName() + " randevunuzu onayladı | " + formatDateTime(saved.getStartTime()))
+                    .type(NotificationType.APPOINTMENT_CONFIRMED)
+                    .data(Map.of("appointmentId", saved.getId().toString(), "screen", "appointment_detail"))
+                    .build());
+        } catch (Exception e) {
+            log.warn("Kullanıcıya randevu onay bildirimi gönderilemedi: {}", e.getMessage());
+        }
+
+        return toResponse(saved);
     }
 
     /**
@@ -305,7 +349,20 @@ public class AppointmentServiceImpl implements AppointmentService {
         UUID businessId = appointment.getBusiness().getId();
         slotLockService.releaseLock(businessId, staffId, appointment.getStartTime(), currentUserId);
 
-        return toResponse(appointmentRepository.save(appointment));
+        Appointment saved = appointmentRepository.save(appointment);
+
+        try {
+            notificationService.sendToUser(saved.getBusiness().getOwner().getId(), PushNotificationPayload.builder()
+                    .title("Randevu İptal Edildi")
+                    .body(saved.getUser().getFullName() + " randevusunu iptal etti | " + formatDateTime(saved.getStartTime()))
+                    .type(NotificationType.APPOINTMENT_CANCELLED)
+                    .data(Map.of("appointmentId", saved.getId().toString(), "screen", "business_appointment_detail"))
+                    .build());
+        } catch (Exception e) {
+            log.warn("İşletme sahibine randevu iptal bildirimi gönderilemedi: {}", e.getMessage());
+        }
+
+        return toResponse(saved);
     }
 
     /**
@@ -337,7 +394,20 @@ public class AppointmentServiceImpl implements AppointmentService {
         UUID appointmentUserId = appointment.getUser().getId();
         slotLockService.releaseLock(businessId, staffId, appointment.getStartTime(), appointmentUserId);
 
-        return toResponse(appointmentRepository.save(appointment));
+        Appointment saved = appointmentRepository.save(appointment);
+
+        try {
+            notificationService.sendToUser(saved.getUser().getId(), PushNotificationPayload.builder()
+                    .title("Randevunuz İptal Edildi")
+                    .body(saved.getBusiness().getName() + " randevunuzu iptal etti | " + formatDateTime(saved.getStartTime()))
+                    .type(NotificationType.APPOINTMENT_CANCELLED)
+                    .data(Map.of("appointmentId", saved.getId().toString(), "screen", "appointment_detail"))
+                    .build());
+        } catch (Exception e) {
+            log.warn("Kullanıcıya randevu iptal bildirimi gönderilemedi: {}", e.getMessage());
+        }
+
+        return toResponse(saved);
     }
 
     /**
@@ -383,6 +453,12 @@ public class AppointmentServiceImpl implements AppointmentService {
     // =========================================================================
     // Private yardımcı metodlar
     // =========================================================================
+
+    private String formatDateTime(OffsetDateTime dt) {
+        if (dt == null) return "";
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d MMMM yyyy EEEE HH:mm", new Locale("tr", "TR"));
+        return dt.format(formatter);
+    }
 
     /**
      * Randevuyu ID ile getirir; bulunamazsa {@link ResourceNotFoundException} fırlatır.
