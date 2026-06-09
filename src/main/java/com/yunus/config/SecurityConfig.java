@@ -198,6 +198,9 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET,    "/api/v1/reviews/my").authenticated()
                         .requestMatchers(HttpMethod.DELETE, "/api/v1/reviews/{reviewId}").authenticated()
 
+                        // ── Device token endpoint'leri — kimlik doğrulama gerektirir
+                        .requestMatchers("/api/v1/device-tokens/**").authenticated()
+
                         // ── Diğer tüm endpoint'ler — kimlik doğrulama zorunlu ────────
                         .anyRequest().authenticated()
                 )

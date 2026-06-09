@@ -14,10 +14,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-/**
- * Push bildirim (FCM) cihaz token kaydı.
- * Aktif kullanım Faz 10'da; şema erken hazırlanmıştır.
- */
 @Entity
 @Table(name = "device_tokens")
 @Getter
@@ -29,15 +25,14 @@ public class DeviceToken extends BaseEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    // Firebase Cloud Messaging token; aynı token tekrar gelirse güncellenir
-    @Column(nullable = false, length = 500, unique = true)
+    @Column(name = "token", nullable = false, unique = true, length = 500)
     private String token;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 20)
+    @Column(length = 20)
     private DevicePlatform platform;
 
-    @Column(name = "is_active", nullable = false)
-    private Boolean isActive = true;
+    @Column(name = "is_active")
+    private boolean active = true;
 
 }

@@ -3,3 +3,12 @@ spring:
     name: randevu
   profiles:
     active: dev
+
+firebase:
+  credentials-path: classpath:firebase/firebase-service-account.json
+  enabled: true
+
+app:
+  notification:
+    reminder-hours-before: 24
+    review-request-hours-after: 1
