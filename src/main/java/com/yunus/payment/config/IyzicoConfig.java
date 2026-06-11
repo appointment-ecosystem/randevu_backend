@@ -1,6 +1,7 @@
 package com.yunus.payment.config;
 
 import com.iyzipay.Options;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,4 +28,8 @@ public class IyzicoConfig {
         return options;
     }
 
+    @Bean
+    public ObjectMapper objectMapper() {
+        return new ObjectMapper();
+    }
 }
