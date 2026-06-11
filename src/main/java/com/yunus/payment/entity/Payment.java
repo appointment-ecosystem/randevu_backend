@@ -2,6 +2,8 @@ package com.yunus.payment.entity;
 
 import com.yunus.appointment.entity.Appointment;
 import com.yunus.common.entity.BaseEntity;
+import com.yunus.payment.enums.PaymentStatus;
+import com.yunus.payment.enums.PaymentType;
 import com.yunus.user.entity.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -15,10 +17,11 @@ import java.math.BigDecimal;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 /**
- * Randevuya bağlı ödeme işlemi (kapora veya tam ödeme).
- * Aktif entegrasyon Faz 11'de; provider webhook verisi JSONB olarak saklanır.
+ * iyzico üzerinden gerçekleştirilen ödeme kaydı.
  */
 @Entity
 @Table(name = "payments")
@@ -27,38 +30,46 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Payment extends BaseEntity {
 
+    // Ödemenin ilişkili olduğu randevu
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "appointment_id", nullable = false)
     private Appointment appointment;
 
+    // Ödemeyi yapan kullanıcı
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    // Ödeme tutarı
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal amount;
 
     @Column(nullable = false, length = 10)
     private String currency = "TRY";
 
-    // DEPOSIT = kapora, FULL = tam ödeme
+    // DEPOSIT (kapora) veya FULL (tam ödeme)
     @Enumerated(EnumType.STRING)
     @Column(name = "payment_type", nullable = false, length = 30)
     private PaymentType paymentType;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 30)
-    private PaymentStatus status = PaymentStatus.INITIATED;
+    private PaymentStatus status;
 
-    @Enumerated(EnumType.STRING)
-    @Column(length = 30)
-    private PaymentProvider provider;
+    // Ödeme sağlayıcısı (varsayılan: IYZICO)
+    @Column(nullable = false, length = 30)
+    private String provider = "IYZICO";
 
-    // Ödeme sağlayıcısındaki işlem / sipariş referans numarası
+    // iyzico'nun döndürdüğü paymentId
     @Column(name = "provider_reference", length = 255)
     private String providerReference;
 
-    // Iyzico / PayTR webhook ham JSON yanıtı
+    // İade için gereken paymentTransactionId
+    @Column(name = "provider_transaction_reference", length = 255)
+    private String providerTransactionReference;
+
+    // iyzico ham response - kart bilgisi ASLA içermez
+    @JdbcTypeCode(SqlTypes.JSON)
     @Column(name = "provider_response", columnDefinition = "jsonb")
     private String providerResponse;
 

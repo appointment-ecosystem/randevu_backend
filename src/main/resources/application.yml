@@ -8,7 +8,16 @@ firebase:
   credentials-path: classpath:firebase/firebase-service-account.json
   enabled: true
 
+# iyzico ödeme entegrasyonu
+iyzico:
+  api-key: sandbox-p8YCnlLGjHVwlUgX7SjnogTQGLk1lmvM
+  secret-key: sandbox-LUwVL04JRHnVnyK9lAvBZ5IOF725XGLD
+  base-url: https://sandbox-api.iyzipay.com
+  callback-url: http://localhost:8080/api/v1/payments/callback
+  deposit-rate: 0.20
+
 app:
   notification:
     reminder-hours-before: 24
     review-request-hours-after: 1
+  frontend-url: http://localhost:3000
