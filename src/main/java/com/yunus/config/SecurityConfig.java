@@ -11,6 +11,9 @@ package com.yunus.config;
  *   POST /api/v1/auth/login
  *   POST /api/v1/auth/refresh
  *
+ * Ödeme (payments) — iyzico callback, Faz 11:
+ *   POST /api/v1/payments/callback
+ *
  * Konum (location):
  *   GET  /api/v1/locations/**
  *
@@ -149,6 +152,9 @@ public class SecurityConfig {
 
                         // ── Randevular (public) ──────────────────────────────────────
                         .requestMatchers(HttpMethod.GET, "/api/v1/appointments/available-slots").permitAll()
+
+                        // ── Ödeme callback (public) — iyzico tarafından çağrılır ─────
+                        .requestMatchers(HttpMethod.POST, "/api/v1/payments/callback").permitAll()
 
                         // ── İşletme — legacy (public) ────────────────────────────────
                         .requestMatchers(HttpMethod.GET, "/api/v1/businesses/**").permitAll()
