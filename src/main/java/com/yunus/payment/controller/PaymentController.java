@@ -88,22 +88,16 @@ public class PaymentController {
         String html = """
                 <!DOCTYPE html>
                 <html>
-                <head><meta charset="UTF-8"></head>
+                <head>
+                <meta charset="UTF-8">
+                <meta http-equiv="refresh" content="0;url=%s">
+                </head>
                 <body>
-                <script>
-                (function() {
-                    var url = '%s';
-                    if (window !== window.top) {
-                        window.top.location.href = url;
-                    } else {
-                        window.location.href = url;
-                    }
-                })();
-                </script>
+                <script>window.location.href = '%s';</script>
                 <p>Yönlendiriliyor...</p>
                 </body>
                 </html>
-                """.formatted(redirectUrl);
+                """.formatted(redirectUrl, redirectUrl);
 
         response.setContentType("text/html;charset=UTF-8");
         response.setStatus(200);

@@ -1,0 +1,2507 @@
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v4.0.6)
+
+2026-06-12T12:54:32.499+03:00  INFO 178244 --- [randevu] [           main] com.yunus.RandevuApplication             : Starting RandevuApplication v0.0.1-SNAPSHOT using Java 21.0.11 with PID 178244 (C:\Users\Yunus Emre Bütün\Desktop\Randevu_Proje\randevu_backend\target\randevu_backend-0.0.1-SNAPSHOT.jar started by Yunus Emre Bütün in C:\Users\Yunus Emre Bütün\Desktop\Randevu_Proje\randevu_backend)
+2026-06-12T12:54:32.502+03:00  INFO 178244 --- [randevu] [           main] com.yunus.RandevuApplication             : The following 1 profile is active: "dev"
+2026-06-12T12:54:33.503+03:00  INFO 178244 --- [randevu] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2026-06-12T12:54:33.504+03:00  INFO 178244 --- [randevu] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-06-12T12:54:33.648+03:00  INFO 178244 --- [randevu] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 136 ms. Found 17 JPA repository interfaces.
+2026-06-12T12:54:33.692+03:00  INFO 178244 --- [randevu] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2026-06-12T12:54:33.696+03:00  INFO 178244 --- [randevu] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2026-06-12T12:54:33.725+03:00  INFO 178244 --- [randevu] [           main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.yunus.appointment.repository.AppointmentRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-06-12T12:54:33.725+03:00  INFO 178244 --- [randevu] [           main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.yunus.business.repository.BusinessCategoryRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-06-12T12:54:33.725+03:00  INFO 178244 --- [randevu] [           main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.yunus.business.repository.BusinessDiscoveryRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-06-12T12:54:33.725+03:00  INFO 178244 --- [randevu] [           main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.yunus.business.repository.BusinessPhotoRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-06-12T12:54:33.725+03:00  INFO 178244 --- [randevu] [           main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.yunus.business.repository.BusinessRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-06-12T12:54:33.725+03:00  INFO 178244 --- [randevu] [           main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.yunus.business.repository.HolidayRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-06-12T12:54:33.726+03:00  INFO 178244 --- [randevu] [           main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.yunus.business.repository.ServiceRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-06-12T12:54:33.726+03:00  INFO 178244 --- [randevu] [           main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.yunus.business.repository.StaffRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-06-12T12:54:33.726+03:00  INFO 178244 --- [randevu] [           main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.yunus.business.repository.WorkingHourRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-06-12T12:54:33.726+03:00  INFO 178244 --- [randevu] [           main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.yunus.location.repository.CityRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-06-12T12:54:33.726+03:00  INFO 178244 --- [randevu] [           main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.yunus.location.repository.DistrictRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-06-12T12:54:33.727+03:00  INFO 178244 --- [randevu] [           main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.yunus.location.repository.NeighborhoodRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-06-12T12:54:33.727+03:00  INFO 178244 --- [randevu] [           main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.yunus.notification.repository.DeviceTokenRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-06-12T12:54:33.727+03:00  INFO 178244 --- [randevu] [           main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.yunus.payment.repository.PaymentRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-06-12T12:54:33.727+03:00  INFO 178244 --- [randevu] [           main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.yunus.review.repository.ReviewRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-06-12T12:54:33.727+03:00  INFO 178244 --- [randevu] [           main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.yunus.user.repository.RefreshTokenRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-06-12T12:54:33.727+03:00  INFO 178244 --- [randevu] [           main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.yunus.user.repository.UserRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-06-12T12:54:33.727+03:00  INFO 178244 --- [randevu] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 8 ms. Found 0 Redis repository interfaces.
+2026-06-12T12:54:34.554+03:00  INFO 178244 --- [randevu] [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 8080 (http)
+2026-06-12T12:54:34.571+03:00  INFO 178244 --- [randevu] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-06-12T12:54:34.572+03:00  INFO 178244 --- [randevu] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.21]
+2026-06-12T12:54:34.602+03:00  INFO 178244 --- [randevu] [           main] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 2044 ms
+2026-06-12T12:54:34.799+03:00  INFO 178244 --- [randevu] [           main] org.hibernate.orm.jpa                    : HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-06-12T12:54:34.845+03:00  INFO 178244 --- [randevu] [           main] org.hibernate.orm.core                   : HHH000001: Hibernate ORM core version 7.2.12.Final
+2026-06-12T12:54:35.203+03:00  INFO 178244 --- [randevu] [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-06-12T12:54:35.220+03:00  INFO 178244 --- [randevu] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-06-12T12:54:35.379+03:00  INFO 178244 --- [randevu] [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@64829470
+2026-06-12T12:54:35.381+03:00  INFO 178244 --- [randevu] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-06-12T12:54:35.430+03:00  INFO 178244 --- [randevu] [           main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [jdbc:postgresql://localhost:5432/postgre_db]
+	Database driver: PostgreSQL JDBC Driver
+	Database dialect: PostgreSQLDialect
+	Database version: 14.17
+	Default catalog/schema: postgre_db/gallerist
+	Autocommit mode: undefined/unknown
+	Isolation level: READ_COMMITTED [default READ_COMMITTED]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-06-12T12:54:36.307+03:00  INFO 178244 --- [randevu] [           main] org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-06-12T12:54:36.370+03:00  INFO 178244 --- [randevu] [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-06-12T12:54:36.410+03:00  INFO 178244 --- [randevu] [           main] o.s.d.j.r.query.QueryEnhancerFactories   : Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-06-12T12:54:37.928+03:00  INFO 178244 --- [randevu] [           main] eAuthenticationProviderManagerConfigurer : Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2026-06-12T12:54:37.928+03:00  WARN 178244 --- [randevu] [           main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+2026-06-12T12:54:38.687+03:00  INFO 178244 --- [randevu] [           main] com.yunus.payment.config.IyzicoConfig    : iyzico config yüklendi: apiKey=sandbox-, secretKey=sandbox-..., baseUrl=https://sandbox-api.iyzipay.com
+2026-06-12T12:54:39.466+03:00  INFO 178244 --- [randevu] [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 8080 (http) with context path '/'
+2026-06-12T12:54:39.473+03:00  INFO 178244 --- [randevu] [           main] com.yunus.RandevuApplication             : Started RandevuApplication in 7.37 seconds (process running for 7.959)
+Hibernate: 
+    select
+        count(*) 
+    from
+        randevu.cities c1_0
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status='COMPLETED' 
+        and a1_0.end_time>=? 
+        and a1_0.end_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status in ('PENDING', 'CONFIRMED') 
+        and a1_0.start_time>=? 
+        and a1_0.start_time<?
+Hibernate: 
+    select
+        count(*) 
+    from
+        randevu.business_categories bc1_0
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.full_name,
+        u1_0.is_active,
+        u1_0.password_hash,
+        u1_0.phone,
+        u1_0.phone_verified,
+        u1_0.profile_photo_url,
+        u1_0.role,
+        u1_0.updated_at 
+    from
+        randevu.users u1_0 
+    where
+        u1_0.phone=?
+Hibernate: 
+    select
+        b1_0.id,
+        b1_0.address_line,
+        b1_0.city_id,
+        b1_0.created_at,
+        b1_0.description,
+        b1_0.district_id,
+        b1_0.email,
+        b1_0.is_active,
+        b1_0.latitude,
+        b1_0.longitude,
+        b1_0.name,
+        b1_0.neighborhood_id,
+        b1_0.owner_id,
+        b1_0.phone,
+        b1_0.rejection_reason,
+        b1_0.slug,
+        b1_0.status,
+        b1_0.updated_at,
+        b1_0.website 
+    from
+        randevu.businesses b1_0 
+    where
+        b1_0.slug=?
+2026-06-12T12:54:39.822+03:00  WARN 178244 --- [randevu] [ication-async-1] c.y.n.scheduler.NotificationScheduler    : Hatırlatma bildirimi gönderilemedi [appointmentId=8af8e7c7-db82-4539-b87c-31815080215a]: Could not initialize proxy [com.yunus.business.entity.Business#428620da-0482-4eb9-befe-d443d74918f5] - no session
+2026-06-12T12:54:39.826+03:00  WARN 178244 --- [randevu] [ication-async-1] c.y.n.scheduler.NotificationScheduler    : Hatırlatma bildirimi gönderilemedi [appointmentId=b23701d9-877d-49f9-a094-128f6ed835ec]: Could not initialize proxy [com.yunus.business.entity.Business#6f69ef08-4bec-4bfd-a190-5cdd10c14c73] - no session
+2026-06-12T12:54:46.932+03:00  INFO 178244 --- [randevu] [nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-06-12T12:54:46.932+03:00  INFO 178244 --- [randevu] [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-06-12T12:54:46.933+03:00  INFO 178244 --- [randevu] [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2026-06-12T12:54:46.962+03:00  INFO 178244 --- [randevu] [nio-8080-exec-1] c.y.p.s.impl.IyzicoPaymentServiceImpl    : Ödeme callback alındı: conversationId=test, mdStatus=0
+2026-06-12T12:57:11.181+03:00  WARN 178244 --- [randevu] [nio-8080-exec-3] com.yunus.config.SecurityConfig          : Unauthorized request to: /api/v1/auth/me
+Hibernate: 
+    select
+        rt1_0.id,
+        rt1_0.created_at,
+        rt1_0.expires_at,
+        rt1_0.revoked,
+        rt1_0.token_hash,
+        rt1_0.updated_at,
+        rt1_0.user_id 
+    from
+        randevu.refresh_tokens rt1_0 
+    where
+        rt1_0.token_hash=?
+2026-06-12T12:57:11.364+03:00  WARN 178244 --- [randevu] [nio-8080-exec-5] com.yunus.auth.RefreshTokenService       : Revoked refresh token attempt for user: b348eda9-2e23-4185-bb86-cba5386d7458
+2026-06-12T12:57:11.368+03:00  WARN 178244 --- [randevu] [nio-8080-exec-5] c.y.exception.GlobalExceptionHandler     : Unauthorized: Bu oturum sonlandırılmış
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.full_name,
+        u1_0.is_active,
+        u1_0.password_hash,
+        u1_0.phone,
+        u1_0.phone_verified,
+        u1_0.profile_photo_url,
+        u1_0.role,
+        u1_0.updated_at 
+    from
+        randevu.users u1_0 
+    where
+        u1_0.email=?
+2026-06-12T12:57:19.442+03:00  INFO 178244 --- [randevu] [nio-8080-exec-7] com.yunus.auth.AuthService               : User logged in successfully: b348eda9-2e23-4185-bb86-cba5386d7458
+2026-06-12T12:57:19.461+03:00  INFO 178244 --- [randevu] [nio-8080-exec-7] com.yunus.auth.RefreshTokenService       : New refresh token created for user: b348eda9-2e23-4185-bb86-cba5386d7458
+Hibernate: 
+    insert 
+    into
+        randevu.refresh_tokens
+        (created_at, expires_at, revoked, token_hash, updated_at, user_id, id) 
+    values
+        (?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.full_name,
+        u1_0.is_active,
+        u1_0.password_hash,
+        u1_0.phone,
+        u1_0.phone_verified,
+        u1_0.profile_photo_url,
+        u1_0.role,
+        u1_0.updated_at 
+    from
+        randevu.users u1_0 
+    where
+        u1_0.phone=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.full_name,
+        u1_0.is_active,
+        u1_0.password_hash,
+        u1_0.phone,
+        u1_0.phone_verified,
+        u1_0.profile_photo_url,
+        u1_0.role,
+        u1_0.updated_at 
+    from
+        randevu.users u1_0 
+    where
+        u1_0.phone=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.full_name,
+        u1_0.is_active,
+        u1_0.password_hash,
+        u1_0.phone,
+        u1_0.phone_verified,
+        u1_0.profile_photo_url,
+        u1_0.role,
+        u1_0.updated_at 
+    from
+        randevu.users u1_0 
+    where
+        u1_0.phone=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.full_name,
+        u1_0.is_active,
+        u1_0.password_hash,
+        u1_0.phone,
+        u1_0.phone_verified,
+        u1_0.profile_photo_url,
+        u1_0.role,
+        u1_0.updated_at 
+    from
+        randevu.users u1_0 
+    where
+        u1_0.phone=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.full_name,
+        u1_0.is_active,
+        u1_0.password_hash,
+        u1_0.phone,
+        u1_0.phone_verified,
+        u1_0.profile_photo_url,
+        u1_0.role,
+        u1_0.updated_at 
+    from
+        randevu.users u1_0 
+    where
+        u1_0.phone=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.full_name,
+        u1_0.is_active,
+        u1_0.password_hash,
+        u1_0.phone,
+        u1_0.phone_verified,
+        u1_0.profile_photo_url,
+        u1_0.role,
+        u1_0.updated_at 
+    from
+        randevu.users u1_0 
+    where
+        u1_0.phone=?
+2026-06-12T12:57:24.144+03:00 ERROR 178244 --- [randevu] [nio-8080-exec-7] c.y.exception.GlobalExceptionHandler     : Unexpected error occurred
+
+org.springframework.web.method.annotation.MethodArgumentTypeMismatchException: Method parameter 'businessId': Failed to convert value of type 'java.lang.String' to required type 'java.util.UUID'; Invalid UUID string: zen-spa
+	at org.springframework.web.method.annotation.AbstractNamedValueMethodArgumentResolver.convertIfNecessary(AbstractNamedValueMethodArgumentResolver.java:295) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.method.annotation.AbstractNamedValueMethodArgumentResolver.resolveArgument(AbstractNamedValueMethodArgumentResolver.java:134) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.method.support.HandlerMethodArgumentResolverComposite.resolveArgument(HandlerMethodArgumentResolverComposite.java:122) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.method.support.InvocableHandlerMethod.getMethodArgumentValues(InvocableHandlerMethod.java:224) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:174) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:117) ~[spring-webmvc-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:934) ~[spring-webmvc-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:853) ~[spring-webmvc-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:86) ~[spring-webmvc-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:963) ~[spring-webmvc-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:866) ~[spring-webmvc-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1000) ~[spring-webmvc-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:892) ~[spring-webmvc-7.0.7.jar!/:7.0.7]
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:622) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:874) ~[spring-webmvc-7.0.7.jar!/:7.0.7]
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:710) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:128) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:53) ~[tomcat-embed-websocket-11.0.21.jar!/:na]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:110) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:108) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.security.web.FilterChainProxy.lambda$doFilterInternal$3(FilterChainProxy.java:235) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:376) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.access.intercept.AuthorizationFilter.doFilter(AuthorizationFilter.java:101) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:126) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:120) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:132) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:86) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.authentication.AnonymousAuthenticationFilter.doFilter(AnonymousAuthenticationFilter.java:100) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter.doFilter(SecurityContextHolderAwareRequestFilter.java:181) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:63) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at com.yunus.security.JwtFilter.doFilterInternal(JwtFilter.java:94) ~[!/:0.0.1-SNAPSHOT]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:110) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:96) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:91) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:90) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:75) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:82) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:69) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:62) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.session.DisableEncodeUrlFilter.doFilterInternal(DisableEncodeUrlFilter.java:42) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:237) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:195) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.filter.ServletRequestPathFilter.doFilter(ServletRequestPathFilter.java:52) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebSecurityConfiguration.java:317) ~[spring-security-config-7.0.5.jar!/:7.0.5]
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:355) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:272) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:199) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:165) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:77) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:492) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:113) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:83) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:72) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:341) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:397) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:903) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1801) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:946) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:480) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:57) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at java.base/java.lang.Thread.run(Thread.java:1583) ~[na:na]
+Caused by: java.lang.IllegalArgumentException: Invalid UUID string: zen-spa
+	at java.base/java.util.UUID.fromString1(UUID.java:282) ~[na:na]
+	at java.base/java.util.UUID.fromString(UUID.java:260) ~[na:na]
+	at org.springframework.beans.propertyeditors.UUIDEditor.setAsText(UUIDEditor.java:37) ~[spring-beans-7.0.7.jar!/:7.0.7]
+	at org.springframework.beans.TypeConverterDelegate.doConvertTextValue(TypeConverterDelegate.java:434) ~[spring-beans-7.0.7.jar!/:7.0.7]
+	at org.springframework.beans.TypeConverterDelegate.doConvertValue(TypeConverterDelegate.java:407) ~[spring-beans-7.0.7.jar!/:7.0.7]
+	at org.springframework.beans.TypeConverterDelegate.convertIfNecessary(TypeConverterDelegate.java:158) ~[spring-beans-7.0.7.jar!/:7.0.7]
+	at org.springframework.beans.TypeConverterSupport.convertIfNecessary(TypeConverterSupport.java:75) ~[spring-beans-7.0.7.jar!/:7.0.7]
+	at org.springframework.beans.TypeConverterSupport.convertIfNecessary(TypeConverterSupport.java:51) ~[spring-beans-7.0.7.jar!/:7.0.7]
+	at org.springframework.validation.DataBinder.convertIfNecessary(DataBinder.java:843) ~[spring-context-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.method.annotation.AbstractNamedValueMethodArgumentResolver.convertIfNecessary(AbstractNamedValueMethodArgumentResolver.java:287) ~[spring-web-7.0.7.jar!/:7.0.7]
+	... 94 common frames omitted
+
+2026-06-12T12:57:24.144+03:00 ERROR 178244 --- [randevu] [nio-8080-exec-3] c.y.exception.GlobalExceptionHandler     : Unexpected error occurred
+
+org.springframework.web.method.annotation.MethodArgumentTypeMismatchException: Method parameter 'businessId': Failed to convert value of type 'java.lang.String' to required type 'java.util.UUID'; Invalid UUID string: zen-spa
+	at org.springframework.web.method.annotation.AbstractNamedValueMethodArgumentResolver.convertIfNecessary(AbstractNamedValueMethodArgumentResolver.java:295) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.method.annotation.AbstractNamedValueMethodArgumentResolver.resolveArgument(AbstractNamedValueMethodArgumentResolver.java:134) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.method.support.HandlerMethodArgumentResolverComposite.resolveArgument(HandlerMethodArgumentResolverComposite.java:122) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.method.support.InvocableHandlerMethod.getMethodArgumentValues(InvocableHandlerMethod.java:224) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:174) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:117) ~[spring-webmvc-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:934) ~[spring-webmvc-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:853) ~[spring-webmvc-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:86) ~[spring-webmvc-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:963) ~[spring-webmvc-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:866) ~[spring-webmvc-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1000) ~[spring-webmvc-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:892) ~[spring-webmvc-7.0.7.jar!/:7.0.7]
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:622) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:874) ~[spring-webmvc-7.0.7.jar!/:7.0.7]
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:710) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:128) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:53) ~[tomcat-embed-websocket-11.0.21.jar!/:na]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:110) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:108) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.security.web.FilterChainProxy.lambda$doFilterInternal$3(FilterChainProxy.java:235) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:376) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.access.intercept.AuthorizationFilter.doFilter(AuthorizationFilter.java:101) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:126) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:120) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:132) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:86) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.authentication.AnonymousAuthenticationFilter.doFilter(AnonymousAuthenticationFilter.java:100) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter.doFilter(SecurityContextHolderAwareRequestFilter.java:181) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:63) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at com.yunus.security.JwtFilter.doFilterInternal(JwtFilter.java:94) ~[!/:0.0.1-SNAPSHOT]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:110) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:96) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:91) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:90) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:75) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:82) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:69) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:62) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.session.DisableEncodeUrlFilter.doFilterInternal(DisableEncodeUrlFilter.java:42) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:237) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:195) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.filter.ServletRequestPathFilter.doFilter(ServletRequestPathFilter.java:52) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebSecurityConfiguration.java:317) ~[spring-security-config-7.0.5.jar!/:7.0.5]
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:355) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:272) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:199) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:165) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:77) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:492) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:113) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:83) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:72) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:341) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:397) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:903) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1801) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:946) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:480) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:57) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at java.base/java.lang.Thread.run(Thread.java:1583) ~[na:na]
+Caused by: java.lang.IllegalArgumentException: Invalid UUID string: zen-spa
+	at java.base/java.util.UUID.fromString1(UUID.java:282) ~[na:na]
+	at java.base/java.util.UUID.fromString(UUID.java:260) ~[na:na]
+	at org.springframework.beans.propertyeditors.UUIDEditor.setAsText(UUIDEditor.java:37) ~[spring-beans-7.0.7.jar!/:7.0.7]
+	at org.springframework.beans.TypeConverterDelegate.doConvertTextValue(TypeConverterDelegate.java:434) ~[spring-beans-7.0.7.jar!/:7.0.7]
+	at org.springframework.beans.TypeConverterDelegate.doConvertValue(TypeConverterDelegate.java:407) ~[spring-beans-7.0.7.jar!/:7.0.7]
+	at org.springframework.beans.TypeConverterDelegate.convertIfNecessary(TypeConverterDelegate.java:158) ~[spring-beans-7.0.7.jar!/:7.0.7]
+	at org.springframework.beans.TypeConverterSupport.convertIfNecessary(TypeConverterSupport.java:75) ~[spring-beans-7.0.7.jar!/:7.0.7]
+	at org.springframework.beans.TypeConverterSupport.convertIfNecessary(TypeConverterSupport.java:51) ~[spring-beans-7.0.7.jar!/:7.0.7]
+	at org.springframework.validation.DataBinder.convertIfNecessary(DataBinder.java:843) ~[spring-context-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.method.annotation.AbstractNamedValueMethodArgumentResolver.convertIfNecessary(AbstractNamedValueMethodArgumentResolver.java:287) ~[spring-web-7.0.7.jar!/:7.0.7]
+	... 94 common frames omitted
+
+2026-06-12T12:57:24.144+03:00 ERROR 178244 --- [randevu] [nio-8080-exec-9] c.y.exception.GlobalExceptionHandler     : Unexpected error occurred
+
+org.springframework.web.method.annotation.MethodArgumentTypeMismatchException: Method parameter 'businessId': Failed to convert value of type 'java.lang.String' to required type 'java.util.UUID'; Invalid UUID string: zen-spa
+	at org.springframework.web.method.annotation.AbstractNamedValueMethodArgumentResolver.convertIfNecessary(AbstractNamedValueMethodArgumentResolver.java:295) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.method.annotation.AbstractNamedValueMethodArgumentResolver.resolveArgument(AbstractNamedValueMethodArgumentResolver.java:134) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.method.support.HandlerMethodArgumentResolverComposite.resolveArgument(HandlerMethodArgumentResolverComposite.java:122) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.method.support.InvocableHandlerMethod.getMethodArgumentValues(InvocableHandlerMethod.java:224) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:174) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:117) ~[spring-webmvc-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:934) ~[spring-webmvc-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:853) ~[spring-webmvc-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:86) ~[spring-webmvc-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:963) ~[spring-webmvc-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:866) ~[spring-webmvc-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1000) ~[spring-webmvc-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:892) ~[spring-webmvc-7.0.7.jar!/:7.0.7]
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:622) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:874) ~[spring-webmvc-7.0.7.jar!/:7.0.7]
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:710) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:128) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:53) ~[tomcat-embed-websocket-11.0.21.jar!/:na]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:110) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:108) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.security.web.FilterChainProxy.lambda$doFilterInternal$3(FilterChainProxy.java:235) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:376) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.access.intercept.AuthorizationFilter.doFilter(AuthorizationFilter.java:101) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:126) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:120) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:132) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:86) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.authentication.AnonymousAuthenticationFilter.doFilter(AnonymousAuthenticationFilter.java:100) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter.doFilter(SecurityContextHolderAwareRequestFilter.java:181) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:63) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at com.yunus.security.JwtFilter.doFilterInternal(JwtFilter.java:94) ~[!/:0.0.1-SNAPSHOT]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:110) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:96) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:91) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:90) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:75) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:82) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:69) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:62) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.session.DisableEncodeUrlFilter.doFilterInternal(DisableEncodeUrlFilter.java:42) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:237) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:195) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.filter.ServletRequestPathFilter.doFilter(ServletRequestPathFilter.java:52) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebSecurityConfiguration.java:317) ~[spring-security-config-7.0.5.jar!/:7.0.5]
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:355) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:272) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:199) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:165) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:77) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:492) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:113) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:83) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:72) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:341) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:397) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:903) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1801) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:946) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:480) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:57) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at java.base/java.lang.Thread.run(Thread.java:1583) ~[na:na]
+Caused by: java.lang.IllegalArgumentException: Invalid UUID string: zen-spa
+	at java.base/java.util.UUID.fromString1(UUID.java:282) ~[na:na]
+	at java.base/java.util.UUID.fromString(UUID.java:260) ~[na:na]
+	at org.springframework.beans.propertyeditors.UUIDEditor.setAsText(UUIDEditor.java:37) ~[spring-beans-7.0.7.jar!/:7.0.7]
+	at org.springframework.beans.TypeConverterDelegate.doConvertTextValue(TypeConverterDelegate.java:434) ~[spring-beans-7.0.7.jar!/:7.0.7]
+	at org.springframework.beans.TypeConverterDelegate.doConvertValue(TypeConverterDelegate.java:407) ~[spring-beans-7.0.7.jar!/:7.0.7]
+	at org.springframework.beans.TypeConverterDelegate.convertIfNecessary(TypeConverterDelegate.java:158) ~[spring-beans-7.0.7.jar!/:7.0.7]
+	at org.springframework.beans.TypeConverterSupport.convertIfNecessary(TypeConverterSupport.java:75) ~[spring-beans-7.0.7.jar!/:7.0.7]
+	at org.springframework.beans.TypeConverterSupport.convertIfNecessary(TypeConverterSupport.java:51) ~[spring-beans-7.0.7.jar!/:7.0.7]
+	at org.springframework.validation.DataBinder.convertIfNecessary(DataBinder.java:843) ~[spring-context-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.method.annotation.AbstractNamedValueMethodArgumentResolver.convertIfNecessary(AbstractNamedValueMethodArgumentResolver.java:287) ~[spring-web-7.0.7.jar!/:7.0.7]
+	... 94 common frames omitted
+
+2026-06-12T12:57:24.144+03:00 ERROR 178244 --- [randevu] [nio-8080-exec-2] c.y.exception.GlobalExceptionHandler     : Unexpected error occurred
+
+org.springframework.web.method.annotation.MethodArgumentTypeMismatchException: Method parameter 'id': Failed to convert value of type 'java.lang.String' to required type 'java.util.UUID'; Invalid UUID string: zen-spa
+	at org.springframework.web.method.annotation.AbstractNamedValueMethodArgumentResolver.convertIfNecessary(AbstractNamedValueMethodArgumentResolver.java:295) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.method.annotation.AbstractNamedValueMethodArgumentResolver.resolveArgument(AbstractNamedValueMethodArgumentResolver.java:134) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.method.support.HandlerMethodArgumentResolverComposite.resolveArgument(HandlerMethodArgumentResolverComposite.java:122) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.method.support.InvocableHandlerMethod.getMethodArgumentValues(InvocableHandlerMethod.java:224) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:174) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:117) ~[spring-webmvc-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:934) ~[spring-webmvc-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:853) ~[spring-webmvc-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:86) ~[spring-webmvc-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:963) ~[spring-webmvc-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:866) ~[spring-webmvc-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1000) ~[spring-webmvc-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:892) ~[spring-webmvc-7.0.7.jar!/:7.0.7]
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:622) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:874) ~[spring-webmvc-7.0.7.jar!/:7.0.7]
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:710) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:128) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:53) ~[tomcat-embed-websocket-11.0.21.jar!/:na]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:110) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:108) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.security.web.FilterChainProxy.lambda$doFilterInternal$3(FilterChainProxy.java:235) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:376) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.access.intercept.AuthorizationFilter.doFilter(AuthorizationFilter.java:101) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:126) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:120) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:132) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:86) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.authentication.AnonymousAuthenticationFilter.doFilter(AnonymousAuthenticationFilter.java:100) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter.doFilter(SecurityContextHolderAwareRequestFilter.java:181) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:63) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at com.yunus.security.JwtFilter.doFilterInternal(JwtFilter.java:94) ~[!/:0.0.1-SNAPSHOT]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:110) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:96) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:91) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:90) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:75) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:82) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:69) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:62) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.session.DisableEncodeUrlFilter.doFilterInternal(DisableEncodeUrlFilter.java:42) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:237) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:195) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.filter.ServletRequestPathFilter.doFilter(ServletRequestPathFilter.java:52) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebSecurityConfiguration.java:317) ~[spring-security-config-7.0.5.jar!/:7.0.5]
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:355) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:272) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:199) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:165) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:77) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:492) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:113) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:83) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:72) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:341) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:397) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:903) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1801) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:946) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:480) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:57) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at java.base/java.lang.Thread.run(Thread.java:1583) ~[na:na]
+Caused by: java.lang.IllegalArgumentException: Invalid UUID string: zen-spa
+	at java.base/java.util.UUID.fromString1(UUID.java:282) ~[na:na]
+	at java.base/java.util.UUID.fromString(UUID.java:260) ~[na:na]
+	at org.springframework.beans.propertyeditors.UUIDEditor.setAsText(UUIDEditor.java:37) ~[spring-beans-7.0.7.jar!/:7.0.7]
+	at org.springframework.beans.TypeConverterDelegate.doConvertTextValue(TypeConverterDelegate.java:434) ~[spring-beans-7.0.7.jar!/:7.0.7]
+	at org.springframework.beans.TypeConverterDelegate.doConvertValue(TypeConverterDelegate.java:407) ~[spring-beans-7.0.7.jar!/:7.0.7]
+	at org.springframework.beans.TypeConverterDelegate.convertIfNecessary(TypeConverterDelegate.java:158) ~[spring-beans-7.0.7.jar!/:7.0.7]
+	at org.springframework.beans.TypeConverterSupport.convertIfNecessary(TypeConverterSupport.java:75) ~[spring-beans-7.0.7.jar!/:7.0.7]
+	at org.springframework.beans.TypeConverterSupport.convertIfNecessary(TypeConverterSupport.java:51) ~[spring-beans-7.0.7.jar!/:7.0.7]
+	at org.springframework.validation.DataBinder.convertIfNecessary(DataBinder.java:843) ~[spring-context-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.method.annotation.AbstractNamedValueMethodArgumentResolver.convertIfNecessary(AbstractNamedValueMethodArgumentResolver.java:287) ~[spring-web-7.0.7.jar!/:7.0.7]
+	... 94 common frames omitted
+
+2026-06-12T12:57:24.144+03:00 ERROR 178244 --- [randevu] [nio-8080-exec-6] c.y.exception.GlobalExceptionHandler     : Unexpected error occurred
+
+org.springframework.web.method.annotation.MethodArgumentTypeMismatchException: Method parameter 'businessId': Failed to convert value of type 'java.lang.String' to required type 'java.util.UUID'; Invalid UUID string: zen-spa
+	at org.springframework.web.method.annotation.AbstractNamedValueMethodArgumentResolver.convertIfNecessary(AbstractNamedValueMethodArgumentResolver.java:295) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.method.annotation.AbstractNamedValueMethodArgumentResolver.resolveArgument(AbstractNamedValueMethodArgumentResolver.java:134) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.method.support.HandlerMethodArgumentResolverComposite.resolveArgument(HandlerMethodArgumentResolverComposite.java:122) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.method.support.InvocableHandlerMethod.getMethodArgumentValues(InvocableHandlerMethod.java:224) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:174) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:117) ~[spring-webmvc-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:934) ~[spring-webmvc-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:853) ~[spring-webmvc-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:86) ~[spring-webmvc-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:963) ~[spring-webmvc-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:866) ~[spring-webmvc-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1000) ~[spring-webmvc-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:892) ~[spring-webmvc-7.0.7.jar!/:7.0.7]
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:622) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:874) ~[spring-webmvc-7.0.7.jar!/:7.0.7]
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:710) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:128) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:53) ~[tomcat-embed-websocket-11.0.21.jar!/:na]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:110) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:108) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.security.web.FilterChainProxy.lambda$doFilterInternal$3(FilterChainProxy.java:235) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:376) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.access.intercept.AuthorizationFilter.doFilter(AuthorizationFilter.java:101) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:126) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:120) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:132) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:86) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.authentication.AnonymousAuthenticationFilter.doFilter(AnonymousAuthenticationFilter.java:100) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter.doFilter(SecurityContextHolderAwareRequestFilter.java:181) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:63) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at com.yunus.security.JwtFilter.doFilterInternal(JwtFilter.java:94) ~[!/:0.0.1-SNAPSHOT]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:110) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:96) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:91) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:90) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:75) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:82) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:69) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:62) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.session.DisableEncodeUrlFilter.doFilterInternal(DisableEncodeUrlFilter.java:42) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:237) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:195) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.filter.ServletRequestPathFilter.doFilter(ServletRequestPathFilter.java:52) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebSecurityConfiguration.java:317) ~[spring-security-config-7.0.5.jar!/:7.0.5]
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:355) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:272) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:199) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:165) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:77) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:492) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:113) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:83) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:72) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:341) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:397) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:903) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1801) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:946) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:480) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:57) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at java.base/java.lang.Thread.run(Thread.java:1583) ~[na:na]
+Caused by: java.lang.IllegalArgumentException: Invalid UUID string: zen-spa
+	at java.base/java.util.UUID.fromString1(UUID.java:282) ~[na:na]
+	at java.base/java.util.UUID.fromString(UUID.java:260) ~[na:na]
+	at org.springframework.beans.propertyeditors.UUIDEditor.setAsText(UUIDEditor.java:37) ~[spring-beans-7.0.7.jar!/:7.0.7]
+	at org.springframework.beans.TypeConverterDelegate.doConvertTextValue(TypeConverterDelegate.java:434) ~[spring-beans-7.0.7.jar!/:7.0.7]
+	at org.springframework.beans.TypeConverterDelegate.doConvertValue(TypeConverterDelegate.java:407) ~[spring-beans-7.0.7.jar!/:7.0.7]
+	at org.springframework.beans.TypeConverterDelegate.convertIfNecessary(TypeConverterDelegate.java:158) ~[spring-beans-7.0.7.jar!/:7.0.7]
+	at org.springframework.beans.TypeConverterSupport.convertIfNecessary(TypeConverterSupport.java:75) ~[spring-beans-7.0.7.jar!/:7.0.7]
+	at org.springframework.beans.TypeConverterSupport.convertIfNecessary(TypeConverterSupport.java:51) ~[spring-beans-7.0.7.jar!/:7.0.7]
+	at org.springframework.validation.DataBinder.convertIfNecessary(DataBinder.java:843) ~[spring-context-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.method.annotation.AbstractNamedValueMethodArgumentResolver.convertIfNecessary(AbstractNamedValueMethodArgumentResolver.java:287) ~[spring-web-7.0.7.jar!/:7.0.7]
+	... 94 common frames omitted
+
+2026-06-12T12:57:24.144+03:00 ERROR 178244 --- [randevu] [nio-8080-exec-5] c.y.exception.GlobalExceptionHandler     : Unexpected error occurred
+
+org.springframework.web.method.annotation.MethodArgumentTypeMismatchException: Method parameter 'businessId': Failed to convert value of type 'java.lang.String' to required type 'java.util.UUID'; Invalid UUID string: zen-spa
+	at org.springframework.web.method.annotation.AbstractNamedValueMethodArgumentResolver.convertIfNecessary(AbstractNamedValueMethodArgumentResolver.java:295) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.method.annotation.AbstractNamedValueMethodArgumentResolver.resolveArgument(AbstractNamedValueMethodArgumentResolver.java:134) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.method.support.HandlerMethodArgumentResolverComposite.resolveArgument(HandlerMethodArgumentResolverComposite.java:122) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.method.support.InvocableHandlerMethod.getMethodArgumentValues(InvocableHandlerMethod.java:224) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:174) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:117) ~[spring-webmvc-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:934) ~[spring-webmvc-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:853) ~[spring-webmvc-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:86) ~[spring-webmvc-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:963) ~[spring-webmvc-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:866) ~[spring-webmvc-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1000) ~[spring-webmvc-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:892) ~[spring-webmvc-7.0.7.jar!/:7.0.7]
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:622) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:874) ~[spring-webmvc-7.0.7.jar!/:7.0.7]
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:710) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:128) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:53) ~[tomcat-embed-websocket-11.0.21.jar!/:na]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:110) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:108) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.security.web.FilterChainProxy.lambda$doFilterInternal$3(FilterChainProxy.java:235) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:376) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.access.intercept.AuthorizationFilter.doFilter(AuthorizationFilter.java:101) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:126) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:120) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:132) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:86) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.authentication.AnonymousAuthenticationFilter.doFilter(AnonymousAuthenticationFilter.java:100) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter.doFilter(SecurityContextHolderAwareRequestFilter.java:181) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:63) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at com.yunus.security.JwtFilter.doFilterInternal(JwtFilter.java:94) ~[!/:0.0.1-SNAPSHOT]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:110) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:96) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:91) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:90) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:75) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:82) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:69) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:62) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.session.DisableEncodeUrlFilter.doFilterInternal(DisableEncodeUrlFilter.java:42) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:385) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:237) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:195) ~[spring-security-web-7.0.5.jar!/:7.0.5]
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.filter.ServletRequestPathFilter.doFilter(ServletRequestPathFilter.java:52) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebSecurityConfiguration.java:317) ~[spring-security-config-7.0.5.jar!/:7.0.5]
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:355) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:272) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:199) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-7.0.7.jar!/:7.0.7]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:107) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:165) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:77) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:492) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:113) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:83) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:72) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:341) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:397) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:903) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1801) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:946) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:480) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:57) ~[tomcat-embed-core-11.0.21.jar!/:na]
+	at java.base/java.lang.Thread.run(Thread.java:1583) ~[na:na]
+Caused by: java.lang.IllegalArgumentException: Invalid UUID string: zen-spa
+	at java.base/java.util.UUID.fromString1(UUID.java:282) ~[na:na]
+	at java.base/java.util.UUID.fromString(UUID.java:260) ~[na:na]
+	at org.springframework.beans.propertyeditors.UUIDEditor.setAsText(UUIDEditor.java:37) ~[spring-beans-7.0.7.jar!/:7.0.7]
+	at org.springframework.beans.TypeConverterDelegate.doConvertTextValue(TypeConverterDelegate.java:434) ~[spring-beans-7.0.7.jar!/:7.0.7]
+	at org.springframework.beans.TypeConverterDelegate.doConvertValue(TypeConverterDelegate.java:407) ~[spring-beans-7.0.7.jar!/:7.0.7]
+	at org.springframework.beans.TypeConverterDelegate.convertIfNecessary(TypeConverterDelegate.java:158) ~[spring-beans-7.0.7.jar!/:7.0.7]
+	at org.springframework.beans.TypeConverterSupport.convertIfNecessary(TypeConverterSupport.java:75) ~[spring-beans-7.0.7.jar!/:7.0.7]
+	at org.springframework.beans.TypeConverterSupport.convertIfNecessary(TypeConverterSupport.java:51) ~[spring-beans-7.0.7.jar!/:7.0.7]
+	at org.springframework.validation.DataBinder.convertIfNecessary(DataBinder.java:843) ~[spring-context-7.0.7.jar!/:7.0.7]
+	at org.springframework.web.method.annotation.AbstractNamedValueMethodArgumentResolver.convertIfNecessary(AbstractNamedValueMethodArgumentResolver.java:287) ~[spring-web-7.0.7.jar!/:7.0.7]
+	... 94 common frames omitted
+
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.full_name,
+        u1_0.is_active,
+        u1_0.password_hash,
+        u1_0.phone,
+        u1_0.phone_verified,
+        u1_0.profile_photo_url,
+        u1_0.role,
+        u1_0.updated_at 
+    from
+        randevu.users u1_0 
+    where
+        u1_0.phone=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.full_name,
+        u1_0.is_active,
+        u1_0.password_hash,
+        u1_0.phone,
+        u1_0.phone_verified,
+        u1_0.profile_photo_url,
+        u1_0.role,
+        u1_0.updated_at 
+    from
+        randevu.users u1_0 
+    where
+        u1_0.phone=?
+Hibernate: 
+    select
+        bc1_0.id,
+        bc1_0.created_at,
+        bc1_0.description,
+        bc1_0.icon_url,
+        bc1_0.is_active,
+        bc1_0.name,
+        bc1_0.slug,
+        bc1_0.sort_order,
+        bc1_0.updated_at 
+    from
+        randevu.business_categories bc1_0 
+    where
+        bc1_0.is_active=true 
+    order by
+        bc1_0.sort_order
+2026-06-12T12:57:25.084+03:00  WARN 178244 --- [randevu] [nio-8080-exec-8] c.y.b.s.BusinessDiscoveryServiceImpl     : sortBy=nearest istendi fakat lat/lng parametresi eksik; varsayılan sıralama uygulanıyor
+Hibernate: 
+    select
+        distinct b1_0.id,
+        b1_0.address_line,
+        b1_0.city_id,
+        b1_0.created_at,
+        b1_0.description,
+        b1_0.district_id,
+        b1_0.email,
+        b1_0.is_active,
+        b1_0.latitude,
+        b1_0.longitude,
+        b1_0.name,
+        b1_0.neighborhood_id,
+        b1_0.owner_id,
+        b1_0.phone,
+        b1_0.rejection_reason,
+        b1_0.slug,
+        b1_0.status,
+        b1_0.updated_at,
+        b1_0.website 
+    from
+        randevu.businesses b1_0 
+    left join
+        randevu.business_category_map c1_0 
+            on b1_0.id=c1_0.business_id 
+    where
+        b1_0.status='APPROVED' 
+        and b1_0.is_active=true 
+        and (
+            ? is null 
+            or c1_0.category_id=?
+        ) 
+        and (
+            ? is null 
+            or b1_0.city_id=?
+        ) 
+        and (
+            ? is null 
+            or b1_0.district_id=?
+        ) 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        bp1_0.id,
+        bp1_0.business_id,
+        bp1_0.created_at,
+        bp1_0.file_name,
+        bp1_0.file_size,
+        bp1_0.is_cover,
+        bp1_0.mime_type,
+        bp1_0.sort_order,
+        bp1_0.updated_at,
+        bp1_0.url 
+    from
+        randevu.business_photos bp1_0 
+    where
+        bp1_0.business_id=? 
+        and bp1_0.is_cover=true
+Hibernate: 
+    select
+        avg(r1_0.rating) 
+    from
+        randevu.reviews r1_0 
+    where
+        r1_0.business_id=? 
+        and r1_0.is_visible=true
+Hibernate: 
+    select
+        count(r1_0.id) 
+    from
+        randevu.reviews r1_0 
+    where
+        r1_0.business_id=? 
+        and r1_0.is_visible=true
+Hibernate: 
+    select
+        c1_0.business_id,
+        c1_1.id,
+        c1_1.created_at,
+        c1_1.description,
+        c1_1.icon_url,
+        c1_1.is_active,
+        c1_1.name,
+        c1_1.slug,
+        c1_1.sort_order,
+        c1_1.updated_at 
+    from
+        randevu.business_category_map c1_0 
+    join
+        randevu.business_categories c1_1 
+            on c1_1.id=c1_0.category_id 
+    where
+        c1_0.business_id=?
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.code,
+        c1_0.created_at,
+        c1_0.is_active,
+        c1_0.name,
+        c1_0.updated_at 
+    from
+        randevu.cities c1_0 
+    where
+        c1_0.id=?
+Hibernate: 
+    select
+        d1_0.id,
+        d1_0.city_id,
+        d1_0.created_at,
+        d1_0.is_active,
+        d1_0.name,
+        d1_0.updated_at 
+    from
+        randevu.districts d1_0 
+    where
+        d1_0.id=?
+Hibernate: 
+    select
+        bp1_0.id,
+        bp1_0.business_id,
+        bp1_0.created_at,
+        bp1_0.file_name,
+        bp1_0.file_size,
+        bp1_0.is_cover,
+        bp1_0.mime_type,
+        bp1_0.sort_order,
+        bp1_0.updated_at,
+        bp1_0.url 
+    from
+        randevu.business_photos bp1_0 
+    where
+        bp1_0.business_id=? 
+        and bp1_0.is_cover=true
+Hibernate: 
+    select
+        avg(r1_0.rating) 
+    from
+        randevu.reviews r1_0 
+    where
+        r1_0.business_id=? 
+        and r1_0.is_visible=true
+Hibernate: 
+    select
+        count(r1_0.id) 
+    from
+        randevu.reviews r1_0 
+    where
+        r1_0.business_id=? 
+        and r1_0.is_visible=true
+Hibernate: 
+    select
+        c1_0.business_id,
+        c1_1.id,
+        c1_1.created_at,
+        c1_1.description,
+        c1_1.icon_url,
+        c1_1.is_active,
+        c1_1.name,
+        c1_1.slug,
+        c1_1.sort_order,
+        c1_1.updated_at 
+    from
+        randevu.business_category_map c1_0 
+    join
+        randevu.business_categories c1_1 
+            on c1_1.id=c1_0.category_id 
+    where
+        c1_0.business_id=?
+Hibernate: 
+    select
+        bp1_0.id,
+        bp1_0.business_id,
+        bp1_0.created_at,
+        bp1_0.file_name,
+        bp1_0.file_size,
+        bp1_0.is_cover,
+        bp1_0.mime_type,
+        bp1_0.sort_order,
+        bp1_0.updated_at,
+        bp1_0.url 
+    from
+        randevu.business_photos bp1_0 
+    where
+        bp1_0.business_id=? 
+        and bp1_0.is_cover=true
+Hibernate: 
+    select
+        avg(r1_0.rating) 
+    from
+        randevu.reviews r1_0 
+    where
+        r1_0.business_id=? 
+        and r1_0.is_visible=true
+Hibernate: 
+    select
+        count(r1_0.id) 
+    from
+        randevu.reviews r1_0 
+    where
+        r1_0.business_id=? 
+        and r1_0.is_visible=true
+Hibernate: 
+    select
+        c1_0.business_id,
+        c1_1.id,
+        c1_1.created_at,
+        c1_1.description,
+        c1_1.icon_url,
+        c1_1.is_active,
+        c1_1.name,
+        c1_1.slug,
+        c1_1.sort_order,
+        c1_1.updated_at 
+    from
+        randevu.business_category_map c1_0 
+    join
+        randevu.business_categories c1_1 
+            on c1_1.id=c1_0.category_id 
+    where
+        c1_0.business_id=?
+2026-06-12T12:57:25.120+03:00  WARN 178244 --- [randevu] [nio-8080-exec-8] ration$PageModule$WarningLoggingModifier : Serializing PageImpl instances as-is is not supported, meaning that there is no guarantee about the stability of the resulting JSON structure!
+	For a stable JSON structure, please use Spring Data's PagedModel (globally via @EnableSpringDataWebSupport(pageSerializationMode = VIA_DTO))
+	or Spring HATEOAS and Spring Data's PagedResourcesAssembler as documented in https://docs.spring.io/spring-data/commons/reference/repositories/core-extensions.html#core.web.pageables.
+
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.full_name,
+        u1_0.is_active,
+        u1_0.password_hash,
+        u1_0.phone,
+        u1_0.phone_verified,
+        u1_0.profile_photo_url,
+        u1_0.role,
+        u1_0.updated_at 
+    from
+        randevu.users u1_0 
+    where
+        u1_0.phone=?
+2026-06-12T12:57:25.133+03:00  WARN 178244 --- [randevu] [nio-8080-exec-5] c.y.b.s.BusinessDiscoveryServiceImpl     : sortBy=nearest istendi fakat lat/lng parametresi eksik; varsayılan sıralama uygulanıyor
+Hibernate: 
+    select
+        distinct b1_0.id,
+        b1_0.address_line,
+        b1_0.city_id,
+        b1_0.created_at,
+        b1_0.description,
+        b1_0.district_id,
+        b1_0.email,
+        b1_0.is_active,
+        b1_0.latitude,
+        b1_0.longitude,
+        b1_0.name,
+        b1_0.neighborhood_id,
+        b1_0.owner_id,
+        b1_0.phone,
+        b1_0.rejection_reason,
+        b1_0.slug,
+        b1_0.status,
+        b1_0.updated_at,
+        b1_0.website 
+    from
+        randevu.businesses b1_0 
+    left join
+        randevu.business_category_map c1_0 
+            on b1_0.id=c1_0.business_id 
+    where
+        b1_0.status='APPROVED' 
+        and b1_0.is_active=true 
+        and (
+            ? is null 
+            or c1_0.category_id=?
+        ) 
+        and (
+            ? is null 
+            or b1_0.city_id=?
+        ) 
+        and (
+            ? is null 
+            or b1_0.district_id=?
+        ) 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        bp1_0.id,
+        bp1_0.business_id,
+        bp1_0.created_at,
+        bp1_0.file_name,
+        bp1_0.file_size,
+        bp1_0.is_cover,
+        bp1_0.mime_type,
+        bp1_0.sort_order,
+        bp1_0.updated_at,
+        bp1_0.url 
+    from
+        randevu.business_photos bp1_0 
+    where
+        bp1_0.business_id=? 
+        and bp1_0.is_cover=true
+Hibernate: 
+    select
+        avg(r1_0.rating) 
+    from
+        randevu.reviews r1_0 
+    where
+        r1_0.business_id=? 
+        and r1_0.is_visible=true
+Hibernate: 
+    select
+        count(r1_0.id) 
+    from
+        randevu.reviews r1_0 
+    where
+        r1_0.business_id=? 
+        and r1_0.is_visible=true
+Hibernate: 
+    select
+        c1_0.business_id,
+        c1_1.id,
+        c1_1.created_at,
+        c1_1.description,
+        c1_1.icon_url,
+        c1_1.is_active,
+        c1_1.name,
+        c1_1.slug,
+        c1_1.sort_order,
+        c1_1.updated_at 
+    from
+        randevu.business_category_map c1_0 
+    join
+        randevu.business_categories c1_1 
+            on c1_1.id=c1_0.category_id 
+    where
+        c1_0.business_id=?
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.code,
+        c1_0.created_at,
+        c1_0.is_active,
+        c1_0.name,
+        c1_0.updated_at 
+    from
+        randevu.cities c1_0 
+    where
+        c1_0.id=?
+Hibernate: 
+    select
+        d1_0.id,
+        d1_0.city_id,
+        d1_0.created_at,
+        d1_0.is_active,
+        d1_0.name,
+        d1_0.updated_at 
+    from
+        randevu.districts d1_0 
+    where
+        d1_0.id=?
+Hibernate: 
+    select
+        bp1_0.id,
+        bp1_0.business_id,
+        bp1_0.created_at,
+        bp1_0.file_name,
+        bp1_0.file_size,
+        bp1_0.is_cover,
+        bp1_0.mime_type,
+        bp1_0.sort_order,
+        bp1_0.updated_at,
+        bp1_0.url 
+    from
+        randevu.business_photos bp1_0 
+    where
+        bp1_0.business_id=? 
+        and bp1_0.is_cover=true
+Hibernate: 
+    select
+        avg(r1_0.rating) 
+    from
+        randevu.reviews r1_0 
+    where
+        r1_0.business_id=? 
+        and r1_0.is_visible=true
+Hibernate: 
+    select
+        count(r1_0.id) 
+    from
+        randevu.reviews r1_0 
+    where
+        r1_0.business_id=? 
+        and r1_0.is_visible=true
+Hibernate: 
+    select
+        c1_0.business_id,
+        c1_1.id,
+        c1_1.created_at,
+        c1_1.description,
+        c1_1.icon_url,
+        c1_1.is_active,
+        c1_1.name,
+        c1_1.slug,
+        c1_1.sort_order,
+        c1_1.updated_at 
+    from
+        randevu.business_category_map c1_0 
+    join
+        randevu.business_categories c1_1 
+            on c1_1.id=c1_0.category_id 
+    where
+        c1_0.business_id=?
+Hibernate: 
+    select
+        bp1_0.id,
+        bp1_0.business_id,
+        bp1_0.created_at,
+        bp1_0.file_name,
+        bp1_0.file_size,
+        bp1_0.is_cover,
+        bp1_0.mime_type,
+        bp1_0.sort_order,
+        bp1_0.updated_at,
+        bp1_0.url 
+    from
+        randevu.business_photos bp1_0 
+    where
+        bp1_0.business_id=? 
+        and bp1_0.is_cover=true
+Hibernate: 
+    select
+        avg(r1_0.rating) 
+    from
+        randevu.reviews r1_0 
+    where
+        r1_0.business_id=? 
+        and r1_0.is_visible=true
+Hibernate: 
+    select
+        count(r1_0.id) 
+    from
+        randevu.reviews r1_0 
+    where
+        r1_0.business_id=? 
+        and r1_0.is_visible=true
+Hibernate: 
+    select
+        c1_0.business_id,
+        c1_1.id,
+        c1_1.created_at,
+        c1_1.description,
+        c1_1.icon_url,
+        c1_1.is_active,
+        c1_1.name,
+        c1_1.slug,
+        c1_1.sort_order,
+        c1_1.updated_at 
+    from
+        randevu.business_category_map c1_0 
+    join
+        randevu.business_categories c1_1 
+            on c1_1.id=c1_0.category_id 
+    where
+        c1_0.business_id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.full_name,
+        u1_0.is_active,
+        u1_0.password_hash,
+        u1_0.phone,
+        u1_0.phone_verified,
+        u1_0.profile_photo_url,
+        u1_0.role,
+        u1_0.updated_at 
+    from
+        randevu.users u1_0 
+    where
+        u1_0.phone=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.full_name,
+        u1_0.is_active,
+        u1_0.password_hash,
+        u1_0.phone,
+        u1_0.phone_verified,
+        u1_0.profile_photo_url,
+        u1_0.role,
+        u1_0.updated_at 
+    from
+        randevu.users u1_0 
+    where
+        u1_0.phone=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.full_name,
+        u1_0.is_active,
+        u1_0.password_hash,
+        u1_0.phone,
+        u1_0.phone_verified,
+        u1_0.profile_photo_url,
+        u1_0.role,
+        u1_0.updated_at 
+    from
+        randevu.users u1_0 
+    where
+        u1_0.phone=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.full_name,
+        u1_0.is_active,
+        u1_0.password_hash,
+        u1_0.phone,
+        u1_0.phone_verified,
+        u1_0.profile_photo_url,
+        u1_0.role,
+        u1_0.updated_at 
+    from
+        randevu.users u1_0 
+    where
+        u1_0.phone=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.full_name,
+        u1_0.is_active,
+        u1_0.password_hash,
+        u1_0.phone,
+        u1_0.phone_verified,
+        u1_0.profile_photo_url,
+        u1_0.role,
+        u1_0.updated_at 
+    from
+        randevu.users u1_0 
+    where
+        u1_0.phone=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.full_name,
+        u1_0.is_active,
+        u1_0.password_hash,
+        u1_0.phone,
+        u1_0.phone_verified,
+        u1_0.profile_photo_url,
+        u1_0.role,
+        u1_0.updated_at 
+    from
+        randevu.users u1_0 
+    where
+        u1_0.phone=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.full_name,
+        u1_0.is_active,
+        u1_0.password_hash,
+        u1_0.phone,
+        u1_0.phone_verified,
+        u1_0.profile_photo_url,
+        u1_0.role,
+        u1_0.updated_at 
+    from
+        randevu.users u1_0 
+    where
+        u1_0.phone=?
+Hibernate: 
+    select
+        b1_0.id,
+        b1_0.address_line,
+        b1_0.city_id,
+        b1_0.created_at,
+        b1_0.description,
+        b1_0.district_id,
+        b1_0.email,
+        b1_0.is_active,
+        b1_0.latitude,
+        b1_0.longitude,
+        b1_0.name,
+        b1_0.neighborhood_id,
+        b1_0.owner_id,
+        b1_0.phone,
+        b1_0.rejection_reason,
+        b1_0.slug,
+        b1_0.status,
+        b1_0.updated_at,
+        b1_0.website 
+    from
+        randevu.businesses b1_0 
+    where
+        b1_0.id=?
+Hibernate: 
+    select
+        b1_0.id,
+        b1_0.address_line,
+        b1_0.city_id,
+        b1_0.created_at,
+        b1_0.description,
+        b1_0.district_id,
+        b1_0.email,
+        b1_0.is_active,
+        b1_0.latitude,
+        b1_0.longitude,
+        b1_0.name,
+        b1_0.neighborhood_id,
+        b1_0.owner_id,
+        b1_0.phone,
+        b1_0.rejection_reason,
+        b1_0.slug,
+        b1_0.status,
+        b1_0.updated_at,
+        b1_0.website 
+    from
+        randevu.businesses b1_0 
+    where
+        b1_0.id=?
+Hibernate: 
+    select
+        b1_0.id,
+        b1_0.address_line,
+        b1_0.city_id,
+        b1_0.created_at,
+        b1_0.description,
+        b1_0.district_id,
+        b1_0.email,
+        b1_0.is_active,
+        b1_0.latitude,
+        b1_0.longitude,
+        b1_0.name,
+        b1_0.neighborhood_id,
+        b1_0.owner_id,
+        b1_0.phone,
+        b1_0.rejection_reason,
+        b1_0.slug,
+        b1_0.status,
+        b1_0.updated_at,
+        b1_0.website 
+    from
+        randevu.businesses b1_0 
+    where
+        b1_0.id=?
+Hibernate: 
+    select
+        b1_0.id,
+        b1_0.address_line,
+        b1_0.city_id,
+        b1_0.created_at,
+        b1_0.description,
+        b1_0.district_id,
+        b1_0.email,
+        b1_0.is_active,
+        b1_0.latitude,
+        b1_0.longitude,
+        b1_0.name,
+        b1_0.neighborhood_id,
+        b1_0.owner_id,
+        b1_0.phone,
+        b1_0.rejection_reason,
+        b1_0.slug,
+        b1_0.status,
+        b1_0.updated_at,
+        b1_0.website 
+    from
+        randevu.businesses b1_0 
+    where
+        b1_0.id=?
+Hibernate: 
+    select
+        b1_0.id,
+        b1_0.address_line,
+        b1_0.city_id,
+        b1_0.created_at,
+        b1_0.description,
+        b1_0.district_id,
+        b1_0.email,
+        b1_0.is_active,
+        b1_0.latitude,
+        b1_0.longitude,
+        b1_0.name,
+        b1_0.neighborhood_id,
+        b1_0.owner_id,
+        b1_0.phone,
+        b1_0.rejection_reason,
+        b1_0.slug,
+        b1_0.status,
+        b1_0.updated_at,
+        b1_0.website 
+    from
+        randevu.businesses b1_0 
+    where
+        b1_0.id=?
+Hibernate: 
+    select
+        r1_0.id,
+        r1_0.appointment_id,
+        r1_0.business_id,
+        r1_0.comment,
+        r1_0.created_at,
+        r1_0.is_visible,
+        r1_0.rating,
+        r1_0.updated_at,
+        r1_0.user_id 
+    from
+        randevu.reviews r1_0 
+    where
+        r1_0.business_id=? 
+        and r1_0.is_visible=true 
+    order by
+        r1_0.created_at desc 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        c1_0.business_id,
+        c1_1.id,
+        c1_1.created_at,
+        c1_1.description,
+        c1_1.icon_url,
+        c1_1.is_active,
+        c1_1.name,
+        c1_1.slug,
+        c1_1.sort_order,
+        c1_1.updated_at 
+    from
+        randevu.business_category_map c1_0 
+    join
+        randevu.business_categories c1_1 
+            on c1_1.id=c1_0.category_id 
+    where
+        c1_0.business_id=?
+Hibernate: 
+    select
+        s1_0.id,
+        s1_0.business_id,
+        s1_0.created_at,
+        s1_0.currency,
+        s1_0.description,
+        s1_0.duration_min,
+        s1_0.image_url,
+        s1_0.is_active,
+        s1_0.name,
+        s1_0.price,
+        s1_0.sort_order,
+        s1_0.updated_at 
+    from
+        randevu.services s1_0 
+    where
+        s1_0.business_id=? 
+        and s1_0.is_active=true 
+    order by
+        s1_0.sort_order
+Hibernate: 
+    select
+        bp1_0.id,
+        bp1_0.business_id,
+        bp1_0.created_at,
+        bp1_0.file_name,
+        bp1_0.file_size,
+        bp1_0.is_cover,
+        bp1_0.mime_type,
+        bp1_0.sort_order,
+        bp1_0.updated_at,
+        bp1_0.url 
+    from
+        randevu.business_photos bp1_0 
+    where
+        bp1_0.business_id=? 
+    order by
+        bp1_0.sort_order
+Hibernate: 
+    select
+        s1_0.id,
+        s1_0.bio,
+        s1_0.business_id,
+        s1_0.created_at,
+        s1_0.full_name,
+        s1_0.is_active,
+        s1_0.profile_photo_url,
+        s1_0.sort_order,
+        s1_0.title,
+        s1_0.updated_at,
+        s1_0.user_id 
+    from
+        randevu.staff s1_0 
+    where
+        s1_0.business_id=? 
+        and s1_0.is_active=true 
+    order by
+        s1_0.sort_order
+Hibernate: 
+    select
+        wh1_0.id,
+        wh1_0.business_id,
+        wh1_0.close_time,
+        wh1_0.created_at,
+        wh1_0.day_of_week,
+        wh1_0.is_closed,
+        wh1_0.open_time,
+        wh1_0.staff_id,
+        wh1_0.updated_at 
+    from
+        randevu.working_hours wh1_0 
+    where
+        wh1_0.business_id=? 
+        and wh1_0.staff_id is null 
+    order by
+        wh1_0.day_of_week
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.code,
+        c1_0.created_at,
+        c1_0.is_active,
+        c1_0.name,
+        c1_0.updated_at 
+    from
+        randevu.cities c1_0 
+    where
+        c1_0.id=?
+Hibernate: 
+    select
+        s1_0.staff_id,
+        s1_1.id,
+        s1_1.business_id,
+        s1_1.created_at,
+        s1_1.currency,
+        s1_1.description,
+        s1_1.duration_min,
+        s1_1.image_url,
+        s1_1.is_active,
+        s1_1.name,
+        s1_1.price,
+        s1_1.sort_order,
+        s1_1.updated_at 
+    from
+        randevu.staff_services s1_0 
+    join
+        randevu.services s1_1 
+            on s1_1.id=s1_0.service_id 
+    where
+        s1_0.staff_id=?
+Hibernate: 
+    select
+        d1_0.id,
+        d1_0.city_id,
+        d1_0.created_at,
+        d1_0.is_active,
+        d1_0.name,
+        d1_0.updated_at 
+    from
+        randevu.districts d1_0 
+    where
+        d1_0.id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.full_name,
+        u1_0.is_active,
+        u1_0.password_hash,
+        u1_0.phone,
+        u1_0.phone_verified,
+        u1_0.profile_photo_url,
+        u1_0.role,
+        u1_0.updated_at 
+    from
+        randevu.users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.full_name,
+        u1_0.is_active,
+        u1_0.password_hash,
+        u1_0.phone,
+        u1_0.phone_verified,
+        u1_0.profile_photo_url,
+        u1_0.role,
+        u1_0.updated_at 
+    from
+        randevu.users u1_0 
+    where
+        u1_0.phone=?
+Hibernate: 
+    select
+        s1_0.id,
+        s1_0.business_id,
+        s1_0.created_at,
+        s1_0.currency,
+        s1_0.description,
+        s1_0.duration_min,
+        s1_0.image_url,
+        s1_0.is_active,
+        s1_0.name,
+        s1_0.price,
+        s1_0.sort_order,
+        s1_0.updated_at 
+    from
+        randevu.services s1_0 
+    where
+        s1_0.id=? 
+        and s1_0.business_id=? 
+        and s1_0.is_active=true
+Hibernate: 
+    select
+        h1_0.id,
+        h1_0.business_id,
+        h1_0.created_at,
+        h1_0.date,
+        h1_0.reason,
+        h1_0.staff_id,
+        h1_0.updated_at 
+    from
+        randevu.holidays h1_0 
+    where
+        h1_0.business_id=? 
+        and h1_0.staff_id is null 
+        and h1_0.date=?
+Hibernate: 
+    select
+        wh1_0.id,
+        wh1_0.business_id,
+        wh1_0.close_time,
+        wh1_0.created_at,
+        wh1_0.day_of_week,
+        wh1_0.is_closed,
+        wh1_0.open_time,
+        wh1_0.staff_id,
+        wh1_0.updated_at 
+    from
+        randevu.working_hours wh1_0 
+    where
+        wh1_0.business_id=? 
+        and wh1_0.staff_id is null
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.business_id=? 
+        and a1_0.staff_id is null 
+        and a1_0.status in (?, ?) 
+        and a1_0.start_time>=? 
+        and a1_0.start_time<?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.full_name,
+        u1_0.is_active,
+        u1_0.password_hash,
+        u1_0.phone,
+        u1_0.phone_verified,
+        u1_0.profile_photo_url,
+        u1_0.role,
+        u1_0.updated_at 
+    from
+        randevu.users u1_0 
+    where
+        u1_0.phone=?
+Hibernate: 
+    select
+        b1_0.id,
+        b1_0.address_line,
+        b1_0.city_id,
+        b1_0.created_at,
+        b1_0.description,
+        b1_0.district_id,
+        b1_0.email,
+        b1_0.is_active,
+        b1_0.latitude,
+        b1_0.longitude,
+        b1_0.name,
+        b1_0.neighborhood_id,
+        b1_0.owner_id,
+        b1_0.phone,
+        b1_0.rejection_reason,
+        b1_0.slug,
+        b1_0.status,
+        b1_0.updated_at,
+        b1_0.website 
+    from
+        randevu.businesses b1_0 
+    where
+        b1_0.id=?
+Hibernate: 
+    select
+        s1_0.id,
+        s1_0.business_id,
+        s1_0.created_at,
+        s1_0.currency,
+        s1_0.description,
+        s1_0.duration_min,
+        s1_0.image_url,
+        s1_0.is_active,
+        s1_0.name,
+        s1_0.price,
+        s1_0.sort_order,
+        s1_0.updated_at 
+    from
+        randevu.services s1_0 
+    where
+        s1_0.id=? 
+        and s1_0.business_id=? 
+        and s1_0.is_active=true
+Hibernate: 
+    select
+        count(a1_0.id)>0 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.business_id=? 
+        and a1_0.staff_id is null 
+        and a1_0.status in (?, ?) 
+        and a1_0.start_time<? 
+        and a1_0.end_time>?
+Hibernate: 
+    insert 
+    into
+        randevu.appointments
+        (business_id, cancellation_reason, created_at, currency, end_time, notes, price_snapshot, service_id, staff_id, start_time, status, updated_at, user_id, id) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    select
+        dt1_0.token 
+    from
+        randevu.device_tokens dt1_0 
+    where
+        dt1_0.user_id=? 
+        and dt1_0.is_active=true
+Hibernate: 
+    select
+        dt1_0.token 
+    from
+        randevu.device_tokens dt1_0 
+    where
+        dt1_0.user_id=? 
+        and dt1_0.is_active=true
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.full_name,
+        u1_0.is_active,
+        u1_0.password_hash,
+        u1_0.phone,
+        u1_0.phone_verified,
+        u1_0.profile_photo_url,
+        u1_0.role,
+        u1_0.updated_at 
+    from
+        randevu.users u1_0 
+    where
+        u1_0.phone=?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.id=?
+Hibernate: 
+    select
+        p1_0.id,
+        p1_0.amount,
+        p1_0.appointment_id,
+        p1_0.created_at,
+        p1_0.currency,
+        p1_0.payment_type,
+        p1_0.provider,
+        p1_0.provider_reference,
+        p1_0.provider_response,
+        p1_0.provider_transaction_reference,
+        p1_0.status,
+        p1_0.updated_at,
+        p1_0.user_id 
+    from
+        randevu.payments p1_0 
+    where
+        p1_0.appointment_id=? 
+        and p1_0.status in (?)
+2026-06-12T12:57:47.039+03:00  INFO 178244 --- [randevu] [nio-8080-exec-7] c.y.p.s.impl.IyzicoPaymentServiceImpl    : iyzico request: conversationId=e9504ccd-d2b7-4c06-9eca-297313e360bf, price=100.00, callbackUrl=http://localhost:8080/api/v1/payments/callback, buyerEmail=mustafa@gmail.com, buyerId=b348eda9-2e23-4185-bb86-cba5386d7458
+Hibernate: 
+    select
+        s1_0.id,
+        s1_0.business_id,
+        s1_0.created_at,
+        s1_0.currency,
+        s1_0.description,
+        s1_0.duration_min,
+        s1_0.image_url,
+        s1_0.is_active,
+        s1_0.name,
+        s1_0.price,
+        s1_0.sort_order,
+        s1_0.updated_at 
+    from
+        randevu.services s1_0 
+    where
+        s1_0.id=?
+2026-06-12T12:57:47.479+03:00  WARN 178244 --- [randevu] [nio-8080-exec-7] c.y.p.s.impl.IyzicoPaymentServiceImpl    : iyzico yanıtı: status=success, errorCode=null, errorMessage=null, errorGroup=null, locale=tr
+2026-06-12T12:57:47.480+03:00  INFO 178244 --- [randevu] [nio-8080-exec-7] c.y.p.s.impl.IyzicoPaymentServiceImpl    : Ödeme başlatıldı: paymentId=e9504ccd-d2b7-4c06-9eca-297313e360bf, appointmentId=def537f7-ffab-4d8c-96c4-df5ea1b23616, tutar=100.00
+Hibernate: 
+    insert 
+    into
+        randevu.payments
+        (amount, appointment_id, created_at, currency, payment_type, provider, provider_reference, provider_response, provider_transaction_reference, status, updated_at, user_id, id) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    update
+        randevu.payments 
+    set
+        amount=?,
+        appointment_id=?,
+        currency=?,
+        payment_type=?,
+        provider=?,
+        provider_reference=?,
+        provider_response=?,
+        provider_transaction_reference=?,
+        status=?,
+        updated_at=?,
+        user_id=? 
+    where
+        id=?
+2026-06-12T12:57:51.199+03:00  INFO 178244 --- [randevu] [nio-8080-exec-5] c.y.p.s.impl.IyzicoPaymentServiceImpl    : Ödeme callback alındı: conversationId=e9504ccd-d2b7-4c06-9eca-297313e360bf, mdStatus=1
+Hibernate: 
+    select
+        p1_0.id,
+        p1_0.amount,
+        p1_0.appointment_id,
+        p1_0.created_at,
+        p1_0.currency,
+        p1_0.payment_type,
+        p1_0.provider,
+        p1_0.provider_reference,
+        p1_0.provider_response,
+        p1_0.provider_transaction_reference,
+        p1_0.status,
+        p1_0.updated_at,
+        p1_0.user_id 
+    from
+        randevu.payments p1_0 
+    where
+        p1_0.id=?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.id=?
+2026-06-12T12:57:51.853+03:00  INFO 178244 --- [randevu] [nio-8080-exec-5] c.y.p.s.impl.IyzicoPaymentServiceImpl    : Ödeme başarılı: paymentId=e9504ccd-d2b7-4c06-9eca-297313e360bf, appointmentId=def537f7-ffab-4d8c-96c4-df5ea1b23616
+Hibernate: 
+    update
+        randevu.payments 
+    set
+        amount=?,
+        appointment_id=?,
+        currency=?,
+        payment_type=?,
+        provider=?,
+        provider_reference=?,
+        provider_response=?,
+        provider_transaction_reference=?,
+        status=?,
+        updated_at=?,
+        user_id=? 
+    where
+        id=?
+Hibernate: 
+    update
+        randevu.appointments 
+    set
+        business_id=?,
+        cancellation_reason=?,
+        currency=?,
+        end_time=?,
+        notes=?,
+        price_snapshot=?,
+        service_id=?,
+        staff_id=?,
+        start_time=?,
+        status=?,
+        updated_at=?,
+        user_id=? 
+    where
+        id=?
+2026-06-12T12:57:51.879+03:00  WARN 178244 --- [randevu] [nio-8080-exec-3] com.yunus.config.SecurityConfig          : Unauthorized request to: /.well-known/appspecific/com.chrome.devtools.json
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.full_name,
+        u1_0.is_active,
+        u1_0.password_hash,
+        u1_0.phone,
+        u1_0.phone_verified,
+        u1_0.profile_photo_url,
+        u1_0.role,
+        u1_0.updated_at 
+    from
+        randevu.users u1_0 
+    where
+        u1_0.phone=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.full_name,
+        u1_0.is_active,
+        u1_0.password_hash,
+        u1_0.phone,
+        u1_0.phone_verified,
+        u1_0.profile_photo_url,
+        u1_0.role,
+        u1_0.updated_at 
+    from
+        randevu.users u1_0 
+    where
+        u1_0.phone=?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.user_id=? 
+    order by
+        a1_0.start_time desc
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.created_at,
+        u1_0.email,
+        u1_0.full_name,
+        u1_0.is_active,
+        u1_0.password_hash,
+        u1_0.phone,
+        u1_0.phone_verified,
+        u1_0.profile_photo_url,
+        u1_0.role,
+        u1_0.updated_at 
+    from
+        randevu.users u1_0 
+    where
+        u1_0.id=?
+Hibernate: 
+    select
+        b1_0.id,
+        b1_0.address_line,
+        b1_0.city_id,
+        b1_0.created_at,
+        b1_0.description,
+        b1_0.district_id,
+        b1_0.email,
+        b1_0.is_active,
+        b1_0.latitude,
+        b1_0.longitude,
+        b1_0.name,
+        b1_0.neighborhood_id,
+        b1_0.owner_id,
+        b1_0.phone,
+        b1_0.rejection_reason,
+        b1_0.slug,
+        b1_0.status,
+        b1_0.updated_at,
+        b1_0.website 
+    from
+        randevu.businesses b1_0 
+    where
+        b1_0.id=?
+Hibernate: 
+    select
+        s1_0.id,
+        s1_0.business_id,
+        s1_0.created_at,
+        s1_0.currency,
+        s1_0.description,
+        s1_0.duration_min,
+        s1_0.image_url,
+        s1_0.is_active,
+        s1_0.name,
+        s1_0.price,
+        s1_0.sort_order,
+        s1_0.updated_at 
+    from
+        randevu.services s1_0 
+    where
+        s1_0.id=?
+Hibernate: 
+    select
+        b1_0.id,
+        b1_0.address_line,
+        b1_0.city_id,
+        b1_0.created_at,
+        b1_0.description,
+        b1_0.district_id,
+        b1_0.email,
+        b1_0.is_active,
+        b1_0.latitude,
+        b1_0.longitude,
+        b1_0.name,
+        b1_0.neighborhood_id,
+        b1_0.owner_id,
+        b1_0.phone,
+        b1_0.rejection_reason,
+        b1_0.slug,
+        b1_0.status,
+        b1_0.updated_at,
+        b1_0.website 
+    from
+        randevu.businesses b1_0 
+    where
+        b1_0.id=?
+Hibernate: 
+    select
+        s1_0.id,
+        s1_0.business_id,
+        s1_0.created_at,
+        s1_0.currency,
+        s1_0.description,
+        s1_0.duration_min,
+        s1_0.image_url,
+        s1_0.is_active,
+        s1_0.name,
+        s1_0.price,
+        s1_0.sort_order,
+        s1_0.updated_at 
+    from
+        randevu.services s1_0 
+    where
+        s1_0.id=?
+Hibernate: 
+    select
+        b1_0.id,
+        b1_0.address_line,
+        b1_0.city_id,
+        b1_0.created_at,
+        b1_0.description,
+        b1_0.district_id,
+        b1_0.email,
+        b1_0.is_active,
+        b1_0.latitude,
+        b1_0.longitude,
+        b1_0.name,
+        b1_0.neighborhood_id,
+        b1_0.owner_id,
+        b1_0.phone,
+        b1_0.rejection_reason,
+        b1_0.slug,
+        b1_0.status,
+        b1_0.updated_at,
+        b1_0.website 
+    from
+        randevu.businesses b1_0 
+    where
+        b1_0.id=?
+Hibernate: 
+    select
+        s1_0.id,
+        s1_0.business_id,
+        s1_0.created_at,
+        s1_0.currency,
+        s1_0.description,
+        s1_0.duration_min,
+        s1_0.image_url,
+        s1_0.is_active,
+        s1_0.name,
+        s1_0.price,
+        s1_0.sort_order,
+        s1_0.updated_at 
+    from
+        randevu.services s1_0 
+    where
+        s1_0.id=?
+Hibernate: 
+    select
+        s1_0.id,
+        s1_0.business_id,
+        s1_0.created_at,
+        s1_0.currency,
+        s1_0.description,
+        s1_0.duration_min,
+        s1_0.image_url,
+        s1_0.is_active,
+        s1_0.name,
+        s1_0.price,
+        s1_0.sort_order,
+        s1_0.updated_at 
+    from
+        randevu.services s1_0 
+    where
+        s1_0.id=?

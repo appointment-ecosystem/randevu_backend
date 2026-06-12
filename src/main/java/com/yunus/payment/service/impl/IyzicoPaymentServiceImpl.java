@@ -136,14 +136,6 @@ public class IyzicoPaymentServiceImpl implements PaymentService {
         CreatePaymentRequest threedsRequest = buildThreedsRequest(payment, appointment, currentUser, request, clientIp);
         ThreedsInitialize threedsInitialize = ThreedsInitialize.create(threedsRequest, iyzicoOptions);
 
-        // TODO: geçici debug logu - sorun çözülünce kaldırılacak
-        log.warn("iyzico yanıtı: status={}, errorCode={}, errorMessage={}, errorGroup={}, locale={}",
-                threedsInitialize.getStatus(),
-                threedsInitialize.getErrorCode(),
-                threedsInitialize.getErrorMessage(),
-                threedsInitialize.getErrorGroup(),
-                threedsInitialize.getLocale());
-
         // Adım 9 — Başlatma başarısızsa ödemeyi FAIL olarak işaretle
         if (!IYZICO_SUCCESS_STATUS.equals(threedsInitialize.getStatus())) {
             payment.setStatus(PaymentStatus.FAIL);
@@ -189,14 +181,6 @@ public class IyzicoPaymentServiceImpl implements PaymentService {
         paymentRequest.setPaymentChannel("WEB");
         paymentRequest.setPaymentGroup("SERVICE");
         paymentRequest.setCallbackUrl(iyzicoProperties.getCallbackUrl());
-
-        // TODO: geçici debug logu - sorun çözülünce kaldırılacak (kart bilgisi içermez)
-        log.info("iyzico request: conversationId={}, price={}, callbackUrl={}, buyerEmail={}, buyerId={}",
-                paymentRequest.getConversationId(),
-                paymentRequest.getPrice(),
-                iyzicoProperties.getCallbackUrl(),
-                user.getEmail() != null ? user.getEmail() : "null",
-                user.getId() != null ? user.getId().toString() : "null");
 
         // Kart bilgileri — ASLA loglanmaz veya saklanmaz
         PaymentCard paymentCard = new PaymentCard();

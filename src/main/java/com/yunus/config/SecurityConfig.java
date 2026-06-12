@@ -253,7 +253,20 @@ public class SecurityConfig {
         configuration.setExposedHeaders(List.of("Authorization"));
         configuration.setAllowCredentials(true);
 
+        // iyzico 3DS callback: bankanın hosted ödeme sayfası farklı bir origin'den
+        // (form POST ile, Origin header'ı set edilmiş şekilde) bu endpoint'e POST yapar.
+        // Spring'in CorsFilter'ı, /** için tanımlı allowedOrigins listesinde olmayan
+        // origin'leri preflight olmayan isteklerde de reddeder (403). Bu yüzden bu
+        // path için ayrı, kimlik bilgisi gerektirmeyen, tüm origin'lere izin veren
+        // bir konfigürasyon tanımlanır.
+        CorsConfiguration callbackConfiguration = new CorsConfiguration();
+        callbackConfiguration.setAllowedOrigins(List.of("*"));
+        callbackConfiguration.setAllowedMethods(List.of("GET", "POST", "OPTIONS"));
+        callbackConfiguration.setAllowedHeaders(List.of("*"));
+        callbackConfiguration.setAllowCredentials(false);
+
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/api/v1/payments/callback", callbackConfiguration);
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
