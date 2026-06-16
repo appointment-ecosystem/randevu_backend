@@ -2505,3 +2505,2031 @@ Hibernate:
         randevu.services s1_0 
     where
         s1_0.id=?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status='COMPLETED' 
+        and a1_0.end_time>=? 
+        and a1_0.end_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status in ('PENDING', 'CONFIRMED') 
+        and a1_0.start_time>=? 
+        and a1_0.start_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status='COMPLETED' 
+        and a1_0.end_time>=? 
+        and a1_0.end_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status in ('PENDING', 'CONFIRMED') 
+        and a1_0.start_time>=? 
+        and a1_0.start_time<?
+2026-06-12T13:24:39.495+03:00  WARN 178244 --- [randevu] [ication-async-2] c.y.n.scheduler.NotificationScheduler    : Hatırlatma bildirimi gönderilemedi [appointmentId=da275094-a152-48f6-a012-4e4cbf043935]: Could not initialize proxy [com.yunus.business.entity.Business#92909ae7-d7bc-4a1c-b2ec-0920478eed8e] - no session
+2026-06-12T13:24:39.497+03:00  WARN 178244 --- [randevu] [ication-async-2] c.y.n.scheduler.NotificationScheduler    : Hatırlatma bildirimi gönderilemedi [appointmentId=bde332e0-5b1d-4048-bfba-6781cf06dd89]: Could not initialize proxy [com.yunus.business.entity.Business#6f69ef08-4bec-4bfd-a190-5cdd10c14c73] - no session
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status='COMPLETED' 
+        and a1_0.end_time>=? 
+        and a1_0.end_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status in ('PENDING', 'CONFIRMED') 
+        and a1_0.start_time>=? 
+        and a1_0.start_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status in ('PENDING', 'CONFIRMED') 
+        and a1_0.start_time>=? 
+        and a1_0.start_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status='COMPLETED' 
+        and a1_0.end_time>=? 
+        and a1_0.end_time<?
+2026-06-12T13:54:39.502+03:00  WARN 178244 --- [randevu] [ication-async-2] c.y.n.scheduler.NotificationScheduler    : Hatırlatma bildirimi gönderilemedi [appointmentId=def537f7-ffab-4d8c-96c4-df5ea1b23616]: Could not initialize proxy [com.yunus.business.entity.Business#428620da-0482-4eb9-befe-d443d74918f5] - no session
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status in ('PENDING', 'CONFIRMED') 
+        and a1_0.start_time>=? 
+        and a1_0.start_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status='COMPLETED' 
+        and a1_0.end_time>=? 
+        and a1_0.end_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status='COMPLETED' 
+        and a1_0.end_time>=? 
+        and a1_0.end_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status in ('PENDING', 'CONFIRMED') 
+        and a1_0.start_time>=? 
+        and a1_0.start_time<?
+2026-06-12T14:24:39.519+03:00  WARN 178244 --- [randevu] [ication-async-2] c.y.n.scheduler.NotificationScheduler    : Hatırlatma bildirimi gönderilemedi [appointmentId=ada7019d-81bc-4a5a-b8ba-4185892430ab]: Could not initialize proxy [com.yunus.business.entity.Business#6f69ef08-4bec-4bfd-a190-5cdd10c14c73] - no session
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status in ('PENDING', 'CONFIRMED') 
+        and a1_0.start_time>=? 
+        and a1_0.start_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status='COMPLETED' 
+        and a1_0.end_time>=? 
+        and a1_0.end_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status in ('PENDING', 'CONFIRMED') 
+        and a1_0.start_time>=? 
+        and a1_0.start_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status='COMPLETED' 
+        and a1_0.end_time>=? 
+        and a1_0.end_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status='COMPLETED' 
+        and a1_0.end_time>=? 
+        and a1_0.end_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status in ('PENDING', 'CONFIRMED') 
+        and a1_0.start_time>=? 
+        and a1_0.start_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status='COMPLETED' 
+        and a1_0.end_time>=? 
+        and a1_0.end_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status in ('PENDING', 'CONFIRMED') 
+        and a1_0.start_time>=? 
+        and a1_0.start_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status in ('PENDING', 'CONFIRMED') 
+        and a1_0.start_time>=? 
+        and a1_0.start_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status='COMPLETED' 
+        and a1_0.end_time>=? 
+        and a1_0.end_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status='COMPLETED' 
+        and a1_0.end_time>=? 
+        and a1_0.end_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status in ('PENDING', 'CONFIRMED') 
+        and a1_0.start_time>=? 
+        and a1_0.start_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status in ('PENDING', 'CONFIRMED') 
+        and a1_0.start_time>=? 
+        and a1_0.start_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status='COMPLETED' 
+        and a1_0.end_time>=? 
+        and a1_0.end_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status in ('PENDING', 'CONFIRMED') 
+        and a1_0.start_time>=? 
+        and a1_0.start_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status='COMPLETED' 
+        and a1_0.end_time>=? 
+        and a1_0.end_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status in ('PENDING', 'CONFIRMED') 
+        and a1_0.start_time>=? 
+        and a1_0.start_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status='COMPLETED' 
+        and a1_0.end_time>=? 
+        and a1_0.end_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status in ('PENDING', 'CONFIRMED') 
+        and a1_0.start_time>=? 
+        and a1_0.start_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status='COMPLETED' 
+        and a1_0.end_time>=? 
+        and a1_0.end_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status in ('PENDING', 'CONFIRMED') 
+        and a1_0.start_time>=? 
+        and a1_0.start_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status='COMPLETED' 
+        and a1_0.end_time>=? 
+        and a1_0.end_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status='COMPLETED' 
+        and a1_0.end_time>=? 
+        and a1_0.end_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status in ('PENDING', 'CONFIRMED') 
+        and a1_0.start_time>=? 
+        and a1_0.start_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status='COMPLETED' 
+        and a1_0.end_time>=? 
+        and a1_0.end_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status in ('PENDING', 'CONFIRMED') 
+        and a1_0.start_time>=? 
+        and a1_0.start_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status='COMPLETED' 
+        and a1_0.end_time>=? 
+        and a1_0.end_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status in ('PENDING', 'CONFIRMED') 
+        and a1_0.start_time>=? 
+        and a1_0.start_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status='COMPLETED' 
+        and a1_0.end_time>=? 
+        and a1_0.end_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status in ('PENDING', 'CONFIRMED') 
+        and a1_0.start_time>=? 
+        and a1_0.start_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status in ('PENDING', 'CONFIRMED') 
+        and a1_0.start_time>=? 
+        and a1_0.start_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status='COMPLETED' 
+        and a1_0.end_time>=? 
+        and a1_0.end_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status='COMPLETED' 
+        and a1_0.end_time>=? 
+        and a1_0.end_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status in ('PENDING', 'CONFIRMED') 
+        and a1_0.start_time>=? 
+        and a1_0.start_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status in ('PENDING', 'CONFIRMED') 
+        and a1_0.start_time>=? 
+        and a1_0.start_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status='COMPLETED' 
+        and a1_0.end_time>=? 
+        and a1_0.end_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status='COMPLETED' 
+        and a1_0.end_time>=? 
+        and a1_0.end_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status in ('PENDING', 'CONFIRMED') 
+        and a1_0.start_time>=? 
+        and a1_0.start_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status='COMPLETED' 
+        and a1_0.end_time>=? 
+        and a1_0.end_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status in ('PENDING', 'CONFIRMED') 
+        and a1_0.start_time>=? 
+        and a1_0.start_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status in ('PENDING', 'CONFIRMED') 
+        and a1_0.start_time>=? 
+        and a1_0.start_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status='COMPLETED' 
+        and a1_0.end_time>=? 
+        and a1_0.end_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status in ('PENDING', 'CONFIRMED') 
+        and a1_0.start_time>=? 
+        and a1_0.start_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status='COMPLETED' 
+        and a1_0.end_time>=? 
+        and a1_0.end_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status='COMPLETED' 
+        and a1_0.end_time>=? 
+        and a1_0.end_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status in ('PENDING', 'CONFIRMED') 
+        and a1_0.start_time>=? 
+        and a1_0.start_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status in ('PENDING', 'CONFIRMED') 
+        and a1_0.start_time>=? 
+        and a1_0.start_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status='COMPLETED' 
+        and a1_0.end_time>=? 
+        and a1_0.end_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status='COMPLETED' 
+        and a1_0.end_time>=? 
+        and a1_0.end_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status in ('PENDING', 'CONFIRMED') 
+        and a1_0.start_time>=? 
+        and a1_0.start_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status='COMPLETED' 
+        and a1_0.end_time>=? 
+        and a1_0.end_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status in ('PENDING', 'CONFIRMED') 
+        and a1_0.start_time>=? 
+        and a1_0.start_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status='COMPLETED' 
+        and a1_0.end_time>=? 
+        and a1_0.end_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status in ('PENDING', 'CONFIRMED') 
+        and a1_0.start_time>=? 
+        and a1_0.start_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status in ('PENDING', 'CONFIRMED') 
+        and a1_0.start_time>=? 
+        and a1_0.start_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status='COMPLETED' 
+        and a1_0.end_time>=? 
+        and a1_0.end_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status in ('PENDING', 'CONFIRMED') 
+        and a1_0.start_time>=? 
+        and a1_0.start_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status='COMPLETED' 
+        and a1_0.end_time>=? 
+        and a1_0.end_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status='COMPLETED' 
+        and a1_0.end_time>=? 
+        and a1_0.end_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status in ('PENDING', 'CONFIRMED') 
+        and a1_0.start_time>=? 
+        and a1_0.start_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status='COMPLETED' 
+        and a1_0.end_time>=? 
+        and a1_0.end_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status in ('PENDING', 'CONFIRMED') 
+        and a1_0.start_time>=? 
+        and a1_0.start_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status='COMPLETED' 
+        and a1_0.end_time>=? 
+        and a1_0.end_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status in ('PENDING', 'CONFIRMED') 
+        and a1_0.start_time>=? 
+        and a1_0.start_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status='COMPLETED' 
+        and a1_0.end_time>=? 
+        and a1_0.end_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status in ('PENDING', 'CONFIRMED') 
+        and a1_0.start_time>=? 
+        and a1_0.start_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status='COMPLETED' 
+        and a1_0.end_time>=? 
+        and a1_0.end_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status in ('PENDING', 'CONFIRMED') 
+        and a1_0.start_time>=? 
+        and a1_0.start_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status in ('PENDING', 'CONFIRMED') 
+        and a1_0.start_time>=? 
+        and a1_0.start_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status='COMPLETED' 
+        and a1_0.end_time>=? 
+        and a1_0.end_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status='COMPLETED' 
+        and a1_0.end_time>=? 
+        and a1_0.end_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status in ('PENDING', 'CONFIRMED') 
+        and a1_0.start_time>=? 
+        and a1_0.start_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status in ('PENDING', 'CONFIRMED') 
+        and a1_0.start_time>=? 
+        and a1_0.start_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status='COMPLETED' 
+        and a1_0.end_time>=? 
+        and a1_0.end_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status='COMPLETED' 
+        and a1_0.end_time>=? 
+        and a1_0.end_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status in ('PENDING', 'CONFIRMED') 
+        and a1_0.start_time>=? 
+        and a1_0.start_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status='COMPLETED' 
+        and a1_0.end_time>=? 
+        and a1_0.end_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status in ('PENDING', 'CONFIRMED') 
+        and a1_0.start_time>=? 
+        and a1_0.start_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status in ('PENDING', 'CONFIRMED') 
+        and a1_0.start_time>=? 
+        and a1_0.start_time<?
+Hibernate: 
+    select
+        a1_0.id,
+        a1_0.business_id,
+        a1_0.cancellation_reason,
+        a1_0.created_at,
+        a1_0.currency,
+        a1_0.end_time,
+        a1_0.notes,
+        a1_0.price_snapshot,
+        a1_0.service_id,
+        a1_0.staff_id,
+        a1_0.start_time,
+        a1_0.status,
+        a1_0.updated_at,
+        a1_0.user_id 
+    from
+        randevu.appointments a1_0 
+    where
+        a1_0.status='COMPLETED' 
+        and a1_0.end_time>=? 
+        and a1_0.end_time<?
