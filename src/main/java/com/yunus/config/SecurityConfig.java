@@ -149,6 +149,7 @@ public class SecurityConfig {
 
                         // ── Kategoriler (public) ─────────────────────────────────────
                         .requestMatchers(HttpMethod.GET, "/api/v1/categories").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/business-categories/**").permitAll()
 
                         // ── Randevular (public) ──────────────────────────────────────
                         .requestMatchers(HttpMethod.GET, "/api/v1/appointments/available-slots").permitAll()
