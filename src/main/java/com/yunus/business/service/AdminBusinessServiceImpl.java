@@ -119,7 +119,7 @@ public class AdminBusinessServiceImpl implements AdminBusinessService {
      *
      * @param id Sorgulanacak işletme kimliği
      * @return Bulunan işletme nesnesi
-     * @throws ApiException İşletme bulunamadığında fırlatılır (ErrorType.BUSINESS_NOT_FOUND, 404)
+     * @ throws ApiException İşletme bulunamadığında fırlatılır (ErrorType.BUSINESS_NOT_FOUND, 404)
      */
     private Business findBusinessById(UUID id) {
         return businessRepository.findById(id)
@@ -131,7 +131,7 @@ public class AdminBusinessServiceImpl implements AdminBusinessService {
      * Gerekçe boş veya null ise doğrulama hatası fırlatır.
      *
      * @param reason Doğrulanacak gerekçe metni
-     * @throws ApiException Gerekçe geçersiz olduğunda fırlatılır (ErrorType.VALIDATION_ERROR, 400)
+     * @ throws ApiException Gerekçe geçersiz olduğunda fırlatılır (ErrorType.VALIDATION_ERROR, 400)
      */
     private void validateReason(String reason) {
         if (reason == null || reason.trim().isEmpty()) {

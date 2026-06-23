@@ -10,6 +10,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 import javax.crypto.SecretKey;
+
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class JwtService {
+
 
     private final JwtProperties jwtProperties;
 
