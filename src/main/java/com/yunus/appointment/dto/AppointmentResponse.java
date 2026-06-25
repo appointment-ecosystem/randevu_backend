@@ -35,6 +35,7 @@ import java.util.UUID;
  * @param id                 randevunun benzersiz tanımlayıcısı
  * @param userId             randevu sahibi kullanıcının UUID'si
  * @param userName           kullanıcının görünen adı
+ * @param userPhone          müşterinin telefon numarası
  * @param businessId         randevunun yapıldığı işletmenin UUID'si
  * @param businessName       işletmenin görünen adı
  * @param serviceId          rezerve edilen hizmetin UUID'si
@@ -55,6 +56,7 @@ public record AppointmentResponse(
         UUID id,
         UUID userId,
         String userName,
+        String userPhone,
         UUID businessId,
         String businessName,
         UUID serviceId,

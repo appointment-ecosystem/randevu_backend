@@ -604,6 +604,7 @@ public class AppointmentServiceImpl implements AppointmentService {
                 appointment.getId(),
                 appointment.getUser().getId(),
                 appointment.getUser().getFullName(),
+                appointment.getUser().getPhone(),
                 appointment.getBusiness().getId(),
                 appointment.getBusiness().getName(),
                 appointment.getService().getId(),
