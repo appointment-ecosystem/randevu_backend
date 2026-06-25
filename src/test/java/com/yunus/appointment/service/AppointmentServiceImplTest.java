@@ -208,4 +208,61 @@ class AppointmentServiceImplTest {
         assertThrows(ForbiddenException.class, () -> appointmentService.getBusinessAppointments(
                 businessId, OffsetDateTime.now().minusDays(1), OffsetDateTime.now().plusDays(1)));
     }
+
+    @Test
+    void customerCanViewOwnAppointment() {
+        Business business = newBusiness();
+        Appointment appointment = newAppointment(business, null);
+
+        when(appointmentRepository.findById(appointment.getId())).thenReturn(Optional.of(appointment));
+        when(currentUserService.getCurrentUserId()).thenReturn(appointment.getUser().getId());
+
+        AppointmentResponse response = appointmentService.getAppointment(appointment.getId());
+
+        assertEquals(appointment.getId(), response.id());
+    }
+
+    @Test
+    void assignedStaffCanViewAppointment() {
+        Business business = newBusiness();
+        Staff staffA = newStaff(staffAId, staffAUserId, business);
+        Appointment appointment = newAppointment(business, staffA);
+
+        when(appointmentRepository.findById(appointment.getId())).thenReturn(Optional.of(appointment));
+        when(currentUserService.getCurrentUserId()).thenReturn(staffAUserId);
+        when(staffRepository.findByUserIdAndIsActiveTrue(staffAUserId)).thenReturn(Optional.of(staffA));
+
+        AppointmentResponse response = appointmentService.getAppointment(appointment.getId());
+
+        assertEquals(appointment.getId(), response.id());
+    }
+
+    @Test
+    void unassignedStaffFromSameBusinessCannotViewAppointment() {
+        Business business = newBusiness();
+        Staff staffA = newStaff(staffAId, staffAUserId, business);
+        Staff staffB = newStaff(staffBId, staffBUserId, business);
+        Appointment appointment = newAppointment(business, staffB);
+
+        when(appointmentRepository.findById(appointment.getId())).thenReturn(Optional.of(appointment));
+        when(currentUserService.getCurrentUserId()).thenReturn(staffAUserId);
+        when(staffRepository.findByUserIdAndIsActiveTrue(staffAUserId)).thenReturn(Optional.of(staffA));
+
+        assertThrows(ForbiddenException.class,
+                () -> appointmentService.getAppointment(appointment.getId()));
+    }
+
+    @Test
+    void ownerCanAlwaysViewAppointment() {
+        Business business = newBusiness();
+        Staff staffA = newStaff(staffAId, staffAUserId, business);
+        Appointment appointment = newAppointment(business, staffA);
+
+        when(appointmentRepository.findById(appointment.getId())).thenReturn(Optional.of(appointment));
+        when(currentUserService.getCurrentUserId()).thenReturn(ownerId);
+
+        AppointmentResponse response = appointmentService.getAppointment(appointment.getId());
+
+        assertEquals(appointment.getId(), response.id());
+    }
 }

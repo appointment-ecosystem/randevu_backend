@@ -229,7 +229,7 @@ public class AppointmentController {
     @PatchMapping("/{id}/confirm")
     @Operation(summary = "Randevuyu onayla (işletme)",
                description = "PENDING durumundaki randevuyu CONFIRMED'a geçirir. " +
-                             "Yalnızca işletme sahibi kullanabilir.")
+                             "İşletme sahibi veya bu randevuya atanmış personel kullanabilir.")
     public ResponseEntity<BaseResponse<AppointmentResponse>> confirmAppointment(
             @PathVariable UUID id) {
 
@@ -273,8 +273,8 @@ public class AppointmentController {
      */
     @PatchMapping("/{id}/cancel-by-business")
     @Operation(summary = "Randevuyu iptal et (işletme)",
-               description = "İşletme sahibi randevuyu CANCELLED_BY_BUSINESS statüsüne geçirir. " +
-                             "reason opsiyoneldir.")
+               description = "İşletme sahibi veya bu randevuya atanmış personel kullanabilir. " +
+                             "Randevuyu CANCELLED_BY_BUSINESS statüsüne geçirir. reason opsiyoneldir.")
     public ResponseEntity<BaseResponse<AppointmentResponse>> cancelAppointmentByBusiness(
             @PathVariable UUID id,
             @Valid @RequestBody AppointmentStatusUpdateRequest request) {
@@ -296,7 +296,7 @@ public class AppointmentController {
     @PatchMapping("/{id}/complete")
     @Operation(summary = "Randevuyu tamamlandı işaretle",
                description = "CONFIRMED durumundaki randevuyu COMPLETED'a geçirir. " +
-                             "Yalnızca işletme sahibi kullanabilir.")
+                             "İşletme sahibi veya bu randevuya atanmış personel kullanabilir.")
     public ResponseEntity<BaseResponse<AppointmentResponse>> completeAppointment(
             @PathVariable UUID id) {
 
@@ -318,7 +318,7 @@ public class AppointmentController {
     @PatchMapping("/{id}/no-show")
     @Operation(summary = "No-show işaretle",
                description = "CONFIRMED durumundaki randevuyu NO_SHOW statüsüne geçirir. " +
-                             "Yalnızca işletme sahibi kullanabilir.")
+                             "İşletme sahibi veya bu randevuya atanmış personel kullanabilir.")
     public ResponseEntity<BaseResponse<AppointmentResponse>> markNoShow(
             @PathVariable UUID id) {
 

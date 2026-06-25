@@ -188,8 +188,8 @@ public class AppointmentServiceImpl implements AppointmentService {
     /**
      * {@inheritDoc}
      *
-     * <p>Yetki: randevunun sahibi (user) veya randevunun ait olduğu işletmenin
-     * sahibi (business.owner) görüntüleyebilir.
+     * <p>Yetki: randevunun sahibi (user) her zaman görüntüleyebilir. Müşteri değilse,
+     * işletme sahibi veya randevuya atanmış personel görüntüleyebilir.
      */
     @Override
     @Transactional(readOnly = true)
@@ -197,11 +197,10 @@ public class AppointmentServiceImpl implements AppointmentService {
         Appointment appointment = findAppointmentOrThrow(appointmentId);
         UUID currentUserId = currentUserService.getCurrentUserId();
 
-        boolean isOwner          = appointment.getUser().getId().equals(currentUserId);
-        boolean isBusinessOwner  = appointment.getBusiness().getOwner().getId().equals(currentUserId);
-
-        if (!isOwner && !isBusinessOwner) {
-            throw new ForbiddenException("Bu randevuyu görüntüleme yetkiniz yok.");
+        boolean isCustomer = appointment.getUser().getId().equals(currentUserId);
+        if (!isCustomer) {
+            BusinessAccess access = requireBusinessOwnershipForAppointment(appointment);
+            requireAssignedStaffIfNotOwner(access, appointment);
         }
         return toResponse(appointment);
     }
