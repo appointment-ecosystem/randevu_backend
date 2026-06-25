@@ -255,8 +255,10 @@ public class AppointmentServiceImpl implements AppointmentService {
     public List<AppointmentResponse> getBusinessAppointments(
             UUID businessId, OffsetDateTime rangeStart, OffsetDateTime rangeEnd) {
 
-        requireBusinessOwnership(businessId);
-        return appointmentRepository.findByBusinessIdAndTimeRange(businessId, rangeStart, rangeEnd)
+        BusinessAccess access = requireBusinessOwnership(businessId);
+        return filterByStaffAccess(
+                appointmentRepository.findByBusinessIdAndTimeRange(businessId, rangeStart, rangeEnd),
+                access)
                 .stream()
                 .map(this::toResponse)
                 .toList();
@@ -273,9 +275,11 @@ public class AppointmentServiceImpl implements AppointmentService {
             UUID businessId, AppointmentStatus status,
             OffsetDateTime rangeStart, OffsetDateTime rangeEnd) {
 
-        requireBusinessOwnership(businessId);
-        return appointmentRepository
-                .findByBusinessIdAndStatusAndTimeRange(businessId, status, rangeStart, rangeEnd)
+        BusinessAccess access = requireBusinessOwnership(businessId);
+        return filterByStaffAccess(
+                appointmentRepository.findByBusinessIdAndStatusAndTimeRange(
+                        businessId, status, rangeStart, rangeEnd),
+                access)
                 .stream()
                 .map(this::toResponse)
                 .toList();
@@ -295,8 +299,9 @@ public class AppointmentServiceImpl implements AppointmentService {
     public AppointmentResponse confirmAppointment(UUID appointmentId) {
         Appointment appointment = findAppointmentOrThrow(appointmentId);
 
-        // Yetki: yalnızca işletme sahibi onaylayabilir
-        requireBusinessOwnershipForAppointment(appointment);
+        // Yetki: işletme sahibi veya bu randevuya atanmış personel onaylayabilir
+        BusinessAccess access = requireBusinessOwnershipForAppointment(appointment);
+        requireAssignedStaffIfNotOwner(access, appointment);
 
         if (appointment.getStatus() != AppointmentStatus.PENDING) {
             throw new BusinessException("Sadece PENDING durumundaki randevu onaylanabilir.");
@@ -377,8 +382,9 @@ public class AppointmentServiceImpl implements AppointmentService {
     public AppointmentResponse cancelAppointmentByBusiness(UUID appointmentId, String reason) {
         Appointment appointment = findAppointmentOrThrow(appointmentId);
 
-        // Yetki: yalnızca işletme sahibi iptal edebilir
-        requireBusinessOwnershipForAppointment(appointment);
+        // Yetki: işletme sahibi veya bu randevuya atanmış personel iptal edebilir
+        BusinessAccess access = requireBusinessOwnershipForAppointment(appointment);
+        requireAssignedStaffIfNotOwner(access, appointment);
 
         AppointmentStatus currentStatus = appointment.getStatus();
         if (currentStatus != AppointmentStatus.PENDING && currentStatus != AppointmentStatus.CONFIRMED) {
@@ -420,7 +426,8 @@ public class AppointmentServiceImpl implements AppointmentService {
     public AppointmentResponse completeAppointment(UUID appointmentId) {
         Appointment appointment = findAppointmentOrThrow(appointmentId);
 
-        requireBusinessOwnershipForAppointment(appointment);
+        BusinessAccess access = requireBusinessOwnershipForAppointment(appointment);
+        requireAssignedStaffIfNotOwner(access, appointment);
 
         if (appointment.getStatus() != AppointmentStatus.CONFIRMED) {
             throw new BusinessException("Sadece CONFIRMED durumundaki randevu tamamlanabilir.");
@@ -440,7 +447,8 @@ public class AppointmentServiceImpl implements AppointmentService {
     public AppointmentResponse markNoShow(UUID appointmentId) {
         Appointment appointment = findAppointmentOrThrow(appointmentId);
 
-        requireBusinessOwnershipForAppointment(appointment);
+        BusinessAccess access = requireBusinessOwnershipForAppointment(appointment);
+        requireAssignedStaffIfNotOwner(access, appointment);
 
         if (appointment.getStatus() != AppointmentStatus.CONFIRMED) {
             throw new BusinessException("Sadece CONFIRMED durumundaki randevu no-show olarak işaretlenebilir.");
@@ -473,30 +481,113 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     /**
-     * Belirli bir işletmenin sahibinin giriş yapmış kullanıcı olup olmadığını kontrol eder.
-     * Değilse {@link ForbiddenException} fırlatır.
+     * İşletme bazlı yetki kontrolünün sonucu: çağıran ya işletme sahibidir
+     * ya da o işletmeye bağlı bir personeldir (bu durumda {@code staffId} dolu gelir).
      *
-     * @param businessId doğrulanacak işletmenin UUID'si
+     * <p>Bu sonuç, randevu bazlı ek kısıtlamalar için
+     * {@link #requireAssignedStaffIfNotOwner} ve {@link #filterByStaffAccess}
+     * tarafından kullanılır — owner/personel ayrımı ile personelin kendi
+     * randevusuna kısıtlanması mantığı burada birbirine karışmaz.
      */
-    private void requireBusinessOwnership(UUID businessId) {
-        UUID currentUserId = currentUserService.getCurrentUserId();
-        businessRepository.findByIdAndOwnerIdAndIsActiveTrue(businessId, currentUserId)
-                .orElseThrow(() -> new ForbiddenException(
-                        "Bu işletmenin randevularını görüntüleme yetkiniz yok."));
+    private record BusinessAccess(boolean owner, UUID staffId) {
     }
 
     /**
-     * Randevunun ait olduğu işletmenin sahibinin giriş yapmış kullanıcı olup olmadığını kontrol eder.
-     * Değilse {@link ForbiddenException} fırlatır.
+     * Giriş yapmış kullanıcının belirtilen işletmeye personel olarak bağlı olup olmadığını
+     * kontrol eder. Personel kaydı yoksa veya başka bir işletmeye bağlıysa {@code null} döner.
+     *
+     * @param businessId    doğrulanacak işletmenin UUID'si
+     * @param currentUserId giriş yapmış kullanıcının UUID'si
+     * @return bu işletmeye bağlı aktif personel kaydı, yoksa {@code null}
+     */
+    private Staff resolveStaffMembership(UUID businessId, UUID currentUserId) {
+        return staffRepository.findByUserIdAndIsActiveTrue(currentUserId)
+                .filter(staff -> staff.getBusiness().getId().equals(businessId))
+                .orElse(null);
+    }
+
+    /**
+     * Belirli bir işletmeye erişim yetkisini kontrol eder: çağıran kullanıcı ya
+     * işletme sahibi ya da o işletmeye bağlı aktif bir personel olmalıdır.
+     * İkisi de değilse {@link ForbiddenException} fırlatır.
+     *
+     * @param businessId doğrulanacak işletmenin UUID'si
+     * @return çağıranın owner/personel erişim bilgisi
+     */
+    private BusinessAccess requireBusinessOwnership(UUID businessId) {
+        UUID currentUserId = currentUserService.getCurrentUserId();
+        boolean isOwner = businessRepository
+                .findByIdAndOwnerIdAndIsActiveTrue(businessId, currentUserId)
+                .isPresent();
+        if (isOwner) {
+            return new BusinessAccess(true, null);
+        }
+
+        Staff staff = resolveStaffMembership(businessId, currentUserId);
+        if (staff != null) {
+            return new BusinessAccess(false, staff.getId());
+        }
+
+        throw new ForbiddenException("Bu işletmenin randevularını görüntüleme yetkiniz yok.");
+    }
+
+    /**
+     * Randevunun ait olduğu işletmeye erişim yetkisini kontrol eder: çağıran kullanıcı ya
+     * işletme sahibi ya da o işletmeye bağlı aktif bir personel olmalıdır.
+     * İkisi de değilse {@link ForbiddenException} fırlatır.
      *
      * @param appointment yetki kontrolü yapılacak randevu
+     * @return çağıranın owner/personel erişim bilgisi
      */
-    private void requireBusinessOwnershipForAppointment(Appointment appointment) {
+    private BusinessAccess requireBusinessOwnershipForAppointment(Appointment appointment) {
         UUID currentUserId = currentUserService.getCurrentUserId();
+        UUID businessId = appointment.getBusiness().getId();
         UUID ownerId = appointment.getBusiness().getOwner().getId();
-        if (!ownerId.equals(currentUserId)) {
-            throw new ForbiddenException("Bu işlem için işletme sahibi yetkisi gereklidir.");
+        if (ownerId.equals(currentUserId)) {
+            return new BusinessAccess(true, null);
         }
+
+        Staff staff = resolveStaffMembership(businessId, currentUserId);
+        if (staff != null) {
+            return new BusinessAccess(false, staff.getId());
+        }
+
+        throw new ForbiddenException("Bu işlem için işletme sahibi yetkisi gereklidir.");
+    }
+
+    /**
+     * Personel erişiminde, randevunun çağırana atanmış olup olmadığını kontrol eder.
+     * Owner için bu ek kısıtlama uygulanmaz. Personelse ve randevu ona atanmamışsa
+     * (staff alanı null ya da başka bir personele aitse) {@link ForbiddenException} fırlatır.
+     *
+     * @param access      {@link #requireBusinessOwnershipForAppointment} sonucu
+     * @param appointment kontrol edilecek randevu
+     */
+    private void requireAssignedStaffIfNotOwner(BusinessAccess access, Appointment appointment) {
+        if (access.owner()) {
+            return;
+        }
+        Staff assignedStaff = appointment.getStaff();
+        if (assignedStaff == null || !assignedStaff.getId().equals(access.staffId())) {
+            throw new ForbiddenException("Bu randevu size atanmamış.");
+        }
+    }
+
+    /**
+     * Personel erişiminde randevu listesini çağırana atanmış randevularla sınırlar.
+     * Owner için filtre uygulanmaz; atanmamış randevular dahil tümünü görür.
+     *
+     * @param appointments filtrelenecek randevu listesi
+     * @param access       {@link #requireBusinessOwnership} sonucu
+     * @return owner ise değişmemiş liste, personelse sadece kendisine atanmış randevular
+     */
+    private List<Appointment> filterByStaffAccess(List<Appointment> appointments, BusinessAccess access) {
+        if (access.owner()) {
+            return appointments;
+        }
+        return appointments.stream()
+                .filter(a -> a.getStaff() != null && a.getStaff().getId().equals(access.staffId()))
+                .toList();
     }
 
     /**
