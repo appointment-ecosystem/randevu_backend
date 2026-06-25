@@ -46,7 +46,7 @@ package com.yunus.config;
  * ─── Kimlik Doğrulama Gerektiren Endpoint'ler ────────────────────────────────
  *
  * Kullanıcı profili:
- *   ANY  /api/v1/users/me, /api/v1/users/me/**  → USER, BUSINESS_OWNER, ADMIN
+ *   ANY  /api/v1/users/me, /api/v1/users/me/**  → USER, BUSINESS_OWNER, BUSINESS_EMPLOYEE, ADMIN
  *
  * Değerlendirme (review) — Faz 5:
  *   POST   /api/v1/reviews
@@ -194,7 +194,7 @@ public class SecurityConfig {
 
                         // ── Kullanıcı profili (rol bazlı) ────────────────────────────
                         .requestMatchers("/api/v1/users/me", "/api/v1/users/me/**")
-                        .hasAnyRole("USER", "BUSINESS_OWNER", "ADMIN")
+                        .hasAnyRole("USER", "BUSINESS_OWNER", "BUSINESS_EMPLOYEE", "ADMIN")
 
                         // ── Randevu işlemleri (açıkça authenticated) ─────────────────
                         .requestMatchers(HttpMethod.GET, "/api/v1/appointments/user/{userId}").authenticated()
