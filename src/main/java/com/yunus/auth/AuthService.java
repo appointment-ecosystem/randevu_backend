@@ -4,6 +4,8 @@ import com.yunus.auth.dto.AuthResponse;
 import com.yunus.auth.dto.LoginRequest;
 import com.yunus.auth.dto.RegisterRequest;
 import com.yunus.auth.dto.UserInfoResponse;
+import com.yunus.business.entity.Staff;
+import com.yunus.business.repository.StaffRepository;
 import com.yunus.common.exception.ConflictException;
 import com.yunus.security.JwtService;
 import com.yunus.security.UserPrincipal;
@@ -35,6 +37,7 @@ public class AuthService {
     private static final String BLACKLIST_PREFIX = "blacklist:";
 
     private final UserRepository userRepository;
+    private final StaffRepository staffRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final RefreshTokenService refreshTokenService;
@@ -42,12 +45,14 @@ public class AuthService {
     private final RedisTemplate<String, String> redisTemplate;
 
     public AuthService(UserRepository userRepository,
+                       StaffRepository staffRepository,
                        PasswordEncoder passwordEncoder,
                        JwtService jwtService,
                        RefreshTokenService refreshTokenService,
                        AuthenticationManager authenticationManager,
                        RedisTemplate<String, String> redisTemplate) {
         this.userRepository = userRepository;
+        this.staffRepository = staffRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
         this.refreshTokenService = refreshTokenService;
@@ -199,14 +204,21 @@ public class AuthService {
      */
     @Transactional(readOnly = true)
     public UserInfoResponse getUserInfo(User user) {
-        return UserInfoResponse.builder()
+        UserInfoResponse.UserInfoResponseBuilder builder = UserInfoResponse.builder()
                 .id(user.getId())
                 .fullName(user.getFullName())
                 .phone(user.getPhone())
                 .email(user.getEmail())
                 .role(user.getRole())
                 .phoneVerified(user.getPhoneVerified())
-                .profilePhotoUrl(user.getProfilePhotoUrl())
-                .build();
+                .profilePhotoUrl(user.getProfilePhotoUrl());
+
+        if (user.getRole() == UserRole.BUSINESS_EMPLOYEE) {
+            staffRepository.findByUserIdAndIsActiveTrue(user.getId())
+                    .ifPresent(staff -> builder.staffId(staff.getId())
+                            .businessId(staff.getBusiness().getId()));
+        }
+
+        return builder.build();
     }
 }

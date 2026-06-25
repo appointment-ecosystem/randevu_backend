@@ -25,4 +25,8 @@ public class UserInfoResponse {
     private UserRole role;
     private Boolean phoneVerified;
     private String profilePhotoUrl;
+
+    // BUSINESS_EMPLOYEE rolü için doldurulur; diğer roller için null kalır
+    private UUID staffId;
+    private UUID businessId;
 }

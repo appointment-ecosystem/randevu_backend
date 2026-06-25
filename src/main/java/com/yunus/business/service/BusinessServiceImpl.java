@@ -8,8 +8,10 @@ import com.yunus.business.dto.UpdateBusinessRequest;
 import com.yunus.business.entity.Business;
 import com.yunus.business.entity.BusinessCategory;
 import com.yunus.business.entity.BusinessStatus;
+import com.yunus.business.entity.Staff;
 import com.yunus.business.repository.BusinessCategoryRepository;
 import com.yunus.business.repository.BusinessRepository;
+import com.yunus.business.repository.StaffRepository;
 import com.yunus.common.exception.BusinessException;
 import com.yunus.common.exception.ForbiddenException;
 import com.yunus.common.exception.ResourceNotFoundException;
@@ -51,6 +53,7 @@ public class BusinessServiceImpl implements BusinessService {
     private final DistrictRepository districtRepository;
     private final NeighborhoodRepository neighborhoodRepository;
     private final UserRepository userRepository;
+    private final StaffRepository staffRepository;
     private final BusinessProperties businessProperties;
     private final WebhookService webhookService;
 
@@ -60,6 +63,7 @@ public class BusinessServiceImpl implements BusinessService {
                                DistrictRepository districtRepository,
                                NeighborhoodRepository neighborhoodRepository,
                                UserRepository userRepository,
+                               StaffRepository staffRepository,
                                BusinessProperties businessProperties,
                                WebhookService webhookService) {
         this.businessRepository = businessRepository;
@@ -68,6 +72,7 @@ public class BusinessServiceImpl implements BusinessService {
         this.districtRepository = districtRepository;
         this.neighborhoodRepository = neighborhoodRepository;
         this.userRepository = userRepository;
+        this.staffRepository = staffRepository;
         this.businessProperties = businessProperties;
         this.webhookService = webhookService;
     }
@@ -203,9 +208,19 @@ public class BusinessServiceImpl implements BusinessService {
     @Transactional(readOnly = true)
     public List<BusinessResponse> getMyBusinesses(UUID ownerId) {
         getActiveUser(ownerId); // owner kontrolü
-        return businessRepository.findByOwnerId(ownerId).stream()
+        List<Business> ownedBusinesses = businessRepository.findByOwnerId(ownerId);
+        if (!ownedBusinesses.isEmpty()) {
+            return ownedBusinesses.stream()
+                    .map(this::toBusinessResponse)
+                    .toList();
+        }
+
+        // Owner değilse, BUSINESS_EMPLOYEE olarak bağlı olduğu personel kaydı üzerinden işletmeyi bul
+        return staffRepository.findByUserIdAndIsActiveTrue(ownerId)
+                .map(Staff::getBusiness)
                 .map(this::toBusinessResponse)
-                .toList();
+                .map(List::of)
+                .orElseGet(List::of);
     }
 
     private User getActiveUser(UUID userId) {

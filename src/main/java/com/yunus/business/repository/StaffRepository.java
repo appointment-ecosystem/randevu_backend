@@ -19,4 +19,7 @@ public interface StaffRepository extends JpaRepository<Staff, UUID> {
     // Personel seçimi olmayan sorgulamalar için tüm aktif personel
     List<Staff> findByBusinessIdAndIsActiveTrue(UUID businessId);
 
+    // BUSINESS_EMPLOYEE kullanıcısının bağlı olduğu personel kaydını bulmak için
+    Optional<Staff> findByUserIdAndIsActiveTrue(UUID userId);
+
 }
