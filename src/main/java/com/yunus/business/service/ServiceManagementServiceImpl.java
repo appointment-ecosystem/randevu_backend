@@ -45,6 +45,7 @@ public class ServiceManagementServiceImpl implements ServiceManagementService {
         this.serviceRepository = serviceRepository;
         this.storageService = storageService;
         this.currentUserService = currentUserService;
+        this.businessOwnershipValidator = new com.yunus.business.validator.BusinessOwnershipValidator(businessRepository, currentUserService);
     }
 
     /**
@@ -244,6 +245,8 @@ public class ServiceManagementServiceImpl implements ServiceManagementService {
 
     // ─── Yardımcı metodlar ───────────────────────────────────────────────────
 
+    private final com.yunus.business.validator.BusinessOwnershipValidator businessOwnershipValidator;
+
     /**
      * İşletmeyi ID ile getirir; bulunamazsa ResourceNotFoundException fırlatır.
      */
@@ -257,12 +260,7 @@ public class ServiceManagementServiceImpl implements ServiceManagementService {
      * Sahip değilse ForbiddenException — kimlik bilgisi sızmaz.
      */
     private Business getOwnedBusiness(UUID businessId) {
-        Business business = getBusiness(businessId);
-        User currentUser = currentUserService.getCurrentUser();
-        if (!business.getOwner().getId().equals(currentUser.getId())) {
-            throw new ForbiddenException("Bu işletme size ait değil");
-        }
-        return business;
+        return businessOwnershipValidator.validateOwnership(businessId);
     }
 
     /**

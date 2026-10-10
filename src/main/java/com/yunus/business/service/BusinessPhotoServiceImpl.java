@@ -36,6 +36,8 @@ public class BusinessPhotoServiceImpl implements BusinessPhotoService {
     private final StorageService storageService;
     private final CurrentUserService currentUserService;
 
+    private final com.yunus.business.validator.BusinessOwnershipValidator businessOwnershipValidator;
+
     public BusinessPhotoServiceImpl(BusinessRepository businessRepository,
                                     BusinessPhotoRepository businessPhotoRepository,
                                     StorageService storageService,
@@ -44,6 +46,7 @@ public class BusinessPhotoServiceImpl implements BusinessPhotoService {
         this.businessPhotoRepository = businessPhotoRepository;
         this.storageService = storageService;
         this.currentUserService = currentUserService;
+        this.businessOwnershipValidator = new com.yunus.business.validator.BusinessOwnershipValidator(businessRepository, currentUserService);
     }
 
     /**
@@ -206,12 +209,7 @@ public class BusinessPhotoServiceImpl implements BusinessPhotoService {
      * Sahip değilse ForbiddenException fırlatılır.
      */
     private Business getOwnedBusiness(UUID businessId) {
-        Business business = getBusiness(businessId);
-        User currentUser = currentUserService.getCurrentUser();
-        if (!business.getOwner().getId().equals(currentUser.getId())) {
-            throw new ForbiddenException("Bu işletme size ait değil");
-        }
-        return business;
+        return businessOwnershipValidator.validateOwnership(businessId);
     }
 
     /**

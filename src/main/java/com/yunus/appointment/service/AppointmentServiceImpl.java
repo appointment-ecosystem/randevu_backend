@@ -239,6 +239,14 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     @Transactional(readOnly = true)
     public List<AppointmentResponse> getUserAppointments(UUID userId) {
+        User currentUser = currentUserService.getCurrentUser();
+        boolean isSelf = currentUser.getId().equals(userId);
+        boolean isAdmin = currentUser.getRole() == com.yunus.user.entity.UserRole.ADMIN;
+
+        if (!isSelf && !isAdmin) {
+            throw new ForbiddenException("Başka bir kullanıcının randevularını görüntüleme yetkiniz yok.");
+        }
+
         // İlgili kullanıcının randevularını getir
         return appointmentRepository.findByUserIdOrderByStartTimeDesc(userId)
                 .stream()

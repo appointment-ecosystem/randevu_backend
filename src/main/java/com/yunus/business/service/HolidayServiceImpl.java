@@ -35,6 +35,8 @@ public class HolidayServiceImpl implements HolidayService {
     private final HolidayRepository holidayRepository;
     private final CurrentUserService currentUserService;
 
+    private final com.yunus.business.validator.BusinessOwnershipValidator businessOwnershipValidator;
+
     public HolidayServiceImpl(BusinessRepository businessRepository,
                                StaffRepository staffRepository,
                                HolidayRepository holidayRepository,
@@ -43,6 +45,7 @@ public class HolidayServiceImpl implements HolidayService {
         this.staffRepository = staffRepository;
         this.holidayRepository = holidayRepository;
         this.currentUserService = currentUserService;
+        this.businessOwnershipValidator = new com.yunus.business.validator.BusinessOwnershipValidator(businessRepository, currentUserService);
     }
 
     /**
@@ -143,12 +146,7 @@ public class HolidayServiceImpl implements HolidayService {
      * İşletmeyi getirir ve giriş yapan kullanıcının sahibi olduğunu doğrular.
      */
     private Business getOwnedBusiness(UUID businessId) {
-        Business business = getBusiness(businessId);
-        User currentUser = currentUserService.getCurrentUser();
-        if (!business.getOwner().getId().equals(currentUser.getId())) {
-            throw new ForbiddenException("Bu işletme size ait değil");
-        }
-        return business;
+        return businessOwnershipValidator.validateOwnership(businessId);
     }
 
     /**
