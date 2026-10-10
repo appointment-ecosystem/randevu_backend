@@ -65,37 +65,68 @@ public class SlotLockService {
      * @param userId     kilidi almaya çalışan kullanıcının UUID'si
      * @return {@code true} kilit başarıyla alındıysa, {@code false} slot zaten kilitliyse
      */
-    public boolean tryLock(UUID businessId, UUID staffId, OffsetDateTime startTime, UUID userId) {
+    private static final org.springframework.data.redis.core.script.DefaultRedisScript<Long> RELEASE_LOCK_SCRIPT;
+
+    static {
+        RELEASE_LOCK_SCRIPT = new org.springframework.data.redis.core.script.DefaultRedisScript<>();
+        RELEASE_LOCK_SCRIPT.setScriptText(
+                "if redis.call('get', KEYS[1]) == ARGV[1] then " +
+                "    return redis.call('del', KEYS[1]) " +
+                "else " +
+                "    return 0 " +
+                "end"
+        );
+        RELEASE_LOCK_SCRIPT.setResultType(Long.class);
+    }
+
+    /**
+     * Belirtilen slot için rastgele UUID token kullanarak kilit almayı dener.
+     *
+     * @param businessId İşletme kimliği
+     * @param staffId    Personel kimliği (nullable)
+     * @param startTime  Slot başlangıç saati
+     * @param lockToken  Kilit sahibini temsil eden rastgele UUID token
+     * @return Kilit başarıyla alındıysa true
+     */
+    public boolean tryAcquire(UUID businessId, UUID staffId, OffsetDateTime startTime, String lockToken) {
         String key = buildKey(businessId, staffId, startTime);
-        String value = userId.toString();
         Boolean acquired = redisTemplate.opsForValue()
-                .setIfAbsent(key, value, LOCK_TTL);
+                .setIfAbsent(key, lockToken, LOCK_TTL);
         return Boolean.TRUE.equals(acquired);
     }
 
     /**
-     * Daha önce alınan slot kilidini serbest bırakır.
+     * Lua compare-and-delete scripti ile kilidi atomik olarak serbest bırakır.
      *
-     * <p>Güvenlik kuralı: yalnızca kilidi orijinal olarak alan kullanıcı
-     * ({@code userId}) kilidi silebilir. Başka bir kullanıcıya ait kilide
-     * dokunulmaz; bu durum sessizce görmezden gelinir.
-     *
-     * <p>Kullanım:
-     * <ul>
-     *   <li>Randevu başarıyla oluşturulduktan sonra (DB kaydedildikten sonra)</li>
-     *   <li>İstek hata aldığında {@code finally} bloğunda</li>
-     * </ul>
-     *
-     * @param businessId işletmenin UUID'si
-     * @param staffId    personelin UUID'si; personelsiz işletmelerde {@code null}
-     * @param startTime  slotun başlangıç zamanı
-     * @param userId     kilidi bırakmak isteyen kullanıcının UUID'si
+     * @param businessId İşletme kimliği
+     * @param staffId    Personel kimliği (nullable)
+     * @param startTime  Slot başlangıç saati
+     * @param lockToken  Kilidin sahibi olduğunu kanıtlayan token
+     * @return Kilit başarıyla silindiyse true
+     */
+    public boolean release(UUID businessId, UUID staffId, OffsetDateTime startTime, String lockToken) {
+        String key = buildKey(businessId, staffId, startTime);
+        Long result = redisTemplate.execute(
+                RELEASE_LOCK_SCRIPT,
+                java.util.Collections.singletonList(key),
+                lockToken
+        );
+        return result != null && result > 0;
+    }
+
+    /**
+     * Rastgele UUID token oluşturarak kilit dener (geriye dönük uyumluluk).
+     */
+    public boolean tryLock(UUID businessId, UUID staffId, OffsetDateTime startTime, UUID userId) {
+        return tryAcquire(businessId, staffId, startTime, userId != null ? userId.toString() : UUID.randomUUID().toString());
+    }
+
+    /**
+     * Lua compare-and-delete kullanarak kilidi atomik olarak serbest bırakır (geriye dönük uyumluluk).
      */
     public void releaseLock(UUID businessId, UUID staffId, OffsetDateTime startTime, UUID userId) {
-        String key = buildKey(businessId, staffId, startTime);
-        String currentValue = redisTemplate.opsForValue().get(key);
-        if (Objects.equals(currentValue, userId.toString())) {
-            redisTemplate.delete(key);
+        if (userId != null) {
+            release(businessId, staffId, startTime, userId.toString());
         }
     }
 

@@ -179,6 +179,20 @@ public class GlobalExceptionHandler {
     }
 
     /**
+     * Redis bağlantı veya sorgu zaman aşımı hataları.
+     * Redis erişilemezse 500 yerine 503 SERVICE_UNAVAILABLE döner.
+     */
+    @ExceptionHandler({
+            org.springframework.data.redis.RedisConnectionFailureException.class,
+            org.springframework.dao.QueryTimeoutException.class
+    })
+    public ResponseEntity<BaseResponse<Void>> handleRedisUnavailable(Exception ex) {
+        log.error("Redis servisine ulaşılamıyor: {}", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
+                .body(BaseResponse.error("Önbellek ve kilit servisi şu anda kullanılamıyor. Lütfen kısa süre sonra tekrar deneyin."));
+    }
+
+    /**
      * Beklenmeyen tüm hatalar.
      * Stack trace loglanır, client'a genel mesaj döner; HTTP 500 Internal Server Error.
      */

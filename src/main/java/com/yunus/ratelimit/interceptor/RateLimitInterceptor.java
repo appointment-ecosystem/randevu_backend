@@ -46,6 +46,30 @@ public class RateLimitInterceptor implements HandlerInterceptor {
     /** Redis key namespace; tüm rate limit anahtarları bu prefix ile başlar. */
     private static final String KEY_PREFIX = "rate_limit:";
 
+    private static final org.springframework.data.redis.core.script.DefaultRedisScript<Long> SLIDING_WINDOW_SCRIPT;
+
+    static {
+        SLIDING_WINDOW_SCRIPT = new org.springframework.data.redis.core.script.DefaultRedisScript<>();
+        SLIDING_WINDOW_SCRIPT.setScriptText(
+                "local key = KEYS[1] " +
+                "local windowStart = tonumber(ARGV[1]) " +
+                "local limit = tonumber(ARGV[2]) " +
+                "local now = tonumber(ARGV[3]) " +
+                "local member = ARGV[4] " +
+                "local windowSeconds = tonumber(ARGV[5]) " +
+                "redis.call('zremrangebyscore', key, '-inf', '(' .. windowStart) " +
+                "local currentCount = redis.call('zcard', key) " +
+                "if currentCount < limit then " +
+                "    redis.call('zadd', key, now, member) " +
+                "    redis.call('expire', key, windowSeconds) " +
+                "    return 1 " +
+                "else " +
+                "    return 0 " +
+                "end"
+        );
+        SLIDING_WINDOW_SCRIPT.setResultType(Long.class);
+    }
+
     private final RedisTemplate<String, String> redisTemplate;
     private final JwtService jwtService;
     private final ObjectMapper objectMapper;
@@ -100,33 +124,23 @@ public class RateLimitInterceptor implements HandlerInterceptor {
         long windowMs = (long) rateLimit.windowSeconds() * 1000L;
         long now = System.currentTimeMillis();
         long windowStart = now - windowMs;
+        String member = now + ":" + Thread.currentThread().getId();
 
-        // Sliding window: eski kayıtları temizle ve mevcut sayıyı al
-        ZSetOperations<String, String> zSet = redisTemplate.opsForZSet();
+        Long allowed = redisTemplate.execute(
+                SLIDING_WINDOW_SCRIPT,
+                java.util.Collections.singletonList(redisKey),
+                String.valueOf(windowStart),
+                String.valueOf(rateLimit.limit()),
+                String.valueOf(now),
+                member,
+                String.valueOf(rateLimit.windowSeconds())
+        );
 
-        // Pencere dışındaki kayıtları sil (score < windowStart)
-        zSet.removeRangeByScore(redisKey, 0, windowStart);
-
-        // Mevcut penceredeki istek sayısını al
-        Long requestCount = zSet.zCard(redisKey);
-        long count = (requestCount != null) ? requestCount : 0L;
-
-        log.debug("Rate limit check — key: {}, count: {}/{}", redisKey, count, rateLimit.limit());
-
-        // Limit aşıldı mı?
-        if (count >= rateLimit.limit()) {
-            log.warn("Rate limit exceeded — key: {}, count: {}, limit: {}", redisKey, count, rateLimit.limit());
+        if (allowed == null || allowed == 0L) {
+            log.warn("Rate limit exceeded — key: {}, limit: {}", redisKey, rateLimit.limit());
             writeRateLimitResponse(response);
             return false;
         }
-
-        // Yeni isteği ZSET'e ekle (score = member = epoch ms; üst üste gelen ms için member benzersiz olsun)
-        String member = now + ":" + Thread.currentThread().getId();
-        zSet.add(redisKey, member, now);
-
-        // TTL güncelle
-        redisTemplate.expire(redisKey, rateLimit.windowSeconds(),
-                java.util.concurrent.TimeUnit.SECONDS);
 
         return true;
     }
