@@ -11,6 +11,7 @@ import jakarta.validation.ConstraintViolationException;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -153,6 +154,28 @@ public class GlobalExceptionHandler {
         log.warn("Bad credentials attempt");
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body(BaseResponse.error("Geçersiz telefon numarası veya şifre"));
+    }
+
+    /**
+     * DB unique constraint ihlali → 409 Conflict.
+     *
+     * <p>Redis kilidi devre dışıysa veya race condition'da DB partial unique index
+     * (V2 migration) devreye girer ve DataIntegrityViolationException fırlatır.
+     * Bu handler onu SlotAlreadyTakenException gibi 409 olarak client'a döner.
+     * Mesaj içeriği loglanır; constraint adından slot bilgisi türetilebilir.
+     */
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<BaseResponse<Void>> handleDataIntegrity(DataIntegrityViolationException ex) {
+        String msg = ex.getMessage() != null ? ex.getMessage().toLowerCase() : "";
+        // Slot unique index ihlali mi?
+        if (msg.contains("idx_appointments_staff_start") || msg.contains("appointments")) {
+            log.warn("DB unique constraint ihlali (slot cakismasi): {}", ex.getMessage());
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(BaseResponse.error("Bu randevu slotu dolu. Lütfen başka bir saat seçin."));
+        }
+        log.warn("DataIntegrityViolationException: {}", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(BaseResponse.error("Veri bütünlüğü ihlali: kayıt zaten mevcut olabilir."));
     }
 
     /**

@@ -13,8 +13,14 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: validate
     show-sql: false
+
+  flyway:
+    enabled: true
+    # Prod'da temiz başlangıç varsayılır; baseline-on-migrate kapalı
+    baseline-on-migrate: ${FLYWAY_BASELINE_ON_MIGRATE:false}
+    baseline-version: 0
 
   data:
     redis:

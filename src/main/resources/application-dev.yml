@@ -13,11 +13,18 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
     show-sql: true
     properties:
       hibernate:
         format_sql: true
+
+  flyway:
+    enabled: true
+    # Mevcut (önceden oluşturulmuş) DB için baseline: ilk çalışmada flyway_schema_history
+    # yoksa V1 öncesindeki şemayı baseline kabul eder.
+    baseline-on-migrate: true
+    baseline-version: 0
 
   data:
     redis:
