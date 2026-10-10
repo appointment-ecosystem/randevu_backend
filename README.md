@@ -24,7 +24,7 @@
 
 <br/>
 
-[![CI](https://img.shields.io/github/actions/workflow/status/yunusemrebutu/localservice/ci.yml?branch=main&style=flat-square&label=CI%20Build&logo=github-actions)](https://github.com/yunusemrebutu/localservice/actions)
+[![CI](https://img.shields.io/github/actions/workflow/status/appointment-ecosystem/randevu_backend/ci.yml?branch=main&style=flat-square&label=CI%20Build&logo=github-actions)](https://github.com/appointment-ecosystem/randevu_backend/actions)
 [![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)](LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen?style=flat-square)](CONTRIBUTING.md)
 
