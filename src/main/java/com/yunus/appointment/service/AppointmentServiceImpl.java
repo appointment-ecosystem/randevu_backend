@@ -118,7 +118,8 @@ public class AppointmentServiceImpl implements AppointmentService {
         // Adım 6 — Redis slot lock
         boolean locked = slotLockService.tryLock(businessId, staffId, startTime, userId);
         if (!locked) {
-            throw new BusinessException("Bu slot şu an başka biri tarafından seçiliyor. Lütfen tekrar deneyin.");
+            throw new com.yunus.common.exception.SlotAlreadyTakenException(
+                    "Bu slot şu an başka biri tarafından seçiliyor. Lütfen tekrar deneyin.");
         }
 
         // Adım 7 — DB çakışma kontrolü (lock alındıktan sonra ikinci güvence)
@@ -134,7 +135,8 @@ public class AppointmentServiceImpl implements AppointmentService {
         if (hasConflict) {
             // Lock'u serbest bırak; slot gerçekten dolu
             slotLockService.releaseLock(businessId, staffId, startTime, userId);
-            throw new BusinessException("Bu slot dolu. Lütfen başka bir zaman dilimi seçin.");
+            throw new com.yunus.common.exception.SlotAlreadyTakenException(
+                    "Bu slot dolu. Lütfen başka bir zaman dilimi seçin.");
         }
 
         // Adım 8 — Appointment oluştur ve kaydet
@@ -150,7 +152,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         appointment.setCurrency(service.getCurrency());
         appointment.setNotes(request.notes());
 
-        Appointment saved = appointmentRepository.save(appointment);
+        Appointment saved = appointmentRepository.saveAndFlush(appointment);
 
         // Adım 9 — Lock KASITLI OLARAK BIRAKILMIYOR
         // Randevu PENDING'de; lock 5 dk TTL ile expire olur.

@@ -24,7 +24,15 @@ import lombok.Setter;
  * Çakışma önleme: Redis slot lock + DB unique constraint (staff_id + start_time).
  */
 @Entity
-@Table(name = "appointments")
+@Table(
+        name = "appointments",
+        uniqueConstraints = {
+                @jakarta.persistence.UniqueConstraint(
+                        name = "uk_appointments_staff_start_time",
+                        columnNames = {"staff_id", "start_time"}
+                )
+        }
+)
 @Getter
 @Setter
 @NoArgsConstructor
