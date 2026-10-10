@@ -33,7 +33,7 @@ springdoc:
 # JWT yapilandirmasi
 app:
   jwt:
-    secret: ${JWT_SECRET:dev-only-secret-key-min-256-bit-uzunlugunda-olmali-uretim-icin-degistirilmeli-12345}
+    secret: ${JWT_SECRET:change-me-set-JWT_SECRET-env-variable}
     access-token-expiration: ${JWT_ACCESS_EXPIRATION:900000}
     refresh-token-expiration: ${JWT_REFRESH_EXPIRATION:604800000}
 

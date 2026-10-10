@@ -279,10 +279,14 @@ cd localservice
 # 2. PostgreSQL ve Redis'i başlat
 docker-compose up -d postgres redis
 
-# 3. Uygulamayı dev modunda başlat
+# 3. Ortam değişkenlerini ayarla (GEREKLİ)
+cp .env.example .env
+# .env dosyasını açıp DB_PASSWORD ve JWT_SECRET değerlerini değiştirin
+
+# 4. Uygulamayı dev modunda başlat
 mvn spring-boot:run -Dspring.profiles.active=dev
 
-# 4. Swagger UI'a git
+# 5. Swagger UI'a git
 open http://localhost:8080/swagger-ui.html
 ```
 
