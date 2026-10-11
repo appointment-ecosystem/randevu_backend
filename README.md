@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="https://capsule-render.vercel.app/api?type=waving&color=0:1E40AF,100:10B981&height=200&section=header&text=LocalService&fontSize=72&fontColor=ffffff&fontAlignY=38&desc=Yerel%20Hizmet%20%26%20Randevu%20Ekosistemi&descSize=20&descAlignY=58&descColor=e2e8f0" />
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:1E40AF,100:10B981&height=200&section=header&text=Randevu%20Ekosistemi&fontSize=72&fontColor=ffffff&fontAlignY=38&desc=Yerel%20Hizmet%20%26%20Randevu%20Ekosistemi&descSize=20&descAlignY=58&descColor=e2e8f0" />
 
 <br/>
 
@@ -50,12 +50,12 @@
 
 ## 🎯 Proje Hakkında
 
-**LocalService**, Türkiye'deki randevu tabanlı yerel işletmeleri ve müşterileri buluşturan kapsamlı bir dijital ekosistemdir.
+**Randevu Ekosistemi**, Türkiye'deki randevu tabanlı yerel işletmeleri ve müşterileri buluşturan kapsamlı bir dijital ekosistemdir.
 
 ```
 Kullanıcı randevu almak ister
         ↓
-LocalService üzerinden yakındaki işletmeleri keşfeder
+Randevu Ekosistemi üzerinden yakındaki işletmeleri keşfeder
         ↓
 Hizmet seçer → Personel seçer → Slot seçer
         ↓
@@ -253,7 +253,7 @@ Kullanıcı slot seçer
 | Teknoloji | Kullanım |
 |-----------|----------|
 | Docker + Docker Compose | Container yönetimi |
-| GitHub Actions | CI/CD pipeline |
+| GitHub Actions | CI pipeline |
 | VPS | Production deployment |
 
 ---
@@ -273,8 +273,8 @@ docker --version    # Docker 24+
 
 ```bash
 # 1. Repoyu klonla
-git clone https://github.com/yunusemrebutu/localservice.git
-cd localservice
+git clone https://github.com/appointment-ecosystem/randevu_backend.git
+cd randevu_backend
 
 # 2. PostgreSQL ve Redis'i başlat
 docker-compose up -d postgres redis
@@ -523,7 +523,7 @@ open target/site/surefire-report.html
 
 ```bash
 # Production build
-docker build -t localservice:latest .
+docker build -t randevu_backend:latest .
 
 # Tüm servisleri production modunda başlat
 SPRING_PROFILES_ACTIVE=prod docker-compose up -d
@@ -532,7 +532,7 @@ SPRING_PROFILES_ACTIVE=prod docker-compose up -d
 curl http://localhost:8080/actuator/health
 ```
 
-### GitHub Actions CI/CD
+### GitHub Actions CI
 
 ```yaml
 # .github/workflows/ci.yml
