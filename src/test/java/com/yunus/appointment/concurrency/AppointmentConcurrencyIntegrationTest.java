@@ -302,42 +302,61 @@ public class AppointmentConcurrencyIntegrationTest {
     }
 
     @Test
-    @DisplayName("Senaryo (v): DB-only - Redis kilidi ve JPQL atlanarak doğrudan repository ile kayıt yapıldığında çakışan ikinci kayıt DB constraint tarafından reddedilir")
+    @DisplayName("Senaryo (v): DB-only V3 Exclusion Constraint - 10:00-11:00 varken 10:30-11:30 DB tarafından reddedilir (exclude_overlapping_appointments), 11:00-12:00 başarılı olur")
     void testDirectRepositorySaveThrowsDataIntegrityViolationOnConflict() {
-        OffsetDateTime t14_00 = OffsetDateTime.of(2026, 12, 1, 14, 0, 0, 0, ZoneOffset.ofHours(3));
-        OffsetDateTime t14_30 = OffsetDateTime.of(2026, 12, 1, 14, 30, 0, 0, ZoneOffset.ofHours(3));
+        OffsetDateTime t10_00 = OffsetDateTime.of(2026, 12, 1, 10, 0, 0, 0, ZoneOffset.ofHours(3));
+        OffsetDateTime t11_00 = OffsetDateTime.of(2026, 12, 1, 11, 0, 0, 0, ZoneOffset.ofHours(3));
+        OffsetDateTime t10_30 = OffsetDateTime.of(2026, 12, 1, 10, 30, 0, 0, ZoneOffset.ofHours(3));
+        OffsetDateTime t11_30 = OffsetDateTime.of(2026, 12, 1, 11, 30, 0, 0, ZoneOffset.ofHours(3));
+        OffsetDateTime t12_00 = OffsetDateTime.of(2026, 12, 1, 12, 0, 0, 0, ZoneOffset.ofHours(3));
 
+        // 1. İlk kayıt: 10:00 - 11:00 (CONFIRMED)
         com.yunus.appointment.entity.Appointment first = new com.yunus.appointment.entity.Appointment();
         first.setUser(testUsers.get(0));
         first.setBusiness(business);
         first.setService(service);
         first.setStaff(staff);
-        first.setStartTime(t14_00);
-        first.setEndTime(t14_30);
+        first.setStartTime(t10_00);
+        first.setEndTime(t11_00);
         first.setStatus(com.yunus.appointment.entity.AppointmentStatus.CONFIRMED);
         first.setPriceSnapshot(service.getPrice());
         first.setCurrency("TRY");
         appointmentRepository.saveAndFlush(first);
 
-        // İkinci kayıt: Aynı personel, çakışan slot, aktif durum -> DB seviyesinde constraint ihlali
-        com.yunus.appointment.entity.Appointment conflicting = new com.yunus.appointment.entity.Appointment();
-        conflicting.setUser(testUsers.get(1));
-        conflicting.setBusiness(business);
-        conflicting.setService(service);
-        conflicting.setStaff(staff);
-        conflicting.setStartTime(t14_00);
-        conflicting.setEndTime(t14_30);
-        conflicting.setStatus(com.yunus.appointment.entity.AppointmentStatus.PENDING);
-        conflicting.setPriceSnapshot(service.getPrice());
-        conflicting.setCurrency("TRY");
+        // 2. İkinci kayıt: 10:30 - 11:30 (kesişen aralık!) -> V3 exclusion constraint tarafından reddedilmeli
+        com.yunus.appointment.entity.Appointment overlapping = new com.yunus.appointment.entity.Appointment();
+        overlapping.setUser(testUsers.get(1));
+        overlapping.setBusiness(business);
+        overlapping.setService(service);
+        overlapping.setStaff(staff);
+        overlapping.setStartTime(t10_30);
+        overlapping.setEndTime(t11_30);
+        overlapping.setStatus(com.yunus.appointment.entity.AppointmentStatus.PENDING);
+        overlapping.setPriceSnapshot(service.getPrice());
+        overlapping.setCurrency("TRY");
 
-        // Redis kilidi ve JPQL olmadan doğrudan saveAndFlush çağrıldığında:
-        // DB seviyesindeki partial index (idx_appointments_staff_start_active_unique) veya
-        // exclusion constraint (exclude_overlapping_appointments) tarafından DataIntegrityViolationException fırlatılır.
-        org.junit.jupiter.api.Assertions.assertThrows(
+        org.springframework.dao.DataIntegrityViolationException ex = org.junit.jupiter.api.Assertions.assertThrows(
                 org.springframework.dao.DataIntegrityViolationException.class,
-                () -> appointmentRepository.saveAndFlush(conflicting),
-                "DB seviyesindeki constraint (partial index / exclusion constraint) çakışan kaydı reddetmelidir"
+                () -> appointmentRepository.saveAndFlush(overlapping),
+                "10:00-11:00 ile kesişen 10:30-11:30 kaydı exclude_overlapping_appointments kısıtı tarafından reddedilmelidir"
         );
+        org.junit.jupiter.api.Assertions.assertTrue(
+                ex.getMessage() != null && ex.getMessage().contains("exclude_overlapping_appointments"),
+                "Hata mesajı exclude_overlapping_appointments kısıtını içermelidir. Alınan: " + ex.getMessage()
+        );
+
+        // 3. Üçüncü kayıt: 11:00 - 12:00 (bitişik aralık) -> çakışma yok, başarılı olmalı
+        com.yunus.appointment.entity.Appointment adjacent = new com.yunus.appointment.entity.Appointment();
+        adjacent.setUser(testUsers.get(2));
+        adjacent.setBusiness(business);
+        adjacent.setService(service);
+        adjacent.setStaff(staff);
+        adjacent.setStartTime(t11_00);
+        adjacent.setEndTime(t12_00);
+        adjacent.setStatus(com.yunus.appointment.entity.AppointmentStatus.PENDING);
+        adjacent.setPriceSnapshot(service.getPrice());
+        adjacent.setCurrency("TRY");
+        var savedAdjacent = appointmentRepository.saveAndFlush(adjacent);
+        org.junit.jupiter.api.Assertions.assertNotNull(savedAdjacent.getId(), "Bitişik 11:00-12:00 randevusu başarıyla kaydedilmelidir");
     }
 }
