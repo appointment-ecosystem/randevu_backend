@@ -257,6 +257,13 @@ public class IyzicoPaymentServiceImpl implements PaymentService {
             return frontendUrl + "/odeme/sonuc?status=hata";
         }
 
+        // İdempotency kontrolü: Ödeme zaten başarılı olarak işlendiyse iyzico'ya tekrar gitme,
+        // randevu ve ödeme durumunu bozma, doğrudan başarılı yönlendirmesi dön.
+        if (PaymentStatus.SUCCESS.equals(payment.getStatus())) {
+            log.info("Ödeme zaten başarıyla tamamlanmış (idempotent callback): paymentId={}", payment.getId());
+            return frontendUrl + "/odeme/sonuc?status=basarili&id=" + payment.getId();
+        }
+
         try {
             // mdStatus "1" değilse 3DS doğrulaması başarısız demektir
             if (!MD_STATUS_SUCCESS.equals(mdStatus)) {
