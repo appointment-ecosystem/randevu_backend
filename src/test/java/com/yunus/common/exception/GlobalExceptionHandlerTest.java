@@ -57,4 +57,19 @@ class GlobalExceptionHandlerTest {
         assertEquals("Kullanıcı bulunamadı: id = '12345'", response.getBody().getMessage());
         assertEquals(ErrorType.NOT_FOUND, response.getBody().getErrorType());
     }
+
+    @Test
+    void shouldHandleRedisUnavailableAndReturnServiceUnavailable() {
+        org.springframework.data.redis.RedisConnectionFailureException exception =
+                new org.springframework.data.redis.RedisConnectionFailureException("Could not connect to Redis: connection refused");
+
+        var response = exceptionHandler.handleRedisUnavailable(exception);
+
+        assertNotNull(response);
+        assertEquals(HttpStatus.SERVICE_UNAVAILABLE, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertFalse(response.getBody().isSuccess());
+        assertTrue(response.getBody().getMessage().contains("kullanılamıyor"));
+    }
 }
+
