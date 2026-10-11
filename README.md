@@ -573,7 +573,7 @@ Faz 13 📋  İşletme mobil uygulaması
 Faz 14 📋  AI özellikleri (Spring AI)
 Faz 15 📋  Premium + Abonelik + Gelişmiş istatistikler
 Faz 16 📋  Kategoriye özel modüller (Veteriner, Klinik, Spor...)
-Faz 17 📋  Çok şehir + PostGIS + Ölçekleme + Flyway
+Faz 17 📋  Çok şehir + PostGIS + Performans Optimizasyonu
 Faz 18 📋  Yatırımcıya hazırlık + Metrik altyapısı
 ```
 
