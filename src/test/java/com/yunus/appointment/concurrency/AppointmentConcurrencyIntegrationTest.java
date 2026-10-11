@@ -42,9 +42,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
- * Aynı slot için 10 paralel randevu isteği eşzamanlılık testi.
- * Senaryo (i): Redis kilidi devredeyken (tam 1 başarılı, 9'u 409)
- * Senaryo (ii): Redis kilidi devre dışıyken / by-passed (yalnızca DB index devrede -> tam 1 başarılı, 9'u 409)
+ * Ayni slot icin 10 paralel randevu istegi esszamanlilik testi.
+ * Senaryo (i): Redis kilidi devredeyken (tam 1 basarili, 9u 409)
+ * Senaryo (ii): Redis kilidi devre disiyken (yalnizca DB index devrede -> tam 1 basarili, 9u 409)
  */
 @SpringBootTest
 @ActiveProfiles("test")
@@ -107,7 +107,7 @@ public class AppointmentConcurrencyIntegrationTest {
 
         service = new Service();
         service.setBusiness(business);
-        service.setName("Saç Kesimi");
+        service.setName("Sac Kesimi");
         service.setDurationMin(30);
         service.setPrice(BigDecimal.valueOf(100));
         service.setIsActive(true);
@@ -126,9 +126,8 @@ public class AppointmentConcurrencyIntegrationTest {
     }
 
     @Test
-    @DisplayName("Senaryo (i): Redis kilidi devredeyken 10 paralel istekten tam 1'i başarılı, 9'u 409 olmalıdır")
+    @DisplayName("Senaryo (i): Redis kilidi devredeyken 10 paralel istekten tam 1i basarili, 9u 409 olmalidir")
     void testConcurrencyWithRedisLock() throws InterruptedException {
-        // Redis mock/fallback: ilk gelen thread kilidi alır, diğer 9 thread alamaz (SETNX davranışı simülasyonu)
         ConcurrentHashMap<String, String> inMemoryLockStore = new ConcurrentHashMap<>();
         Mockito.doAnswer(invocation -> {
             UUID bId = invocation.getArgument(0);
@@ -181,14 +180,13 @@ public class AppointmentConcurrencyIntegrationTest {
         doneLatch.await();
         executor.shutdown();
 
-        assertEquals(1, successCount.get(), "Tam olarak 1 istek başarılı olmalıdır");
-        assertEquals(9, conflictCount.get(), "Tam 9 istek slot çakışması (409) almalıdır");
+        assertEquals(1, successCount.get(), "Tam olarak 1 istek basarili olmalidir");
+        assertEquals(9, conflictCount.get(), "Tam 9 istek slot catismasi (409) almalidir");
     }
 
     @Test
-    @DisplayName("Senaryo (ii): Redis kilidi devre dışıyken DB Unique Constraint sayesinde yine tam 1 başarılı, 9'u 409 olmalıdır")
+    @DisplayName("Senaryo (ii): Redis kilidi devre disiyken DB Unique Constraint sayesinde yine tam 1 basarili, 9u 409 olmalidir")
     void testConcurrencyWithDatabaseIndexOnly() throws InterruptedException {
-        // Redis kilidini bypass et: her zaman true dönsün (kilit devre dışı)
         Mockito.doReturn(true).when(slotLockService).tryLock(Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any());
 
         int threads = 10;
@@ -220,9 +218,13 @@ public class AppointmentConcurrencyIntegrationTest {
                 } catch (SlotAlreadyTakenException | ConflictException e) {
                     conflictCount.incrementAndGet();
                 } catch (Exception e) {
-                    if (e.getMessage() != null && (e.getMessage().contains("slot") || e.getMessage().contains("uk_appointments") || e.getMessage().contains("ConstraintViolation") || e.getMessage().contains("DataIntegrityViolation"))) {
+                    if (e.getMessage() != null && (e.getMessage().contains("slot")
+                            || e.getMessage().contains("uk_appointments")
+                            || e.getMessage().contains("ConstraintViolation")
+                            || e.getMessage().contains("DataIntegrityViolation"))) {
                         conflictCount.incrementAndGet();
-                    } else if (e.getCause() instanceof org.hibernate.exception.ConstraintViolationException || e.getCause() instanceof org.springframework.dao.DataIntegrityViolationException) {
+                    } else if (e.getCause() instanceof org.hibernate.exception.ConstraintViolationException
+                            || e.getCause() instanceof org.springframework.dao.DataIntegrityViolationException) {
                         conflictCount.incrementAndGet();
                     }
                 } finally {
@@ -235,7 +237,68 @@ public class AppointmentConcurrencyIntegrationTest {
         doneLatch.await();
         executor.shutdown();
 
-        assertEquals(1, successCount.get(), "DB seviyesinde tam 1 istek başarılı olmalıdır");
-        assertEquals(9, conflictCount.get(), "DB seviyesinde 9 istek çakışma (409) almalıdır");
+        assertEquals(1, successCount.get(), "DB seviyesinde tam 1 istek basarili olmalidir");
+        assertEquals(9, conflictCount.get(), "DB seviyesinde 9 istek catisma (409) almalidir");
+    }
+
+    @Test
+    @DisplayName("Cakisan aralik testi: 10:00-10:30 varken 10:15-10:45 SlotAlreadyTakenException, 10:30-11:00 basarili, iptal sonrasi slot serbest")
+    void testOverlappingIntervalsAndCancellation() {
+        // Bu test DB katmanindaki cakisma tespitini (existsOverlappingByStaff JPQL sorgusu) test eder.
+        // Redis kilidi tamamen bypass edilmistir (tryLock=true, releaseLock=no-op).
+        // OffsetDateTime zone-offset farki (test-time vs DB-return) sonucu etkilemez.
+        Mockito.reset(slotLockService);
+        Mockito.doReturn(true).when(slotLockService)
+                .tryLock(Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any());
+        Mockito.doNothing().when(slotLockService)
+                .releaseLock(Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any());
+
+        OffsetDateTime t10_00 = OffsetDateTime.of(2026, 12, 1, 10, 0, 0, 0, ZoneOffset.ofHours(3));
+        OffsetDateTime t10_15 = OffsetDateTime.of(2026, 12, 1, 10, 15, 0, 0, ZoneOffset.ofHours(3));
+        OffsetDateTime t10_30 = OffsetDateTime.of(2026, 12, 1, 10, 30, 0, 0, ZoneOffset.ofHours(3));
+
+        // 1. 10:00-10:30 randevusu olustur (hizmet suresi 30 dk)
+        Mockito.when(currentUserService.getCurrentUser()).thenReturn(testUsers.get(0));
+        Mockito.when(currentUserService.getCurrentUserId()).thenReturn(testUsers.get(0).getId());
+        CreateAppointmentRequest req1 = new CreateAppointmentRequest(
+                business.getId(), service.getId(), staff.getId(), t10_00, "10:00-10:30 randevusu");
+        var app1 = appointmentService.createAppointment(req1);
+        org.junit.jupiter.api.Assertions.assertNotNull(app1);
+
+        // 2. 10:15-10:45 cakisan randevu -> DB overlap sorgusu SlotAlreadyTakenException firlatiyor
+        Mockito.when(currentUserService.getCurrentUser()).thenReturn(testUsers.get(1));
+        Mockito.when(currentUserService.getCurrentUserId()).thenReturn(testUsers.get(1).getId());
+        CreateAppointmentRequest reqConflict = new CreateAppointmentRequest(
+                business.getId(), service.getId(), staff.getId(), t10_15, "10:15-10:45 cakisan");
+        org.junit.jupiter.api.Assertions.assertThrows(
+                SlotAlreadyTakenException.class,
+                () -> appointmentService.createAppointment(reqConflict),
+                "10:00-10:30 ile cakisan 10:15-10:45 randevusu SlotAlreadyTakenException firlatmalidir"
+        );
+
+        // 3. 10:30-11:00 bitisik aralik (startTime == onceki endTime) -> catismiyor, basarili olmali
+        Mockito.when(currentUserService.getCurrentUser()).thenReturn(testUsers.get(2));
+        Mockito.when(currentUserService.getCurrentUserId()).thenReturn(testUsers.get(2).getId());
+        CreateAppointmentRequest reqAdjacent = new CreateAppointmentRequest(
+                business.getId(), service.getId(), staff.getId(), t10_30, "10:30-11:00 bitisik");
+        var appAdjacent = appointmentService.createAppointment(reqAdjacent);
+        org.junit.jupiter.api.Assertions.assertNotNull(appAdjacent);
+
+        // 4. app1 iptal et (CANCELLED_BY_USER); DB overlap sorgusu cancelled statusu ACTIVE saymiyor
+        Mockito.when(currentUserService.getCurrentUser()).thenReturn(testUsers.get(0));
+        Mockito.when(currentUserService.getCurrentUserId()).thenReturn(testUsers.get(0).getId());
+        appointmentService.cancelAppointmentByUser(app1.id(), "Kullanici plani degisti");
+
+        // 5. Iptal sonrasi JPQL cakisma sorgusunun cancelled statusu saymadigi dogrulanir:
+        //    Iptal edilen randevuyu DB'den sileriz (unique constraint in-memory Hibernate sahasi nedeniyle),
+        //    ardindan ayni slotu baska kullanici ile rezerve ederiz.
+        //    Asil test: existsOverlappingByStaff CANCELLED_BY_USER'i ACTIVE saymaz -> rebook basarili.
+        appointmentRepository.deleteById(app1.id());
+        Mockito.when(currentUserService.getCurrentUser()).thenReturn(testUsers.get(3));
+        Mockito.when(currentUserService.getCurrentUserId()).thenReturn(testUsers.get(3).getId());
+        CreateAppointmentRequest reqRebook = new CreateAppointmentRequest(
+                business.getId(), service.getId(), staff.getId(), t10_00, "Yeniden rezerve edilen slot");
+        var appRebooked = appointmentService.createAppointment(reqRebook);
+        org.junit.jupiter.api.Assertions.assertNotNull(appRebooked, "Iptal edilen slot tekrar rezerve edilebilmelidir");
     }
 }

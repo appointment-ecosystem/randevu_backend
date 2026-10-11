@@ -118,7 +118,8 @@ public class SlotLockService {
      * Rastgele UUID token oluşturarak kilit dener (geriye dönük uyumluluk).
      */
     public boolean tryLock(UUID businessId, UUID staffId, OffsetDateTime startTime, UUID userId) {
-        return tryAcquire(businessId, staffId, startTime, userId != null ? userId.toString() : UUID.randomUUID().toString());
+        String token = (userId != null) ? userId.toString() : UUID.randomUUID().toString();
+        return tryAcquire(businessId, staffId, startTime, token);
     }
 
     /**
