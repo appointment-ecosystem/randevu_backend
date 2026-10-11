@@ -289,16 +289,55 @@ public class AppointmentConcurrencyIntegrationTest {
         Mockito.when(currentUserService.getCurrentUserId()).thenReturn(testUsers.get(0).getId());
         appointmentService.cancelAppointmentByUser(app1.id(), "Kullanici plani degisti");
 
-        // 5. Iptal sonrasi JPQL cakisma sorgusunun cancelled statusu saymadigi dogrulanir:
-        //    Iptal edilen randevuyu DB'den sileriz (unique constraint in-memory Hibernate sahasi nedeniyle),
-        //    ardindan ayni slotu baska kullanici ile rezerve ederiz.
-        //    Asil test: existsOverlappingByStaff CANCELLED_BY_USER'i ACTIVE saymaz -> rebook basarili.
-        appointmentRepository.deleteById(app1.id());
+        // 5. Iptal sonrasi slotun yeniden alinabilirligi:
+        //    CANCELLED_BY_USER durumundaki kayit DB'de durmasina ragmen, partial unique index ve
+        //    existsOverlappingByStaff sorgusu yalnizca aktif randevulari (PENDING, CONFIRMED) hesaba katar.
+        //    Dolayisiyla ayni slot baska bir kullanici tarafindan basariyla rezerve edilebilir.
         Mockito.when(currentUserService.getCurrentUser()).thenReturn(testUsers.get(3));
         Mockito.when(currentUserService.getCurrentUserId()).thenReturn(testUsers.get(3).getId());
         CreateAppointmentRequest reqRebook = new CreateAppointmentRequest(
                 business.getId(), service.getId(), staff.getId(), t10_00, "Yeniden rezerve edilen slot");
         var appRebooked = appointmentService.createAppointment(reqRebook);
         org.junit.jupiter.api.Assertions.assertNotNull(appRebooked, "Iptal edilen slot tekrar rezerve edilebilmelidir");
+    }
+
+    @Test
+    @DisplayName("Senaryo (v): DB-only - Redis kilidi ve JPQL atlanarak doğrudan repository ile kayıt yapıldığında çakışan ikinci kayıt DB constraint tarafından reddedilir")
+    void testDirectRepositorySaveThrowsDataIntegrityViolationOnConflict() {
+        OffsetDateTime t14_00 = OffsetDateTime.of(2026, 12, 1, 14, 0, 0, 0, ZoneOffset.ofHours(3));
+        OffsetDateTime t14_30 = OffsetDateTime.of(2026, 12, 1, 14, 30, 0, 0, ZoneOffset.ofHours(3));
+
+        com.yunus.appointment.entity.Appointment first = new com.yunus.appointment.entity.Appointment();
+        first.setUser(testUsers.get(0));
+        first.setBusiness(business);
+        first.setService(service);
+        first.setStaff(staff);
+        first.setStartTime(t14_00);
+        first.setEndTime(t14_30);
+        first.setStatus(com.yunus.appointment.entity.AppointmentStatus.CONFIRMED);
+        first.setPriceSnapshot(service.getPrice());
+        first.setCurrency("TRY");
+        appointmentRepository.saveAndFlush(first);
+
+        // İkinci kayıt: Aynı personel, çakışan slot, aktif durum -> DB seviyesinde constraint ihlali
+        com.yunus.appointment.entity.Appointment conflicting = new com.yunus.appointment.entity.Appointment();
+        conflicting.setUser(testUsers.get(1));
+        conflicting.setBusiness(business);
+        conflicting.setService(service);
+        conflicting.setStaff(staff);
+        conflicting.setStartTime(t14_00);
+        conflicting.setEndTime(t14_30);
+        conflicting.setStatus(com.yunus.appointment.entity.AppointmentStatus.PENDING);
+        conflicting.setPriceSnapshot(service.getPrice());
+        conflicting.setCurrency("TRY");
+
+        // Redis kilidi ve JPQL olmadan doğrudan saveAndFlush çağrıldığında:
+        // DB seviyesindeki partial index (idx_appointments_staff_start_active_unique) veya
+        // exclusion constraint (exclude_overlapping_appointments) tarafından DataIntegrityViolationException fırlatılır.
+        org.junit.jupiter.api.Assertions.assertThrows(
+                org.springframework.dao.DataIntegrityViolationException.class,
+                () -> appointmentRepository.saveAndFlush(conflicting),
+                "DB seviyesindeki constraint (partial index / exclusion constraint) çakışan kaydı reddetmelidir"
+        );
     }
 }

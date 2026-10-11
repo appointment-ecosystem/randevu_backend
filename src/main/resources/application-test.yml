@@ -1,13 +1,21 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/postgre_db
+    url: jdbc:postgresql://localhost:5432/postgre_db?currentSchema=gallerist
     username: yunus
     password: 123
 
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: validate
+    properties:
+      hibernate:
+        default_schema: gallerist
     show-sql: false
+
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    baseline-version: 0
 
   data:
     redis:
