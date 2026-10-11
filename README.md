@@ -229,7 +229,7 @@ Kullanıcı slot seçer
 |-----------|----------|----------|
 | PostgreSQL | 16 | Ana veritabanı |
 | Redis | 7 | Cache, OTP, slot lock, blacklist |
-| Flyway | — | DB migration (Faz 9+) |
+| Flyway | — | DB migration (V1, V2, V3). Temiz DB için `baseline-on-migrate: false` (veya baseline 0), mevcut Hibernate tablolu DB için uygun sürümle baseline yapılmalıdır. |
 | PostGIS | — | Gelişmiş konum sorguları (Faz 17+) |
 
 ### Storage & Messaging
