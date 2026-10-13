@@ -43,7 +43,21 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
+/**
+ * iyzico 3DS ödeme entegrasyon servisi.
+ *
+ * <p>Akış özeti:
+ * <ol>
+ *   <li>{@link #initiatePayment} — randevu için kapora tutarı hesaplanır,
+ *       INITIATED durumunda ödeme kaydı oluşturulur ve iyzico'dan 3DS HTML alınır.</li>
+ *   <li>{@link #handleCallback} — iyzico'nun 3DS sonrası yönlendirdiği callback işlenir;
+ *       ödeme ve randevu durumu güncellenir.</li>
+ *   <li>{@link #cancelPayment} — başarılı bir ödeme iyzico üzerinden iade edilir.</li>
+ * </ol>
+ *
+ * <p>Güvenlik: Kart bilgileri (numara, son kullanma tarihi, CVC) hiçbir koşulda
+ * loglanmaz veya veritabanına yazılmaz; yalnızca iyzico SDK çağrısında kullanılır.
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor
