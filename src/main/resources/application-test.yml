@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: ${DB_URL:jdbc:postgresql://localhost:5432/postgre_db?currentSchema=gallerist}
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/randevu_clean?currentSchema=public}
     username: ${DB_USERNAME:yunus}
     password: ${DB_PASSWORD:123}
 
@@ -9,7 +9,7 @@ spring:
       ddl-auto: validate
     properties:
       hibernate:
-        default_schema: ${DB_DEFAULT_SCHEMA:gallerist}
+        default_schema: ${DB_DEFAULT_SCHEMA:public}
     show-sql: false
 
   flyway:
