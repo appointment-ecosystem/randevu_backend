@@ -21,3 +21,4 @@ app:
     reminder-hours-before: 24
     review-request-hours-after: 1
   frontend-url: http://localhost:3000
+
