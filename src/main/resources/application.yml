@@ -4,6 +4,7 @@ spring:
   profiles:
     active: dev
 
+# firebase
 firebase:
   credentials-path: classpath:firebase/firebase-service-account.json
   enabled: true
